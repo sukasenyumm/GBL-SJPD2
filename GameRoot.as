@@ -4,10 +4,12 @@
 	import framework.screenstates.MainMenu;
 	import framework.events.NavigationEvent;
 	import starling.events.Event;
+	import framework.screenstates.GamePlay;
 	
 	public class GameRoot extends Sprite{
 
 		private var mainMenu:MainMenu;
+		private var screenGamePlay:GamePlay;
 		public function GameRoot() {
 			// constructor code
 			super();
@@ -30,6 +32,10 @@
 		{
 			this.addEventListener(NavigationEvent.SWITCH_STATE, onChangeScreen);
 			
+			screenGamePlay = new GamePlay();
+			//sembunyikan gameplay dari screen
+			screenGamePlay.disposeTemporarily();
+			this.addChild(screenGamePlay);
 			
 			// Main menu screen.
 			mainMenu = new MainMenu();
@@ -43,8 +49,8 @@
 			switch (event.params.id)
 			{
 				case "play":
-					//screenWelcome.disposeTemporarily();
-					//screenInGame.initialize();
+					mainMenu.disposeTemporarily();
+					screenGamePlay.initialize();
 					break;
 			}
 		}

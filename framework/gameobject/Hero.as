@@ -22,7 +22,7 @@
 		
 		private function createHeroArt():void
 		{
-			heroArt = new MovieClip(GameAssets.getAtlas().getTexture("fly_",20);
+			heroArt = new MovieClip(GameAssets.getAtlas().getTextures("fly_"), 20);
 			heroArt.x = Math.ceil(-heroArt.width/2);
 			heroArt.y = Math.ceil(-heroArt.height/2);
 			

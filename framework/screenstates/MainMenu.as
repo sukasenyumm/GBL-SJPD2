@@ -17,6 +17,7 @@
 	import starling.animation.Tween;
 	import starling.animation.Transitions;
 	import starling.core.Starling;
+	import framework.events.NavigationEvent;
 	
 	
 	/**
@@ -192,6 +193,16 @@
 			/* end quiz button */
 			
 
+			this.addEventListener(Event.TRIGGERED, onMainMenuClick);
+		}
+		
+		private function onMainMenuClick(event:Event):void
+		{
+			var buttonClick:Button = event.target as Button;
+			if(buttonClick as Button == playBtn)
+			{
+				this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "play"},true));
+			}
 		}
 		
 		private function onPlayClick(event:Event):void
@@ -295,6 +306,7 @@
 		public function disposeTemporarily():void
 		{
 			this.visible = false;
+			if(this.hasEventListener(Event.ENTER_FRAME)) this.removeEventListener(Event.ENTER_FRAME,floatingAnimation);
 		}
 		
 		/* quiz only here
@@ -406,5 +418,6 @@
         }
 		
 		/*end quiz here*/
+	
 	}
 }

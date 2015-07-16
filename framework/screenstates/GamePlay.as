@@ -1,6 +1,7 @@
 ﻿package framework.screenstates{
-	import flash.display.Sprite;
 	import framework.gameobject.Hero;
+	import starling.events.Event;
+	import starling.display.Sprite;
 	
 	public class GamePlay extends Sprite{
 
@@ -23,6 +24,15 @@
 			hero.x = stage.stageWidth/2;
 			hero.y = stage.stageHeight/2;
 			this.addChild(hero);
+		}
+		public function disposeTemporarily():void
+		{
+			this.visible = false;
+		}
+		
+		public function initialize():void
+		{
+			this.visible = true;
 		}
 	}
 	
