@@ -1,4 +1,4 @@
-﻿package framework.customObjects
+﻿package framework.customobjects
 {
 	/**
 	 * This class stores the properties of a font -

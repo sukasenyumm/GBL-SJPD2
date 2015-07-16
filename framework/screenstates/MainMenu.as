@@ -7,13 +7,16 @@
 	import starling.events.Event;
 	import starling.display.Button;
 	import starling.text.TextField;
-	import framework.customObjects.Font;
+	import framework.customobjects.Font;
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
 	import framework.utils.Fonts;
 	import framework.quiz.QuizQuestion;
 	import flash.text.TextFieldAutoSize;
 	import feathers.themes.MetalWorksDesktopTheme;
+	import starling.animation.Tween;
+	import starling.animation.Transitions;
+	import starling.core.Starling;
 	
 	
 	/**
@@ -28,6 +31,8 @@
 		private var bg:Image;
 		/** Game title. */
 		private var title:Image;
+		/** hero */
+		private var hero:Image;
 		/** About button. */
 		private var aboutBtn:Button;
 		/** Help button. */
@@ -60,6 +65,12 @@
         private var score:int = 0;
         private var statusT:TextField;
 		/*end quiz declaration */
+		
+		/*animation*/
+		private var tweenHero:Tween;
+		/** Current date. */
+		private var _currentDate:Date;
+		/*end animation*/
 		
 		public function MainMenu()
 		{
@@ -100,6 +111,8 @@
 			title.y = 15;
 			this.addChild(title);
 			
+			hero = new Image(GameAssets.getAtlas().getTexture("welcome_hero"));
+			this.addChild(hero);
 			
 			// ABOUT ELEMENTS
 			fontRegular = Fonts.getFont("Regular");
@@ -146,6 +159,13 @@
 			this.addChild(backBtn);
 			
 			/* quiz button */
+			quizBtn = new Button(GameAssets.getAtlas().getTexture("fly_0004"));
+			quizBtn.x = 660;
+			quizBtn.y = 250;
+			quizBtn.addEventListener(Event.TRIGGERED, onQuizClick);
+			this.addChild(quizBtn);
+			
+			/* quiz button */
 			 var yPosition:Number = 300;
 	
 			prevButton = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
@@ -179,6 +199,11 @@
 			showQuiz();
 		}
 		
+		private function onQuizClick(event:Event):void
+		{
+			showQuiz();
+		}
+		
 		private function onAboutClick(event:Event):void
 		{
 			showMessage("");
@@ -194,15 +219,18 @@
 		public function showAbout():void
 		{
 			screenMode = "about";
+			hero.visible = false;
 			playBtn.visible = false;
 			aboutBtn.visible = false;
 			aboutText.visible = true;
 			backBtn.visible = true;
+			quizBtn.visible = false;
 		}
 		
 		public function showQuiz():void
 		{
 			screenMode = "quiz";
+			hero.visible = false;
 			title.visible = false;
 			playBtn.visible = false;
 			backBtn.visible = true;
@@ -210,6 +238,7 @@
             prevButton.visible = true;
 			nextButton.visible =true;
 			finishButton.visible = true;
+			quizBtn.visible = false;
 			addAllQuestions();
             hideAllQuestions();
             firstQuestion();
@@ -221,14 +250,42 @@
 			disposeTemporarily();		
 			this.visible = true;
 			title.visible = true;
+			hero.visible = true;
 			aboutText.visible = false;
 			backBtn.visible = false;
 			aboutBtn.visible = true;
 			playBtn.visible = true;
+			quizBtn.visible = true;
 			prevButton.visible = false;
 			nextButton.visible =false;
 			finishButton.visible = false;
+			
 			hideAllQuestions();
+			
+			//animation
+			hero.x = -hero.width;
+			hero.y = 100;
+			
+			
+			tweenHero = new Tween(hero, 4, Transitions.EASE_OUT);
+			tweenHero.animate("x", 80);
+			Starling.juggler.add(tweenHero);
+			
+			this.addEventListener(Event.ENTER_FRAME, floatingAnimation);
+		}
+		
+		/**
+		 * Animate floating objects. 
+		 * @param event
+		 * 
+		 */
+		private function floatingAnimation(event:Event):void
+		{
+			_currentDate = new Date();
+			hero.y = 130 + (Math.cos(_currentDate.getTime() * 0.002)) * 25;
+			playBtn.y = 340 + (Math.cos(_currentDate.getTime() * 0.002)) * 10;
+			aboutBtn.y = 460 + (Math.cos(_currentDate.getTime() * 0.002)) * 10;
+			quizBtn.y = 260 + (Math.cos(_currentDate.getTime() * 0.002)) * 10;
 		}
 		
 		/**

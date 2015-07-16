@@ -3,7 +3,7 @@
 	import starling.text.BitmapFont;
 	import starling.text.TextField;
 	import starling.textures.Texture;
-	import framework.customObjects.Font;
+	import framework.customobjects.Font;
 
 	/**
 	 * This class embeds the bitmap fonts used in the game. 
