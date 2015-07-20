@@ -103,8 +103,8 @@
 			
 			bg = new Image(GameAssets.getTexture("BgWelcome"));
 			bg.blendMode = BlendMode.NONE;
-			bg.width = 960;
-			bg.height = 640;
+			bg.width = stage.stageWidth;
+			bg.height = stage.stageHeight;
 			this.addChild(bg);
 			
 			title = new Image(GameAssets.getAtlas().getTexture(("welcome_title")));
@@ -113,6 +113,8 @@
 			this.addChild(title);
 			
 			hero = new Image(GameAssets.getAtlas().getTexture("welcome_hero"));
+			hero.width = hero.width*.5;
+			hero.width = hero.height*.5;
 			this.addChild(hero);
 			
 			// ABOUT ELEMENTS
@@ -140,29 +142,37 @@
 			
 			/* play button  NOO it's quiz*/
 			playBtn = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
-			playBtn.x = 640;
-			playBtn.y = 340;
+			playBtn.width *= 0.5;
+			playBtn.height *= 0.5;
+			playBtn.x = stage.stageWidth/3;
+			playBtn.y = stage.stageHeight/4;
 			playBtn.addEventListener(Event.TRIGGERED, onPlayClick);
 			this.addChild(playBtn);
 			
 			/* about button */
 			aboutBtn = new Button(GameAssets.getAtlas().getTexture("welcome_aboutButton"));
-			aboutBtn.x = 460;
-			aboutBtn.y = 20;
+			aboutBtn.width *= 0.5;
+			aboutBtn.height *= 0.5;
+			aboutBtn.x = stage.stageWidth/3;
+			aboutBtn.y = stage.stageHeight/4 + aboutBtn.height;
 			aboutBtn.addEventListener(Event.TRIGGERED, onAboutClick);
 			this.addChild(aboutBtn);
 			
 			/* back button */
 			backBtn = new Button(GameAssets.getAtlas().getTexture("about_backButton"));
-			backBtn.x = 660;
-			backBtn.y = 350;
+			backBtn.width *= 0.5;
+			backBtn.height *= 0.5;
+			backBtn.x = stage.stageWidth/3;
+			backBtn.y = stage.stageHeight/4 + backBtn.height;
 			backBtn.addEventListener(Event.TRIGGERED, onAboutBackClick);
 			this.addChild(backBtn);
 			
 			/* quiz button */
 			quizBtn = new Button(GameAssets.getAtlas().getTexture("fly_0004"));
-			quizBtn.x = 660;
-			quizBtn.y = 250;
+			quizBtn.width *= 0.5;
+			quizBtn.height *= 0.5;
+			quizBtn.x = stage.stageWidth/3;
+			quizBtn.y = stage.stageHeight/3 + quizBtn.height;
 			quizBtn.addEventListener(Event.TRIGGERED, onQuizClick);
 			this.addChild(quizBtn);
 			
