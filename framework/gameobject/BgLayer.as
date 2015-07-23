@@ -3,6 +3,7 @@
 	import starling.display.Image;
 	import framework.utils.GameAssets;
 	import starling.events.Event;
+	import starling.display.BlendMode;
 	
 	public class BgLayer extends Sprite{
 		
@@ -25,7 +26,9 @@
 			if(layer == 1)
 			{
 				image1 = new Image(GameAssets.getTexture("BgLayer" + layer));
+				image1.blendMode = BlendMode.AUTO;
 				image2 = new Image(GameAssets.getTexture("BgLayer" + layer));
+				image2.blendMode = BlendMode.AUTO;
 			}
 			else
 			{
