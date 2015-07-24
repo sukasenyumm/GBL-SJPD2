@@ -49,6 +49,7 @@
 		private var touchY:Number;
 		
 		private var itemsToAnimate:Vector.<Item>;
+		private var scoreText:TextField;
 		
 		/* for quiz declaration */
 		//for managing questions:
@@ -78,6 +79,18 @@
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE,onAddedToStage);
 			drawGame();
+			
+			fontRegular = Fonts.getFont("Regular");
+			
+			//sementara pakai chiller, karena font regulernya masih ada karakter yang ilang
+			//sementara juga masih pakai box
+			scoreText = new TextField(300,100, "Score: 0","chiller", 14, 0xffffff);
+			scoreText.hAlign = HAlign.LEFT;
+			scoreText.vAlign = VAlign.TOP;
+			scoreText.x = 20;
+			scoreText.y = 20;
+			scoreText.border = true;
+			this.addChild(scoreText);
 		}
 
 		private function drawGame():void
@@ -203,6 +216,8 @@
 						playerSpeed -= (playerSpeed - MIN_SPEED) * 0.01;
 						bg.speed = playerSpeed * elapsed;
 						scoreDistance += (playerSpeed * elapsed)*0.1;
+						
+						scoreText.text = "Score: "+scoreDistance;
 						
 						initObstacle();
 						animateObstacles();
@@ -372,8 +387,6 @@
 		
 		private function initQuiz():void
 		{
-			fontRegular = Fonts.getFont("Regular");
-			
 			statusT = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
 			statusT.x = 0;
 			statusT.y = 100;
