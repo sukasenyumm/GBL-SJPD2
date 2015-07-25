@@ -50,6 +50,9 @@
 		
 		private var itemsToAnimate:Vector.<Item>;
 		private var scoreText:TextField;
+		/** Lives Count. */		
+		private var lives:int;
+		private var scoreLife:TextField;
 		
 		/* for quiz declaration */
 		//for managing questions:
@@ -134,6 +137,16 @@
 			bg.speed = 0;
 			scoreDistance = 0;
 			obstacleGapCount = 0;
+			
+			// Define lives. 5 nyawa broh,..
+			lives = 5;
+			scoreLife = new TextField(300,100, "Score Life: "+String(lives),"chiller", 14, 0xffffff);
+			scoreLife.hAlign = HAlign.LEFT;
+			scoreLife.vAlign = VAlign.TOP;
+			scoreLife.x = stage.stageWidth*0.5;
+			scoreLife.y = 20;
+			scoreLife.border = true;
+			this.addChild(scoreLife);
 			
 			obstacleToAnimate = new Vector.<Obstacle>();
 			itemsToAnimate = new Vector.<Item>();
@@ -226,9 +239,70 @@
 						animateItems();
 						break;
 					case "over":
+						
+						for(var i:uint = 0; i < itemsToAnimate.length; i++)
+						{
+							if (itemsToAnimate[i] != null)
+							{
+								// Dispose the item temporarily.
+								disposeItemTemporarily(i, itemsToAnimate[i]);
+							}
+						}
+						
+						for(var j:uint = 0; j < obstacleToAnimate.length; j++)
+						{
+							if (obstacleToAnimate[j] != null)
+							{
+								// Dispose the obstacle temporarily.
+								disposeObstacleTemporarily(j, obstacleToAnimate[j]);
+							}
+						}
+						
+						// Spin the hero.
+						hero.rotation -= deg2rad(30);
+						
+						// Make the hero fall.
+						
+						// If hero is still on screen, push him down and outside the screen. Also decrease his speed.
+						// Checked for +width below because width is > height. Just a safe value.
+						if (hero.y < stage.stageHeight + hero.width)
+						{
+							playerSpeed -= playerSpeed * elapsed;
+							hero.y += stage.stageHeight * elapsed; 
+						}
+						else
+						{
+							// Once he moves out, reset speed to 0.
+							playerSpeed = 0;
+							
+							// Stop game tick.
+							this.removeEventListener(Event.ENTER_FRAME, onGameTick);
+							
+							// Game over.
+							//gameOver();
+						}
+						
+						// Set the background's speed based on hero's speed.
+						bg.speed = Math.floor(playerSpeed * elapsed);
 					break;
 				}
 			}
+		}
+		
+		private function disposeItemTemporarily(animateId:uint, item:Item):void
+		{
+			itemsToAnimate.splice(animateId, 1);
+			//itemsToAnimate.length--;
+			
+			item.x = stage.stageWidth + item.width * 2;
+			this.removeChild(item);
+		}
+		
+		private function disposeObstacleTemporarily(animateId:uint, obstacle:Obstacle):void
+		{
+			obstacleToAnimate.splice(animateId, 1);
+			this.removeChild(obstacle);
+			//obstacleToAnimate.length--;
 		}
 		
 		private function animateItems():void
@@ -246,23 +320,17 @@
 					this.removeChild(itemToTrack);
 					if(itemToTrack.foodItemType == 1)
 					{
-						gameState = "idle";
-						initQuiz();
-						gamePaused = true;
+						//gameState = "idle";
+						//initQuiz();
+						//gamePaused = true;
 					}
 				}
 				
-				/*if(itemToTrack.bounds.intersects(hero.bounds)&& itemToTrack.foodItemType == 1)
+				if(itemToTrack.x < -50 || gameState == "over")
 				{
-					itemsToAnimate.splice(i,1);
-					this.removeChild(itemToTrack);
-				} */
-				
-				
-				if(itemToTrack.x < -50)
-				{
-					itemsToAnimate.splice(i,1);
-					this.removeChild(itemToTrack);
+					//itemsToAnimate.splice(i,1);
+					//this.removeChild(itemToTrack);
+					disposeItemTemporarily(i, itemToTrack);
 				}
 			}
 		}
@@ -307,6 +375,18 @@
 					obstacleToTrack.rotation = deg2rad(70);
 					hitObstacle = 30;
 					playerSpeed *= 0.5;
+					
+					// Update lives.
+					lives--;
+					
+					if (lives <= 0)
+					{
+						lives = 0;
+						endGame();
+					}
+					
+					scoreLife.text = "Score Life: "+String(lives);
+					
 				}
 				if(obstacleToTrack.distance > 0)
 				{
@@ -323,9 +403,9 @@
 				
 				if(obstacleToTrack.x < -obstacleToTrack.width || gameState == "over")
 				{
-					obstacleToAnimate.splice(i,1);
-					this.removeChild(obstacleToTrack);
+					disposeObstacleTemporarily(i,obstacleToTrack);
 				}
+				
 			}
 		}
 		private function initObstacle():void
@@ -531,6 +611,19 @@
             showMessage("You answered " + score + " correct out of " + quizQuestions.length + " questions.");
 			//trace("You answered " + score + " correct out of " + quizQuestions.length + " questions.")
         }
+		
+		/**
+		 * End game. 
+		 * 
+		 */
+		private function endGame():void
+		{
+			this.x = 0;
+			this.y = 0;
+			
+			// Set Game Over state so all obstacles and items can remove themselves.
+			gameState = "over";
+		}
 		
 	}
 	

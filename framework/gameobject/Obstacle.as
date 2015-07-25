@@ -90,6 +90,17 @@
 			
 		}
 		
+		public function forceWatchOutDisposes(state:String):void
+		{
+			if(state == "over")
+			{
+				Starling.juggler.remove(watchOutAnimation);
+				watchOutAnimation.visible = false;
+				this.removeChild(watchOutAnimation);
+			}
+			
+		}
+		
 		public function get watchOut():Boolean
 		{
 			return _watchOut;
@@ -102,7 +113,11 @@
 			if(watchOutAnimation)
 			{
 				if(value) watchOutAnimation.visible = true;
-				else watchOutAnimation.visible = false;
+				else 
+				{
+					watchOutAnimation.visible = false;
+					Starling.juggler.remove(watchOutAnimation);
+				}
 			}
 		}
 		
@@ -119,7 +134,10 @@
 			{
 				obstacleCrashImage.visible = true;
 				if(_type == 4) obstacleAnimation.visible = false;
-				else obstacleImage.visible = false;
+				else 
+				{
+					obstacleImage.visible = false;
+				}
 			}
 		}
 		
