@@ -71,6 +71,7 @@
 		private var fontRegular:Font;
 		/** Is game currently in paused state? */
 		private var gamePaused:Boolean = false;
+		private var questionTemporary:Number;
 		
 		public function GamePlay() {
 			// constructor code
@@ -320,9 +321,9 @@
 					this.removeChild(itemToTrack);
 					if(itemToTrack.foodItemType == 1)
 					{
-						//gameState = "idle";
-						//initQuiz();
-						//gamePaused = true;
+						gameState = "idle";
+						initQuiz();
+						gamePaused = true;
 					}
 				}
 				
@@ -467,7 +468,9 @@
 		
 		private function initQuiz():void
 		{
-			statusT = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
+			//statusT = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
+			//disi chiller dulu
+			statusT = new TextField(480, 600, "", "chiller", 18, 0xffffff);
 			statusT.x = 0;
 			statusT.y = 100;
 			statusT.hAlign = HAlign.CENTER;
@@ -476,141 +479,109 @@
 			
 			/* quiz button */
 			 var yPosition:Number = 300;
-	
-			prevButton = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
-			prevButton.x = 30;
-			prevButton.y = yPosition;
-			//prevButton.addEventListener(Event.TRIGGERED, prevHandler);
-			this.addChild(prevButton);
-			
-
-            nextButton = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
-            nextButton.x = prevButton.x + prevButton.width + 40;
-            nextButton.y = yPosition;
-            //nextButton.addEventListener(Event.TRIGGERED, nextHandler);
-            this.addChild(nextButton);
 
             finishButton = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
-            finishButton.x = nextButton.x + nextButton.width + 40;
+            finishButton.x = 30;
             finishButton.y = yPosition;
             finishButton.addEventListener(Event.TRIGGERED, finishHandler);
             this.addChild(finishButton);
 			
+			nextButton = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
+            nextButton.x = 30;
+            nextButton.y = yPosition;
+            nextButton.addEventListener(Event.TRIGGERED, nextHandler);
+            this.addChild(nextButton);
+			nextButton.visible = false;
+			
 			quizQuestions = new Array();
             createQuestions();
 			
-			addAllQuestions();
-            hideAllQuestions();
-            firstQuestion();
-			
+			var questionTemp:Number = Math.ceil(Math.random() * ((quizQuestions.length - 1) - 0)+0);
+			addQuestions(questionTemp);
+			questionTemporary = questionTemp;
+        
 			
 		}
 		
 		private function createQuestions() {
-            quizQuestions.push(new QuizQuestion("What color is an orange?",
+            quizQuestions.push(new QuizQuestion("Dummy",
                                                             0,
-                                                            "Orange",
-                                                            "Blue",
-                                                            "Purple",
-                                                            "Brown"));
-            quizQuestions.push(new QuizQuestion("What is the shape of planet earth?",
+                                                            "Dummy",
+                                                            "Dummy",
+                                                            "Dummy",
+                                                            "Dummy"));
+            quizQuestions.push(new QuizQuestion("Didaerah mana pertama kali tentara jepang menduduki Indonesia?",
                                                             2,
-                                                            "Flat",
-                                                            "Cube",
-                                                            "Round",
-                                                            "Shabby"));
-            quizQuestions.push(new QuizQuestion("Who created SpiderMan?",
+                                                            "Semarang",
+                                                            "Solo",
+                                                            "Tarakan",
+                                                            "Makasar"));
+            quizQuestions.push(new QuizQuestion("Pemerintah Hindia Belanda menyerah tanpa syarat kepada Jepang?",
                                                             1,
-                                                            "Jack Kirby",
-                                                            "Stan Lee and Steve Ditko",
-                                                            "Stan Lee",
-                                                            "Steve Ditko",
-                                                            "none of the above"));
-            quizQuestions.push(new QuizQuestion("Who created Mad?",
-                                                            1,
-                                                            "Al Feldstein",
-                                                            "Harvey Kurtzman",
-                                                            "William M. Gaines",
-                                                            "Jack Davis",
-                                                            "none of the above"));
+                                                            "8 Januari 1942",
+                                                            "8 Maret 1942",
+                                                            "17 Agustus 1945",
+                                                            "8 Januari 1945",
+                                                            "8 Maret 1945"));
+            quizQuestions.push(new QuizQuestion("Untuk memikat hari rakyat, Jepang membuat propaganda Tiga A, yang berisi?",
+                                                            3,
+                                                            "Jepang pemimpin Asia",
+                                                            "Jepang pelindung Asia",
+                                                            "epang cahaya Asia",
+                                                            "Semua jawaban benar"));
         }
 		
 		 private function showMessage(theMessage:String) {
             statusT.text = theMessage;
             statusT.x = 200;
         }
-        private function addAllQuestions() {
-            for(var i:int = 0; i < quizQuestions.length; i++) {
+        private function addQuestions(numQuestion:Number) {
+            /*
+			for(var i:int = 0; i < quizQuestions.length; i++) {
                 this.addChild(quizQuestions[i]);
-            }
+            }*/
+			trace("error num: "+numQuestion)
+			this.addChild(quizQuestions[numQuestion]);
         }
-        private function hideAllQuestions() {
-            for(var i:int = 0; i < quizQuestions.length; i++) {
-                quizQuestions[i].visible = false;
-            }
+        private function removeQuestions(numQuestion:Number) {
+           	quizQuestions[numQuestion].visible = false;
         }
-        private function firstQuestion() {
-            currentQuestion = quizQuestions[0];
-            currentQuestion.visible = true;
-        }
-        private function prevHandler(event:Event) {
-            showMessage("");
-            if(currentIndex > 0) {
-                currentQuestion.visible = false;
-                currentIndex--;
-                currentQuestion = quizQuestions[currentIndex];
-                currentQuestion.visible = true;
-            } else {
-                showMessage("sebelumnya");
-            }
-        }
-        private function nextHandler(event:Event) {
-            showMessage("error");
-			trace("user: "+currentQuestion.userAnswer)
-            if(currentQuestion.userAnswer < 0) {
-                showMessage("sesudahnya");
-                return;
-            }
-            if(currentIndex < (quizQuestions.length - 1)) {
-                currentQuestion.visible = false;
-                currentIndex++;
-                currentQuestion = quizQuestions[currentIndex];
-                currentQuestion.visible = true;
-            } else {
-                showMessage("That's all the questions! Click Finish to Score, or Previous to go back");
-            }
-        }
+   
         private function finishHandler(event:Event) {
             showMessage("");
-            var finished:Boolean = true;
-            for(var i:int = 0; i < quizQuestions.length; i++) {
-                if(quizQuestions[i].userAnswer == 0) {
-                    finished = false;
-                    break;
-                }
-            }
-			trace(quizQuestions.length)
-            if(finished || currentIndex == quizQuestions.length -1) {
-                prevButton.visible = false;
-                nextButton.visible = false;
-                finishButton.visible = false;
-                hideAllQuestions();
-                computeScore();
+			var questionTemp:Number = Math.ceil(Math.random() * ((quizQuestions.length - 1) - 0)+0);
+                
+            if(quizQuestions[questionTemporary].userAnswer == quizQuestions[questionTemporary].correctAnswer) {
+                    lives+=3;
+					removeQuestions(questionTemporary);	
+					hideQuestion(questionTemporary);
+					showMessage("Jawaban benar "+quizQuestions[questionTemporary].correctAnswer);
+					scoreLife.text = "Score Life: "+String(lives);
             } else {
-                showMessage("belum selesai semua");
+				lives-=1;
+				removeQuestions(questionTemporary);	
+				hideQuestion(questionTemporary);
+				showMessage("Jawaban Salah "+quizQuestions[questionTemporary].userAnswer);
+				scoreLife.text = "Score Life: "+String(lives);
             }
 			
+			nextButton.visible = true;
+        }
+		
+		private function nextHandler(event:Event) {
 			gamePaused = false;
-        }
-        private function computeScore() {
-            for(var i:int = 0; i < quizQuestions.length; i++) {
-                if(quizQuestions[i].userAnswer == quizQuestions[i].correctAnswer) {
-                    score++;
-                }
-            }
-            showMessage("You answered " + score + " correct out of " + quizQuestions.length + " questions.");
-			//trace("You answered " + score + " correct out of " + quizQuestions.length + " questions.")
-        }
+			nextButton.visible = false;
+			showMessage("");
+		}
+		
+		private function hideQuestion(numQuestion:Number):void
+		{
+			showMessage("");
+			this.removeQuestions(numQuestion);
+			finishButton.visible = false;
+		}
+		
+		//end quiz
 		
 		/**
 		 * End game. 

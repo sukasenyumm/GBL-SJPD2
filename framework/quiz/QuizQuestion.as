@@ -52,7 +52,8 @@
             //create and position the textfield (question):
             fontRegular = Fonts.getFont("Regular");
 			
-			questionField = new TextField(400, 50, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
+			//questionField = new TextField(400, 50, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
+			questionField = new TextField(400, 50, "", "chiller", 18, 0xffffff);
 			
             questionField.text = question;
             questionField.x = questionX;
