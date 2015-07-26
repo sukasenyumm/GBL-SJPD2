@@ -126,8 +126,8 @@
 				" You score when your Hero eats food.\n\nThere are different obstacles that fly in with a \"Look out!\"" +
 				" caution before they appear. Avoid them at all costs. You only have 5 lives. Try to score as much as possible and also" +
 				" try to travel the longest distance.";
-			aboutText.x = 60;
-			aboutText.y = 230;
+			aboutText.x = stage.stageWidth * 0.5 + 100;
+			aboutText.y = stage.stageHeight * 0.7;
 			aboutText.hAlign = HAlign.CENTER;
 			aboutText.vAlign = VAlign.TOP;
 			aboutText.height = aboutText.textBounds.height + 30;

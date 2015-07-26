@@ -45,22 +45,22 @@
 			// Background 1 - Sky
 			bgLayer1.x -= Math.ceil(_speed * bgLayer1.parallax);
 			// Hero flying right
-			if (bgLayer1.x < -stage.stageWidth ) bgLayer1.x = 0;
+			if (bgLayer1.x < -bgLayer1.width * 0.5 ) bgLayer1.x = 0;
 			
 			// Background 2 - Hills
 			bgLayer2.x -= Math.ceil(_speed * bgLayer2.parallax);
 			// Hero flying right
-			if (bgLayer2.x < -stage.stageWidth ) bgLayer2.x = 0;
+			if (bgLayer2.x < -bgLayer2.width * 0.5 ) bgLayer2.x = 0;
 			
 			// Background 3 - Buildings
 			bgLayer3.x -= Math.ceil(_speed * bgLayer3.parallax);
 			// Hero flying right
-			if (bgLayer3.x < -stage.stageWidth ) bgLayer3.x = 0;
+			if (bgLayer3.x < -bgLayer3.width * 0.5 ) bgLayer3.x = 0;
 			
 			// Background 4 - Trees
 			bgLayer4.x -= Math.ceil(_speed * bgLayer4.parallax);
 			// Hero flying right
-			if (bgLayer4.x < -stage.stageWidth ) bgLayer4.x = 0;
+			if (bgLayer4.x <  -bgLayer4.width * 0.5 ) bgLayer4.x = 0;
 		}
 		
 		public function get speed():Number

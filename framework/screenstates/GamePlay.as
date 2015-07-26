@@ -224,7 +224,7 @@
 						if(hero.x < stage.stageWidth * 0.5 * 0.5)
 						{
 							hero.x += ((stage.stageWidth * 0.5 * 0.5 + 10)-hero.x)*0.05;
-							hero.y = stage.stageHeight * 0.5;
+							hero.y -= (hero.y - touchY) * 0.1;
 							
 							playerSpeed += (MIN_SPEED - playerSpeed)* 0.05;
 							bg.speed = playerSpeed * elapsed;
@@ -239,6 +239,25 @@
 						trace(hero.rotation)
 						// Limit the hero's rotation to < 30.
 						hero.rotation = deg2rad(0);
+						
+						// Rotate hero based on mouse position.
+						if ((-(hero.y - touchY) * 0.2) < 30 && (-(hero.y - touchY) * 0.2) > -30) hero.rotation = deg2rad(-(hero.y - touchY) * 0.2);
+						
+						// Limit the hero's rotation to < 30.
+						if (rad2deg(hero.rotation) > 30 ) hero.rotation = rad2deg(30);
+						if (rad2deg(hero.rotation) < -30 ) hero.rotation = -rad2deg(30);
+						
+						// Confine the hero to stage area limit
+						if (hero.y > gameArea.bottom - hero.height * 0.5)    
+						{
+							hero.y = gameArea.bottom - hero.height * 0.5;
+							hero.rotation = deg2rad(0);
+						}
+						if (hero.y < gameArea.top + hero.height * 0.5)    
+						{
+							hero.y = gameArea.top + hero.height * 0.5;
+							hero.rotation = deg2rad(0);
+						}
 						
 						break;
 					case "flying":
