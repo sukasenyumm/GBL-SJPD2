@@ -18,9 +18,12 @@
 	import framework.utils.Fonts;
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
+	import framework.events.NavigationEvent;
+	import starling.animation.Tween;
+	import starling.core.Starling;
+	import starling.utils.rad2deg;
 
-	
-	
+
 	public class GamePlay extends Sprite{
 
 		private var startButton:Button;
@@ -72,6 +75,10 @@
 		/** Is game currently in paused state? */
 		private var gamePaused:Boolean = false;
 		private var questionTemporary:Number;
+		/** GameOver Container. */
+		private var gameOverScreen:GameOverScreen;
+		/** Tween object for game over container. */
+		private var tween_gameOverContainer:Tween;
 		
 		public function GamePlay() {
 			// constructor code
@@ -83,6 +90,16 @@
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE,onAddedToStage);
 			drawGame();
+			drawGameOverScreen();
+			
+			
+		}
+
+		private function drawGame():void
+		{
+			bg = new GameBackground();
+			bg.speed = 50;
+			this.addChild(bg);
 			
 			fontRegular = Fonts.getFont("Regular");
 			
@@ -95,41 +112,54 @@
 			scoreText.y = 20;
 			scoreText.border = true;
 			this.addChild(scoreText);
-		}
-
-		private function drawGame():void
-		{
-			bg = new GameBackground();
-			bg.speed = 50;
-			this.addChild(bg);
 			
 			hero = new Hero();
 			hero.x = stage.stageWidth/2;
 			hero.y = stage.stageHeight/2;
 			this.addChild(hero);
 			
+			obstacleToAnimate = new Vector.<Obstacle>();
+			itemsToAnimate = new Vector.<Item>();
+			
+			// Define lives. 5 nyawa broh,..
+			lives = 5;
+			scoreLife = new TextField(300,100, "Score Life: initialize","chiller", 14, 0xffffff);
+			scoreLife.hAlign = HAlign.LEFT;
+			scoreLife.vAlign = VAlign.TOP;
+			scoreLife.x = stage.stageWidth*0.5;
+			scoreLife.y = 20;
+			scoreLife.border = true;
+			this.addChild(scoreLife);
+			
 			startButton = new Button(GameAssets.getAtlas().getTexture("startButton"));
 			startButton.x = stage.stageWidth/2-startButton.width/2;
 			startButton.y = stage.stageHeight/2-startButton.height/2;
+			startButton.addEventListener(Event.TRIGGERED, onStartButtonClick);
 			this.addChild(startButton);
-			
-			gameArea = new Rectangle(0,100,stage.stageWidth,stage.stage.stageHeight - 250);
-			
 		}
 		
-		public function disposeTemporarily():void
+		private function disposeTemporarily():void
 		{
-			this.visible = false;
+			gameOverScreen.visible = false;
+			
+			if (this.hasEventListener(Event.ENTER_FRAME)) this.removeEventListener(Event.ENTER_FRAME, calculateElapsed);
+			
+			if (this.hasEventListener(TouchEvent.TOUCH)) this.removeEventListener(TouchEvent.TOUCH, onTouch);
+			
+			if (this.hasEventListener(Event.ENTER_FRAME)) this.removeEventListener(Event.ENTER_FRAME, onGameTick);
+			 
 		}
 		
 		public function initialize():void
 		{
+			// Dispose screen temporarily.
+			disposeTemporarily();
+			
 			this.visible = true;
+			
 			// Calculate elapsed time.
 			this.addEventListener(Event.ENTER_FRAME, calculateElapsed);
-			hero.x = -stage.stageWidth;
-			hero.y = -stage.stageHeight * 0.5;
-			
+			gameArea = new Rectangle(0,100,stage.stageWidth,stage.stage.stageHeight - 250);
 			
 			gameState = "idle";
 			
@@ -138,29 +168,30 @@
 			bg.speed = 0;
 			scoreDistance = 0;
 			obstacleGapCount = 0;
+			// Reset background's state to idle.
+			bg.state = 1;//"idle";
+			// Reset hero's state to idle.
+			hero.state = 1;//"idle";
+			hero.x = -stage.stageWidth;
+			hero.y = stage.stageHeight * 0.5;
 			
-			// Define lives. 5 nyawa broh,..
 			lives = 5;
-			scoreLife = new TextField(300,100, "Score Life: "+String(lives),"chiller", 14, 0xffffff);
-			scoreLife.hAlign = HAlign.LEFT;
-			scoreLife.vAlign = VAlign.TOP;
-			scoreLife.x = stage.stageWidth*0.5;
-			scoreLife.y = 20;
-			scoreLife.border = true;
-			this.addChild(scoreLife);
+			scoreLife.text = "Score Life: "+String(lives);
 			
-			obstacleToAnimate = new Vector.<Obstacle>();
-			itemsToAnimate = new Vector.<Item>();
-			
-			startButton.addEventListener(Event.TRIGGERED, onStartButtonClick);
+			//bg.visible = false;
+			startButton.visible = true;
+			//force startButton always in top of layers.
+			this.setChildIndex(startButton, numChildren-1);
 			
 		}
 		
 		private function onStartButtonClick(event:Event):void
 		{
+			trace("hiks")
+			// Hide start button.
 			startButton.visible = false;
-			startButton.removeEventListener(Event.TRIGGERED, onStartButtonClick);
 			
+			// Launch hero.
 			launchHero();
 		}
 		
@@ -193,11 +224,18 @@
 							
 							playerSpeed += (MIN_SPEED - playerSpeed)* 0.05;
 							bg.speed = playerSpeed * elapsed;
+			
 						}
 						else
 						{
 							gameState = "flying";
+							hero.state = 2;
 						}
+						
+						trace(hero.rotation)
+						// Limit the hero's rotation to < 30.
+						hero.rotation = deg2rad(0);
+						
 						break;
 					case "flying":
 					
@@ -238,6 +276,9 @@
 						
 						createFoodItems();
 						animateItems();
+						
+						if(lives <= 0)
+							gameState = "over";
 						break;
 					case "over":
 						
@@ -280,7 +321,7 @@
 							this.removeEventListener(Event.ENTER_FRAME, onGameTick);
 							
 							// Game over.
-							//gameOver();
+							gameOver();
 						}
 						
 						// Set the background's speed based on hero's speed.
@@ -596,6 +637,57 @@
 			gameState = "over";
 		}
 		
+		/**
+		 * Draw game over screen. 
+		 * 
+		 */
+		private function drawGameOverScreen():void
+		{
+			gameOverScreen = new GameOverScreen();
+			gameOverScreen.addEventListener(NavigationEvent.SWITCH_STATE, playAgain);
+			this.addChild(gameOverScreen);
+		}
+		
+		/**
+		 * Play again, when clicked on play again button in Game Over screen. 
+		 * 
+		 */
+		private function playAgain(event:NavigationEvent):void
+		{
+			if (event.params.id == "playAgain") 
+			{
+				trace("playagain");
+				tween_gameOverContainer = new Tween(gameOverScreen, 1);
+				tween_gameOverContainer.fadeTo(0);
+				tween_gameOverContainer.onComplete = gameOverFadedOut;
+				Starling.juggler.add(tween_gameOverContainer);
+			}
+		}
+		
+		/**
+		 * On game over screen faded out. 
+		 * 
+		 */
+		private function gameOverFadedOut():void
+		{
+			trace("alalay");
+			gameOverScreen.visible = false;
+			initialize();
+		}
+		
+		/**
+		 * Game Over - called when hero falls out of screen and when Game Over data should be displayed. 
+		 * 
+		 */
+		private function gameOver():void
+		{
+			this.setChildIndex(gameOverScreen, this.numChildren-1);
+			gameOverScreen.initialize(score, Math.round(scoreDistance));
+			
+			tween_gameOverContainer = new Tween(gameOverScreen, 1);
+			tween_gameOverContainer.fadeTo(1);
+			Starling.juggler.add(tween_gameOverContainer);
+		}
 	}
 	
 }

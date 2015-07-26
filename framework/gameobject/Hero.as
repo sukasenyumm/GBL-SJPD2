@@ -8,6 +8,8 @@
 	public class Hero extends Sprite{
 
 		private var heroArt:MovieClip;
+		/** State of the hero. */
+		private var _state:int;
 		public function Hero() {
 			// constructor code
 			super();
@@ -29,7 +31,14 @@
 			Starling.juggler.add(heroArt);
 			this.addChild(heroArt);
 		}
-
+		
+		/**
+		 * State of the hero. 
+		 * @return 
+		 * 
+		 */
+		public function get state():int { return _state; }
+		public function set state(value:int):void { _state = value; }
 	}
 	
 }

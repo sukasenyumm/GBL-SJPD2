@@ -9,6 +9,8 @@
 		private var bgLayer3:BgLayer;
 		private var bgLayer4:BgLayer;
 		private var _speed:Number = 0;
+		/** State of the game. */		
+		private var _state:int;
 		
 		public function GameBackground() {
 			// constructor code
@@ -70,6 +72,14 @@
 		{
 			_speed = value;
 		}
+		
+		/**
+		 *  
+		 * State of the game.
+		 * 
+		 */
+		public function get state():int { return _state; }
+		public function set state(value:int):void { _state = value; }
 
 	}
 	

@@ -33,8 +33,9 @@
 			this.addEventListener(NavigationEvent.SWITCH_STATE, onChangeScreen);
 			
 			screenGamePlay = new GamePlay();
+			screenGamePlay.addEventListener(NavigationEvent.SWITCH_STATE, onInGameNavigation);
 			//sembunyikan gameplay dari screen
-			screenGamePlay.disposeTemporarily();
+			//screenGamePlay.disposeTemporarily();
 			this.addChild(screenGamePlay);
 			
 			// Main menu screen.
@@ -42,6 +43,25 @@
 			this.addChild(mainMenu);
 			
 			mainMenu.initialize();
+		}
+		
+		/**
+		 * On navigation from different screens. 
+		 * @param event
+		 * 
+		 */
+		private function onInGameNavigation(event:NavigationEvent):void
+		{
+			switch (event.params.id)
+			{
+				case "mainMenu":
+					mainMenu.initialize();
+					break;
+				case "about":
+					//screenWelcome.initialize();
+					//screenWelcome.showAbout();
+					break;
+			}
 		}
 		
 		private function onChangeScreen(event:NavigationEvent):void
