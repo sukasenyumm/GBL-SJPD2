@@ -5,11 +5,13 @@
 	import framework.events.NavigationEvent;
 	import starling.events.Event;
 	import framework.screenstates.GamePlay;
+	import framework.screenstates.ChooseLevel;
 	
 	public class GameRoot extends Sprite{
 
 		private var mainMenu:MainMenu;
 		private var screenGamePlay:GamePlay;
+		private var screenGameLevels:ChooseLevel;
 		public function GameRoot() {
 			// constructor code
 			super();
@@ -34,9 +36,14 @@
 			
 			screenGamePlay = new GamePlay();
 			screenGamePlay.addEventListener(NavigationEvent.SWITCH_STATE, onInGameNavigation);
-			//sembunyikan gameplay dari screen
-			//screenGamePlay.disposeTemporarily();
 			this.addChild(screenGamePlay);
+			//sembunyikan gameplay dari screen
+			screenGamePlay.disposeTemporarily();
+			
+			screenGameLevels = new ChooseLevel();
+			screenGameLevels.addEventListener(NavigationEvent.SWITCH_STATE, onChooseLevelNavigation);
+			this.addChild(screenGameLevels);
+			screenGameLevels.disposeTemporarily();
 			
 			// Main menu screen.
 			mainMenu = new MainMenu();
@@ -58,8 +65,32 @@
 					mainMenu.initialize();
 					break;
 				case "about":
-					//screenWelcome.initialize();
-					//screenWelcome.showAbout();
+					mainMenu.initialize();
+					mainMenu.showAbout();
+					break;
+			}
+		}
+		
+		/**
+		 * On navigation from different screens. 
+		 * @param event
+		 * 
+		 */
+		private function onChooseLevelNavigation(event:NavigationEvent):void
+		{
+			switch (event.params.id)
+			{
+				case "play1":
+					screenGameLevels.disposeTemporarily();
+					screenGamePlay.initialize(1);
+					break;
+				case "play2":
+					screenGameLevels.disposeTemporarily();
+					screenGamePlay.initialize(2);
+					break;
+				case "play3":
+					screenGameLevels.disposeTemporarily();
+					screenGamePlay.initialize(3);
 					break;
 			}
 		}
@@ -68,9 +99,9 @@
 		{
 			switch (event.params.id)
 			{
-				case "play":
+				case "level":
 					mainMenu.disposeTemporarily();
-					screenGamePlay.initialize();
+					screenGameLevels.initialize();
 					break;
 			}
 		}

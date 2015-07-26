@@ -202,22 +202,11 @@
             createQuestions();
 			/* end quiz button */
 			
-
-			this.addEventListener(Event.TRIGGERED, onMainMenuClick);
-		}
-		
-		private function onMainMenuClick(event:Event):void
-		{
-			var buttonClick:Button = event.target as Button;
-			if(buttonClick as Button == playBtn)
-			{
-				this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "play"},true));
-			}
 		}
 		
 		private function onPlayClick(event:Event):void
 		{
-			showQuiz();
+			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "level"},true));
 		}
 		
 		private function onQuizClick(event:Event):void

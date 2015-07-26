@@ -79,6 +79,7 @@
 		private var gameOverScreen:GameOverScreen;
 		/** Tween object for game over container. */
 		private var tween_gameOverContainer:Tween;
+		private var level:int;
 		
 		public function GamePlay() {
 			// constructor code
@@ -138,8 +139,9 @@
 			this.addChild(startButton);
 		}
 		
-		private function disposeTemporarily():void
+		public function disposeTemporarily():void
 		{
+			this.visible = false;
 			gameOverScreen.visible = false;
 			
 			if (this.hasEventListener(Event.ENTER_FRAME)) this.removeEventListener(Event.ENTER_FRAME, calculateElapsed);
@@ -150,7 +152,7 @@
 			 
 		}
 		
-		public function initialize():void
+		public function initialize(nLevel:int):void
 		{
 			// Dispose screen temporarily.
 			disposeTemporarily();
@@ -163,6 +165,7 @@
 			
 			gameState = "idle";
 			
+			level = nLevel;
 			playerSpeed = 0;
 			hitObstacle = 0;
 			bg.speed = 0;
@@ -175,6 +178,7 @@
 			hero.x = -stage.stageWidth;
 			hero.y = stage.stageHeight * 0.5;
 			
+			scoreText.text = "Score: "+scoreDistance;
 			lives = 5;
 			scoreLife.text = "Score Life: "+String(lives);
 			
@@ -535,7 +539,7 @@
 			nextButton.visible = false;
 			
 			quizQuestions = new Array();
-            createQuestions();
+            questionLevels();
 			
 			var questionTemp:Number = Math.ceil(Math.random() * ((quizQuestions.length - 1) - 0)+0);
 			addQuestions(questionTemp);
@@ -544,7 +548,78 @@
 			
 		}
 		
-		private function createQuestions() {
+		private function questionLevels() {
+			switch(level)
+			{
+				case 1:
+					createQuestions1();
+					break;
+				case 2:
+					createQuestions2();
+					break;
+				case 3:
+					createQuestions3();
+					break;
+			}
+		}
+		
+		private function createQuestions1() {
+            quizQuestions.push(new QuizQuestion("Dummy",
+                                                            0,
+                                                            "Dummy",
+                                                            "Dummy",
+                                                            "Dummy",
+                                                            "Dummy"));
+            quizQuestions.push(new QuizQuestion("Didaerah mana pertama kali tentara jepang menduduki Indonesia?",
+                                                            2,
+                                                            "Semarang",
+                                                            "Solo",
+                                                            "Tarakan",
+                                                            "Makasar"));
+            quizQuestions.push(new QuizQuestion("Pemerintah Hindia Belanda menyerah tanpa syarat kepada Jepang?",
+                                                            1,
+                                                            "8 Januari 1942",
+                                                            "8 Maret 1942",
+                                                            "17 Agustus 1945",
+                                                            "8 Januari 1945",
+                                                            "8 Maret 1945"));
+            quizQuestions.push(new QuizQuestion("Untuk memikat hari rakyat, Jepang membuat propaganda Tiga A, yang berisi?",
+                                                            3,
+                                                            "Jepang pemimpin Asia",
+                                                            "Jepang pelindung Asia",
+                                                            "epang cahaya Asia",
+                                                            "Semua jawaban benar"));
+        }
+		
+		private function createQuestions3() {
+            quizQuestions.push(new QuizQuestion("Dummy",
+                                                            0,
+                                                            "Dummy",
+                                                            "Dummy",
+                                                            "Dummy",
+                                                            "Dummy"));
+            quizQuestions.push(new QuizQuestion("Didaerah mana pertama kali tentara jepang menduduki Indonesia?",
+                                                            2,
+                                                            "Semarang",
+                                                            "Solo",
+                                                            "Tarakan",
+                                                            "Makasar"));
+            quizQuestions.push(new QuizQuestion("Pemerintah Hindia Belanda menyerah tanpa syarat kepada Jepang?",
+                                                            1,
+                                                            "8 Januari 1942",
+                                                            "8 Maret 1942",
+                                                            "17 Agustus 1945",
+                                                            "8 Januari 1945",
+                                                            "8 Maret 1945"));
+            quizQuestions.push(new QuizQuestion("Untuk memikat hari rakyat, Jepang membuat propaganda Tiga A, yang berisi?",
+                                                            3,
+                                                            "Jepang pemimpin Asia",
+                                                            "Jepang pelindung Asia",
+                                                            "epang cahaya Asia",
+                                                            "Semua jawaban benar"));
+        }
+		
+		private function createQuestions2() {
             quizQuestions.push(new QuizQuestion("Dummy",
                                                             0,
                                                             "Dummy",
@@ -672,7 +747,7 @@
 		{
 			trace("alalay");
 			gameOverScreen.visible = false;
-			initialize();
+			initialize(level);
 		}
 		
 		/**
