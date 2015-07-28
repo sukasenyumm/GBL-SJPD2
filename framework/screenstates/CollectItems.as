@@ -26,6 +26,7 @@
 	import starling.display.Button;
 	import starling.events.TouchEvent;
 	import feathers.controls.Alert;
+	import framework.utils.SaveManager;
 	
 	public class CollectItems extends Sprite
 	{
@@ -243,11 +244,22 @@
     		trace("selected item:", p_List.selectedIndex);
 			if( p_List.selectedIndex == 0)
 			{
-				var alert:Alert = Alert.show( "Item ini merupakan simbol kedatangan jepang pada tahun xxxx di xxxx.", "Penjelasan", new ListCollection(
-				[
-					{ label: "OK"}
-				]) );
-				alert.addEventListener( Event.CLOSE, alert_closeHandler );
+				if(SaveManager.getInstance().loadDataItemSingle())
+				{
+					var alert:Alert = Alert.show( "Item ini merupakan simbol kedatangan jepang pada tahun xxxx di xxxx.", "Penjelasan", new ListCollection(
+					[
+						{ label: "OK"}
+					]) );
+					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+				}
+				else
+				{
+					var alert:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
+					[
+						{ label: "OK"}
+					]) );
+					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+				}
 			}
 			
 			if( p_List.selectedIndex == 1)

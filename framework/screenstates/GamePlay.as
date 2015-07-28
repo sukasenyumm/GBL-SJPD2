@@ -23,6 +23,8 @@
 	import starling.core.Starling;
 	import starling.utils.rad2deg;
 	import starling.display.Quad;
+	import framework.utils.SaveManager;
+
 
 
 	public class GamePlay extends Sprite{
@@ -706,6 +708,7 @@
 					hideQuestion(questionTemporary);
 					showMessage("Jawaban benar "+quizQuestions[questionTemporary].correctAnswer);
 					scoreLife.text = "Score Life: "+String(lives);
+					SaveManager.getInstance().saveDataItemSingle(true);
             } else {
 				lives-=1;
 				removeQuestions(questionTemporary);	
@@ -745,6 +748,8 @@
 			this.x = 0;
 			this.y = 0;
 			
+			//temporary using distance
+			SaveManager.getInstance().saveDataScore(scoreDistance);
 			// Set Game Over state so all obstacles and items can remove themselves.
 			gameState = "over";
 		}

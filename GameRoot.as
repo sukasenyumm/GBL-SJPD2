@@ -7,6 +7,7 @@
 	import framework.screenstates.GamePlay;
 	import framework.screenstates.ChooseLevel;
 	import framework.screenstates.CollectItems;
+	import framework.utils.SaveManager;
 	
 	public class GameRoot extends Sprite{
 
@@ -17,7 +18,7 @@
 		public function GameRoot() {
 			// constructor code
 			super();
-			
+			SaveManager.getInstance().Initialize();
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		

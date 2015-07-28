@@ -18,6 +18,7 @@
 	import starling.animation.Transitions;
 	import starling.core.Starling;
 	import framework.events.NavigationEvent;
+	import framework.utils.SaveManager;
 	
 	
 	/**
@@ -251,6 +252,7 @@
 			aboutText.visible = true;
 			backBtn.visible = true;
 			quizBtn.visible = false;
+			itemsBtn.visible = false;
 		}
 		
 		public function showQuiz():void
@@ -265,6 +267,7 @@
 			nextButton.visible =true;
 			finishButton.visible = true;
 			quizBtn.visible = false;
+			itemsBtn.visible = false;
 			addAllQuestions();
             hideAllQuestions();
             firstQuestion();
@@ -281,7 +284,15 @@
 			backBtn.visible = false;
 			aboutBtn.visible = true;
 			playBtn.visible = true;
-			quizBtn.visible = true;
+			
+			if(SaveManager.getInstance().loadDataScore() > 100)
+			{
+				quizBtn.visible = true;
+			}
+			else
+			{
+				quizBtn.visible = false;
+			}
 			prevButton.visible = false;
 			nextButton.visible =false;
 			finishButton.visible = false;
