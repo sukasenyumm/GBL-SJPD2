@@ -40,6 +40,8 @@
 		private var helpBtn:Button;
 		/** Achievement button. */
 		private var achievementBtn:Button;
+		/** Items button. */
+		private var itemsBtn:Button;
 		/** Quiz button. */
 		private var quizBtn:Button;
 		/** Play button. */
@@ -167,6 +169,15 @@
 			backBtn.addEventListener(Event.TRIGGERED, onAboutBackClick);
 			this.addChild(backBtn);
 			
+			/* items button */
+			itemsBtn = new Button(GameAssets.getAtlas().getTexture("about_backButton"));
+			itemsBtn.width *= 0.5;
+			itemsBtn.height *= 0.5;
+			itemsBtn.x = stage.stageWidth/3+ 140;
+			itemsBtn.y = stage.stageHeight/4 + backBtn.height;
+			itemsBtn.addEventListener(Event.TRIGGERED, onItemsClick);
+			this.addChild(itemsBtn);
+			
 			/* quiz button */
 			quizBtn = new Button(GameAssets.getAtlas().getTexture("fly_0004"));
 			quizBtn.width *= 0.5;
@@ -207,6 +218,11 @@
 		private function onPlayClick(event:Event):void
 		{
 			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "level"},true));
+		}
+		
+		private function onItemsClick(event:Event):void
+		{
+			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "items"},true));
 		}
 		
 		private function onQuizClick(event:Event):void

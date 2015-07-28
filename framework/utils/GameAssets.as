@@ -21,9 +21,14 @@
 		 */
 		[Embed(source="../media/graphics/mySpritesheet.png")]
 		public static const AtlasTextureGame:Class;
+		[Embed(source="../media/graphics/gameAtlas.png")]
+		public static const AtlasTextureGameTest:Class;
 		
 		[Embed(source="../media/graphics/mySpritesheet.xml", mimeType="application/octet-stream")]
 		public static const AtlasXmlGame:Class;
+		
+		[Embed(source="../media/graphics/gameAtlas.xml", mimeType="application/octet-stream")]
+		public static const AtlasXmlGameTest:Class;
 		
 		/**
 		 * Background Assets 
@@ -34,11 +39,18 @@
 		[Embed(source="../media/graphics/bgWelcome.jpg")]
 		public static const BgWelcome:Class;
 		
+		[Embed(source="../media/graphics/normal-page-symbol.png")]
+		public static const scrollIdle:Class;
+		
+		[Embed(source="../media/graphics/selected-page-symbol.png")]
+		public static const scrollOn:Class;
+		
 		/**
 		 * Texture Cache 
 		 */
 		private static var gameTextures:Dictionary = new Dictionary();
 		private static var gameTextureAtlas:TextureAtlas;
+				private static var gameTextureAtlas2:TextureAtlas;
 		
 		/**
 		 * Returns the Texture atlas instance.
@@ -54,6 +66,18 @@
 			}
 			
 			return gameTextureAtlas;
+		}
+		
+		public static function getAtlasTest():TextureAtlas
+		{
+			if (gameTextureAtlas2 == null)
+			{
+				var texture:Texture = getTexture("AtlasTextureGameTest");
+				var xml:XML = XML(new AtlasXmlGameTest());
+				gameTextureAtlas2=new TextureAtlas(texture, xml);
+			}
+			
+			return gameTextureAtlas2;
 		}
 		
 		/**

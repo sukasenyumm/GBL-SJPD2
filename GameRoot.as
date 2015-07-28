@@ -6,12 +6,14 @@
 	import starling.events.Event;
 	import framework.screenstates.GamePlay;
 	import framework.screenstates.ChooseLevel;
+	import framework.screenstates.CollectItems;
 	
 	public class GameRoot extends Sprite{
 
 		private var mainMenu:MainMenu;
 		private var screenGamePlay:GamePlay;
 		private var screenGameLevels:ChooseLevel;
+		private var screenCollectItems:CollectItems;
 		public function GameRoot() {
 			// constructor code
 			super();
@@ -45,6 +47,12 @@
 			this.addChild(screenGameLevels);
 			screenGameLevels.disposeTemporarily();
 			
+			screenCollectItems = new CollectItems();
+			screenCollectItems.addEventListener(NavigationEvent.SWITCH_STATE, onCollectItemsNavigation);
+			this.addChild(screenCollectItems);
+			screenCollectItems.disposeTemporarily();
+			
+			
 			// Main menu screen.
 			mainMenu = new MainMenu();
 			this.addChild(mainMenu);
@@ -62,15 +70,27 @@
 			switch (event.params.id)
 			{
 				case "mainMenu":
+					screenGamePlay.disposeTemporarily();
 					mainMenu.initialize();
 					break;
 				case "about":
+					screenGamePlay.disposeTemporarily();
 					mainMenu.initialize();
 					mainMenu.showAbout();
 					break;
 			}
 		}
 		
+		private function onCollectItemsNavigation(event:NavigationEvent):void
+		{
+			switch (event.params.id)
+			{
+				case "mainMenu":
+					screenCollectItems.disposeTemporarily();
+					mainMenu.initialize();
+					break;
+			}
+		}
 		/**
 		 * On navigation from different screens. 
 		 * @param event
@@ -92,6 +112,10 @@
 					screenGameLevels.disposeTemporarily();
 					screenGamePlay.initialize(3);
 					break;
+				case "mainMenu":
+					screenGameLevels.disposeTemporarily();
+					mainMenu.initialize();
+					break;
 			}
 		}
 		
@@ -102,6 +126,10 @@
 				case "level":
 					mainMenu.disposeTemporarily();
 					screenGameLevels.initialize();
+					break;
+				case "items":
+					mainMenu.disposeTemporarily();
+					screenCollectItems.initialize();
 					break;
 			}
 		}

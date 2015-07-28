@@ -32,8 +32,8 @@
 			}
 			else
 			{
-				image1 = new Image(GameAssets.getAtlas().getTexture("bgLayer"+layer));
-				image2 = new Image(GameAssets.getAtlas().getTexture("bgLayer"+layer));
+				image1 = new Image(GameAssets.getAtlasTest().getTexture("bgLayer"+layer));
+				image2 = new Image(GameAssets.getAtlasTest().getTexture("bgLayer"+layer));
 				
 			}
 			

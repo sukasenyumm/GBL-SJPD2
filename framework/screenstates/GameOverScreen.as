@@ -195,6 +195,11 @@ package framework.screenstates
 			this.visible = true;
 		}
 		
+		public function disposeTemporarily():void
+		{
+			this.visible = false;
+		}
+		
 		/**
 		 * Score. 
 		 * @return 

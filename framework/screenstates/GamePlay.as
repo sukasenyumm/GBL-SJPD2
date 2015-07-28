@@ -22,6 +22,7 @@
 	import starling.animation.Tween;
 	import starling.core.Starling;
 	import starling.utils.rad2deg;
+	import starling.display.Quad;
 
 
 	public class GamePlay extends Sprite{
@@ -92,8 +93,6 @@
 			this.removeEventListener(Event.ADDED_TO_STAGE,onAddedToStage);
 			drawGame();
 			drawGameOverScreen();
-			
-			
 		}
 
 		private function drawGame():void
@@ -137,6 +136,42 @@
 			startButton.y = stage.stageHeight/2-startButton.height/2;
 			startButton.addEventListener(Event.TRIGGERED, onStartButtonClick);
 			this.addChild(startButton);
+			
+			//quiz
+			//statusT = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
+			//disi chiller dulu
+			statusT = new TextField(480, 600, "", "chiller", 18, 0xffffff);
+			statusT.x = 0;
+			statusT.y = 100;
+			statusT.hAlign = HAlign.CENTER;
+			statusT.vAlign = VAlign.TOP;
+			this.addChild(statusT);
+			
+			/* quiz button */
+			 var yPosition:Number = 300;
+
+            finishButton = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
+            finishButton.x = 30;
+            finishButton.y = yPosition;
+            finishButton.addEventListener(Event.TRIGGERED, finishHandler);
+            this.addChild(finishButton);
+			finishButton.visible = false;
+			
+			nextButton = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
+            nextButton.x = 30;
+            nextButton.y = yPosition;
+            nextButton.addEventListener(Event.TRIGGERED, nextHandler);
+            this.addChild(nextButton);
+			nextButton.visible = false;
+			
+			//quizQuestions = new Array();
+            //questionLevels();
+			
+			//var questionTemp:Number = Math.ceil(Math.random() * ((quizQuestions.length - 1) - 0)+0);
+			//addQuestions(questionTemp);
+			//questionTemporary = questionTemp;
+			
+			//end quiz
 		}
 		
 		public function disposeTemporarily():void
@@ -270,14 +305,14 @@
 							{
 								hero.rotation = deg2rad(-(hero.y -touchY) * 0.2);
 							}
-							if(hero.y > gameArea.bottom - hero.height * 0.5)
+							if(hero.y > gameArea.bottom)
 							{
-								hero.y = gameArea.bottom - hero.height * 0.5;
+								hero.y = gameArea.bottom;
 								hero.rotation = deg2rad(0);
 							}
-							if(hero.y < gameArea.top + hero.height * 0.5)
+							if(hero.y < gameArea.top)
 							{
-								hero.y = gameArea.top + hero.height * 0.5;
+								hero.y = gameArea.top;
 								hero.rotation = deg2rad(0);
 							}
 	
@@ -393,8 +428,6 @@
 				
 				if(itemToTrack.x < -50 || gameState == "over")
 				{
-					//itemsToAnimate.splice(i,1);
-					//this.removeChild(itemToTrack);
 					disposeItemTemporarily(i, itemToTrack);
 				}
 			}
@@ -440,6 +473,8 @@
 					obstacleToTrack.rotation = deg2rad(70);
 					hitObstacle = 30;
 					playerSpeed *= 0.5;
+					
+					trace("aduh")
 					
 					// Update lives.
 					lives--;
@@ -532,38 +567,22 @@
 		
 		private function initQuiz():void
 		{
+			for(var i:uint = 0;i<itemsToAnimate.length;i++)
+			{
+				itemsToAnimate[i].visible = false;
+			}
 			//statusT = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
-			//disi chiller dulu
-			statusT = new TextField(480, 600, "", "chiller", 18, 0xffffff);
-			statusT.x = 0;
-			statusT.y = 100;
-			statusT.hAlign = HAlign.CENTER;
-			statusT.vAlign = VAlign.TOP;
-			this.addChild(statusT);
+			statusT.visible = true;
 			
-			/* quiz button */
-			 var yPosition:Number = 300;
-
-            finishButton = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
-            finishButton.x = 30;
-            finishButton.y = yPosition;
-            finishButton.addEventListener(Event.TRIGGERED, finishHandler);
-            this.addChild(finishButton);
-			
-			nextButton = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
-            nextButton.x = 30;
-            nextButton.y = yPosition;
-            nextButton.addEventListener(Event.TRIGGERED, nextHandler);
-            this.addChild(nextButton);
-			nextButton.visible = false;
+			finishButton.visible = true;
+   			nextButton.visible = false;
 			
 			quizQuestions = new Array();
-            questionLevels();
+			questionLevels();
 			
 			var questionTemp:Number = Math.ceil(Math.random() * ((quizQuestions.length - 1) - 0)+0);
 			addQuestions(questionTemp);
 			questionTemporary = questionTemp;
-        
 			
 		}
 		
@@ -671,11 +690,6 @@
             statusT.x = 200;
         }
         private function addQuestions(numQuestion:Number) {
-            /*
-			for(var i:int = 0; i < quizQuestions.length; i++) {
-                this.addChild(quizQuestions[i]);
-            }*/
-			trace("error num: "+numQuestion)
 			this.addChild(quizQuestions[numQuestion]);
         }
         private function removeQuestions(numQuestion:Number) {
@@ -707,6 +721,10 @@
 			gamePaused = false;
 			nextButton.visible = false;
 			showMessage("");
+			for(var i:uint = 0;i<itemsToAnimate.length;i++)
+			{
+				itemsToAnimate[i].visible = true;
+			}
 		}
 		
 		private function hideQuestion(numQuestion:Number):void
@@ -750,7 +768,6 @@
 		{
 			if (event.params.id == "playAgain") 
 			{
-				trace("playagain");
 				tween_gameOverContainer = new Tween(gameOverScreen, 1);
 				tween_gameOverContainer.fadeTo(0);
 				tween_gameOverContainer.onComplete = gameOverFadedOut;
@@ -764,8 +781,7 @@
 		 */
 		private function gameOverFadedOut():void
 		{
-			trace("alalay");
-			gameOverScreen.visible = false;
+			gameOverScreen.disposeTemporarily();
 			initialize(level);
 		}
 		

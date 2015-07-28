@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://texturepacker.com-->
+<!-- $TexturePacker:SmartUpdate:51783146942ed451f5f6ea942bca62a9$ -->
+<TextureAtlas imagePath="gameAtlas.png">
+    <SubTexture name="bgLayer2" x="2" y="2" width="512" height="92" frameX="0" frameY="0" frameWidth="512" frameHeight="128"/>
+    <SubTexture name="bgLayer3" x="2" y="96" width="512" height="256"/>
+    <SubTexture name="bgLayer4" x="2" y="354" width="512" height="32"/>
+    <SubTexture name="btn_gal" x="516" y="354" width="34" height="34"/>
+    <SubTexture name="btn_info" x="552" y="354" width="34" height="34"/>
+    <SubTexture name="btn_play" x="588" y="354" width="66" height="66"/>
+    <SubTexture name="btn_quit" x="656" y="354" width="18" height="18"/>
+    <SubTexture name="btn_quiz" x="676" y="354" width="34" height="34"/>
+    <SubTexture name="btn_reward" x="712" y="354" width="34" height="34"/>
+    <SubTexture name="btn_sound" x="748" y="354" width="18" height="18"/>
+</TextureAtlas>
