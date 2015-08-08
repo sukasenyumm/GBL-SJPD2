@@ -2,7 +2,7 @@
 <data version="1.0">
     <struct type="Settings">
         <key>fileFormatVersion</key>
-        <int>0</int>
+        <int>1</int>
         <key>variation</key>
         <string>main</string>
         <key>verbose</key>
@@ -144,13 +144,14 @@
             <filename>background png/bgLayer4.png</filename>
             <filename>background png/bgLayer2.png</filename>
             <filename>background png/bgLayer3.png</filename>
-            <filename>button/button/btn_quiz.png</filename>
-            <filename>button/button/btn_reward.png</filename>
-            <filename>button/button/btn_sound.png</filename>
-            <filename>button/button/btn_gal.png</filename>
-            <filename>button/button/btn_info.png</filename>
-            <filename>button/button/btn_play.png</filename>
-            <filename>button/button/btn_quit.png</filename>
+            <filename>button/btn_play.png</filename>
+            <filename>button/btn_quit.png</filename>
+            <filename>button/btn_quiz.png</filename>
+            <filename>button/btn_sound.png</filename>
+            <filename>button/lbl_title.png</filename>
+            <filename>button/btn_credits.png</filename>
+            <filename>button/btn_info.png</filename>
+            <filename>button/btn_item.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
