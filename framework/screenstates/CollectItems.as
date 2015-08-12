@@ -40,6 +40,7 @@
 		private var _pageIndicator:PageIndicator;
 		private var layout:AnchorLayout;
 		private var group:LayoutGroup;
+		private var galeriInfo:TextField;
 		
 		
 		public function CollectItems()
@@ -68,23 +69,31 @@
 		{
 			
 			// Background quad.
-			//bg = new Quad(stage.stageWidth, stage.stageHeight, 0x000000);
-			//bg.alpha = 0.75;
-			//this.addChild(bg);
+			bg = new Quad(stage.stageWidth, stage.stageHeight, 0xFFFFFF);
+			bg.alpha = 0.75;
+			this.addChild(bg);
 			
 			
 			// Navigation buttons.
-			mainBtn = new Button(GameAssets.getAtlas().getTexture("gameOver_mainButton"));
-			mainBtn.x = stage.stageWidth * 0.5 - mainBtn.width * 0.5;
-			mainBtn.y = (stage.stageHeight * 70)/80;
+			mainBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_home"));
+			mainBtn.x = (stage.stageWidth/14);
+			mainBtn.y = stage.stageHeight - (stage.stageHeight/14) - mainBtn.height;
 			mainBtn.addEventListener(Event.TRIGGERED, onMainClick);
 			this.addChild(mainBtn);
+		
+			galeriInfo = new TextField(50, 100, "", "Consolas", 14, 0x000000);
+			galeriInfo.text = "GALERI INFO";
+			galeriInfo.x = stage.stageWidth/2-galeriInfo.textBounds.width/2;
+			galeriInfo.y = stage.stageHeight/6-galeriInfo.textBounds.height*2;
+			this.addChild(galeriInfo);
+			
 			//a nice, fluid layout
 			group = new LayoutGroup();
     
 			this.layout = new AnchorLayout();
+			group.y = stage.stageHeight/6;
 			group.width = stage.stageWidth;
-			group.height = stage.stageHeight - 100;
+			group.height = stage.stageHeight - stage.stageHeight/6;
 			
 			
 			group.autoSizeMode = LayoutGroup.AUTO_SIZE_MODE_STAGE;
@@ -113,7 +122,7 @@
 			//we'll position the page indicator on the bottom and stretch its
 			//width to fill the container's width
 			var pageIndicatorLayoutData:AnchorLayoutData = new AnchorLayoutData();
-			pageIndicatorLayoutData.bottom = 0;
+			pageIndicatorLayoutData.bottom = 100;
 			pageIndicatorLayoutData.left = 0;
 			pageIndicatorLayoutData.right = 0;
 			this._pageIndicator.layoutData = pageIndicatorLayoutData;
@@ -176,7 +185,7 @@
 			listLayout.tileHorizontalAlign = TiledRowsLayout.TILE_HORIZONTAL_ALIGN_CENTER;
 			listLayout.horizontalAlign = TiledRowsLayout.HORIZONTAL_ALIGN_CENTER;
 			listLayout.padding = 20;
-			listLayout.gap = 20;
+			listLayout.gap = 30;
 			this._list.layout = listLayout;
 			group.layout = layout;
 			this.addChild( group );

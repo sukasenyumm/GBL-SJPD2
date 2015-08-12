@@ -19,6 +19,8 @@
 	import starling.core.Starling;
 	import framework.events.NavigationEvent;
 	import framework.utils.SaveManager;
+	import flash.desktop.NativeApplication;
+	import starling.display.Quad;
 	
 	
 	/**
@@ -30,21 +32,23 @@
 	public class MainMenu extends Sprite
 	{
 		/** Background image. */
-		private var bg:Image;
+		private var bg:Quad;
 		/** Game title. */
 		private var title:Image;
 		/** hero */
 		private var hero:Image;
 		/** About button. */
 		private var aboutBtn:Button;
-		/** Help button. */
-		private var helpBtn:Button;
-		/** Achievement button. */
-		private var achievementBtn:Button;
 		/** Items button. */
 		private var itemsBtn:Button;
+		/** Info button. */
+		private var helpBtn:Button;
 		/** Quiz button. */
 		private var quizBtn:Button;
+		/** Sound button. */
+		private var soundBtn:Button;
+		/** Exit button. */
+		private var exitBtn:Button;
 		/** Play button. */
 		private var playBtn:Button;
 		/** Back button. */
@@ -103,112 +107,134 @@
 		private function drawScreen():void
 		{
 			// GENERAL ELEMENTS
+			var bottomColor:uint = 0xFFFFFF; // blue
+			var topColor:uint    = 0xea0b0b; // red	
 			
-			bg = new Image(GameAssets.getTexture("BgWelcome"));
+			bg = new Quad(stage.stageWidth, stage.stageHeight, 0x000000);
 			bg.blendMode = BlendMode.NONE;
-			bg.width = stage.stageWidth;
-			bg.height = stage.stageHeight;
 			this.addChild(bg);
 			
-			title = new Image(GameAssets.getAtlas().getTexture(("welcome_title")));
-			title.x = 10;
-			title.y = 15;
-			this.addChild(title);
+			bg.setVertexColor(0, topColor);
+			bg.setVertexColor(1, topColor);
+			bg.setVertexColor(2, bottomColor);
+			bg.setVertexColor(3, bottomColor);
 			
 			hero = new Image(GameAssets.getAtlas().getTexture("welcome_hero"));
 			hero.width = hero.width*.5;
 			hero.width = hero.height*.5;
 			this.addChild(hero);
 			
+			title = new Image(GameAssets.getAtlasFix().getTexture("lbl_title"));
+			title.x = stage.stageWidth/14;
+			title.y = stage.stageHeight/14;
+			this.addChild(title);
+			
 			// ABOUT ELEMENTS
 			fontRegular = Fonts.getFont("Regular");
 			
-			aboutText = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
-			aboutText.text = "Hungry Hero is a free and open source game built on Adobe Flash using Starling Framework.\n\nhttp://www.hungryherogame.com\n\n" +
-				" The concept is very simple. The hero is pretty much always hungry and you need to feed him with food." +
-				" You score when your Hero eats food.\n\nThere are different obstacles that fly in with a \"Look out!\"" +
-				" caution before they appear. Avoid them at all costs. You only have 5 lives. Try to score as much as possible and also" +
-				" try to travel the longest distance.";
-			aboutText.x = stage.stageWidth * 0.5 + 100;
-			aboutText.y = stage.stageHeight * 0.7;
+			aboutText = new TextField(stage.stageWidth - stage.stageWidth/14, stage.stageHeight -  stage.stageHeight/14, "", "Consolas", 14, 0x000000);
+			aboutText.text = "PESAWAT INSULINDE adalah sebuah game untuk mempelajari Sejarah Indonesia.\n\n" +
+				" Pesawat Insulinde bertugas untuk mengejar pesawat X yang telah mencuri lembaran-lembaran sejarah yang ada di Indonesia." +
+				" Dalam perjalanannya, pesawat X tadi menjatuhkan lembaran-lembaran sejarah disepanjang jalan." +
+				" Jangan lupa kumpulkan juga batu pengetahuan untuk membuka sesi quiz pada menu game.\n\n"+
+				" Game ini diciptakan oleh:\n"+
+				" Abas Setiawan (Produser dan Programmer)\n"+
+				" Yusuf Priambodo (Desainer dan Ilustrator)\n"+
+				" Copyright @2015";
+			aboutText.x = stage.stageWidth/2 - aboutText.textBounds.width/2;
+			aboutText.y = title.y+title.height;
 			aboutText.hAlign = HAlign.CENTER;
 			aboutText.vAlign = VAlign.TOP;
-			aboutText.height = aboutText.textBounds.height + 30;
+			//aboutText.border = true;
 			this.addChild(aboutText);
 			
-			statusT = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
-			statusT.x = 0;
-			statusT.y = 100;
-			statusT.hAlign = HAlign.CENTER;
-			statusT.vAlign = VAlign.TOP;
-			this.addChild(statusT);
-			
-			/* play button  NOO it's quiz*/
-			playBtn = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
-			playBtn.width *= 0.5;
-			playBtn.height *= 0.5;
-			playBtn.x = stage.stageWidth/3;
-			playBtn.y = stage.stageHeight/4;
+			/* play button*/
+			playBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_play"));
+			playBtn.x = stage.stageWidth/2 + playBtn.width;
+			playBtn.y = stage.stageHeight/2 - playBtn.height/2;
 			playBtn.addEventListener(Event.TRIGGERED, onPlayClick);
 			this.addChild(playBtn);
 			
-			/* about button */
-			aboutBtn = new Button(GameAssets.getAtlas().getTexture("welcome_aboutButton"));
-			aboutBtn.width *= 0.5;
-			aboutBtn.height *= 0.5;
-			aboutBtn.x = stage.stageWidth/3;
-			aboutBtn.y = stage.stageHeight/4 + aboutBtn.height;
-			aboutBtn.addEventListener(Event.TRIGGERED, onAboutClick);
-			this.addChild(aboutBtn);
+			/* exit button */
+			exitBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_quit"));
+			exitBtn.x = stage.stageWidth - exitBtn.width - (stage.stageWidth/14);
+			exitBtn.y = (stage.stageHeight/14);
+			exitBtn.addEventListener(Event.TRIGGERED, onExitClick);
+			this.addChild(exitBtn);
+			
+			/* sound button */
+			soundBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_sound"));
+			soundBtn.x = exitBtn.x - exitBtn.width - (stage.stageHeight/20);
+			soundBtn.y = exitBtn.y;
+			soundBtn.addEventListener(Event.TRIGGERED, onSoundClick);
+			this.addChild(soundBtn);
 			
 			/* back button */
-			backBtn = new Button(GameAssets.getAtlas().getTexture("about_backButton"));
-			backBtn.width *= 0.5;
-			backBtn.height *= 0.5;
-			backBtn.x = stage.stageWidth/3;
-			backBtn.y = stage.stageHeight/4 + backBtn.height;
+			backBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_home"));
+			backBtn.x = (stage.stageWidth/14);
+			backBtn.y = stage.stageHeight - (stage.stageHeight/14) - backBtn.height;
 			backBtn.addEventListener(Event.TRIGGERED, onAboutBackClick);
 			this.addChild(backBtn);
 			
+			/* help button */
+			helpBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_info"));
+			helpBtn.x = exitBtn.x - exitBtn.width;
+			helpBtn.y = stage.stageHeight - (stage.stageHeight/14) - helpBtn.height;
+			helpBtn.addEventListener(Event.TRIGGERED, onHelpClick);
+			this.addChild(helpBtn);
+			
+			
+			/* about button */
+			aboutBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_credits"));
+			aboutBtn.x = helpBtn.x-(stage.stageHeight/20)-aboutBtn.height;
+			aboutBtn.y = helpBtn.y;
+			aboutBtn.addEventListener(Event.TRIGGERED, onAboutClick);
+			this.addChild(aboutBtn);
+			
 			/* items button */
-			itemsBtn = new Button(GameAssets.getAtlas().getTexture("about_backButton"));
-			itemsBtn.width *= 0.5;
-			itemsBtn.height *= 0.5;
-			itemsBtn.x = stage.stageWidth/3+ 140;
-			itemsBtn.y = stage.stageHeight/4 + backBtn.height;
+			itemsBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_item"));
+			itemsBtn.x = aboutBtn.x-(stage.stageHeight/20)-itemsBtn.height;
+			itemsBtn.y = helpBtn.y;
 			itemsBtn.addEventListener(Event.TRIGGERED, onItemsClick);
 			this.addChild(itemsBtn);
 			
 			/* quiz button */
-			quizBtn = new Button(GameAssets.getAtlas().getTexture("fly_0004"));
-			quizBtn.width *= 0.5;
-			quizBtn.height *= 0.5;
-			quizBtn.x = stage.stageWidth/3;
-			quizBtn.y = stage.stageHeight/3 + quizBtn.height;
+			quizBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_quiz"));
+			quizBtn.x = itemsBtn.x-(stage.stageHeight/20)-quizBtn.height;
+			quizBtn.y = helpBtn.y;
 			quizBtn.addEventListener(Event.TRIGGERED, onQuizClick);
 			this.addChild(quizBtn);
 			
 			/* quiz button */
-			 var yPosition:Number = 300;
+			var yPosition:Number = backBtn.y - stage.stageHeight/14;
 	
-			prevButton = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
-			prevButton.x = 30;
-			prevButton.y = yPosition;
-			prevButton.addEventListener(Event.TRIGGERED, prevHandler);
-			this.addChild(prevButton);
-			
-
-            nextButton = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
-            nextButton.x = prevButton.x + prevButton.width + 40;
-            nextButton.y = yPosition;
+			nextButton = new Button(GameAssets.getAtlasFix().getTexture("btn_selanjutnya"));
+            nextButton.x = stage.stageWidth/2 - nextButton.width/2;
+            nextButton.y = yPosition - nextButton.height;
             nextButton.addEventListener(Event.TRIGGERED, nextHandler);
             this.addChild(nextButton);
+			
+			
+			prevButton = new Button(GameAssets.getAtlasFix().getTexture("btn_sebelumnya"));
+			prevButton.x = nextButton.x - nextButton.width - 50;
+			prevButton.y = yPosition- prevButton.height;
+			prevButton.addEventListener(Event.TRIGGERED, prevHandler);
+			this.addChild(prevButton);
 
-            finishButton = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
-            finishButton.x = nextButton.x + nextButton.width + 40;
-            finishButton.y = yPosition;
+            finishButton = new Button(GameAssets.getAtlasFix().getTexture("btn_selesai"));
+			finishButton.x = nextButton.x + nextButton.width + 50;
+            finishButton.y = yPosition- finishButton.height;
             finishButton.addEventListener(Event.TRIGGERED, finishHandler);
             this.addChild(finishButton);
+			
+			//statusT = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
+			statusT = new TextField(480, 50, "", "Consolas", 14, 0xffffff);
+			statusT.x = stage.stageWidth/2 - statusT.width/2;
+			statusT.y = finishButton.y - statusT.height*2;
+			statusT.hAlign = HAlign.CENTER;
+			statusT.vAlign = VAlign.TOP;
+			//statusT.border = true;
+			this.addChild(statusT);
 			
 			quizQuestions = new Array();
             createQuestions();
@@ -237,6 +263,23 @@
 			showAbout();
 		}
 		
+		private function onHelpClick(event:Event):void
+		{
+			showMessage("");
+			//showInfo();
+		}
+		
+		private function onSoundClick(event:Event):void
+		{
+			showMessage("");
+		}
+		
+		private function onExitClick(event:Event):void
+		{
+			showMessage("");
+			NativeApplication.nativeApplication.exit(); 
+		}
+		
 		private function onAboutBackClick(event:Event):void
 		{
 			showMessage("");
@@ -249,6 +292,7 @@
 			hero.visible = false;
 			playBtn.visible = false;
 			aboutBtn.visible = false;
+			helpBtn.visible = false;
 			aboutText.visible = true;
 			backBtn.visible = true;
 			quizBtn.visible = false;
@@ -261,6 +305,7 @@
 			hero.visible = false;
 			title.visible = false;
 			playBtn.visible = false;
+			helpBtn.visible = false;
 			backBtn.visible = true;
 			aboutBtn.visible = false;
             prevButton.visible = true;
@@ -284,18 +329,12 @@
 			backBtn.visible = false;
 			aboutBtn.visible = true;
 			playBtn.visible = true;
-			
-			if(SaveManager.getInstance().loadDataScore() > 100)
-			{
-				quizBtn.visible = true;
-			}
-			else
-			{
-				quizBtn.visible = false;
-			}
+			quizBtn.visible = true;
+			helpBtn.visible = true;
 			prevButton.visible = false;
 			nextButton.visible =false;
 			finishButton.visible = false;
+			itemsBtn.visible = true;
 			
 			hideAllQuestions();
 			
@@ -303,10 +342,10 @@
 			hero.x = -hero.width;
 			hero.y = 100;
 			
-			
-			tweenHero = new Tween(hero, 4, Transitions.EASE_OUT);
+			tweenHero = new Tween(hero, 2, Transitions.EASE_OUT);
 			tweenHero.animate("x", 80);
 			Starling.juggler.add(tweenHero);
+			Starling.juggler.removeTweens(tweenHero);
 			
 			this.addEventListener(Event.ENTER_FRAME, floatingAnimation);
 		}
@@ -320,9 +359,7 @@
 		{
 			_currentDate = new Date();
 			hero.y = 130 + (Math.cos(_currentDate.getTime() * 0.002)) * 25;
-			playBtn.y = 340 + (Math.cos(_currentDate.getTime() * 0.002)) * 10;
-			aboutBtn.y = 460 + (Math.cos(_currentDate.getTime() * 0.002)) * 10;
-			quizBtn.y = 260 + (Math.cos(_currentDate.getTime() * 0.002)) * 10;
+			playBtn.y = (stage.stageHeight/2 - playBtn.height/2) + (Math.cos(_currentDate.getTime() * 0.002)) * 10;
 		}
 		
 		/**
@@ -339,6 +376,7 @@
 		*
 		*/
 		 private function createQuestions() {
+			score = 0;
             quizQuestions.push(new QuizQuestion("What color is an orange?",
                                                             0,
                                                             "Orange",
@@ -370,10 +408,13 @@
    
         private function showMessage(theMessage:String) {
             statusT.text = theMessage;
-            statusT.x = 200;
+            statusT.x = stage.stageWidth/2 - statusT.width/2;
         }
+		
         private function addAllQuestions() {
             for(var i:int = 0; i < quizQuestions.length; i++) {
+				quizQuestions[i].x = stage.stageWidth/2 - quizQuestions[i].width/2;
+				quizQuestions[i].y = stage.stageHeight/14+stage.stageHeight/20;
                 this.addChild(quizQuestions[i]);
             }
         }
@@ -429,6 +470,7 @@
                 finishButton.visible = false;
                 hideAllQuestions();
                 computeScore();
+            	
             } else {
                 showMessage("belum selesai semua");
             }

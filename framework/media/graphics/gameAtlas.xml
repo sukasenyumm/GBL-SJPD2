@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker http://texturepacker.com-->
-<!-- $TexturePacker:SmartUpdate:cf0ba23994e73cbe8251a9e2181eb927$ -->
+<!-- $TexturePacker:SmartUpdate:2ad60185c21539989594f8c86b8e9215$ -->
 <TextureAtlas imagePath="gameAtlas.png">
     <SubTexture name="bgLayer2" x="2" y="2" width="512" height="92" frameX="0" frameY="0" frameWidth="512" frameHeight="128"/>
     <SubTexture name="bgLayer3" x="2" y="96" width="512" height="256"/>
     <SubTexture name="bgLayer4" x="2" y="354" width="512" height="32"/>
-    <SubTexture name="btn_credits" x="516" y="354" width="32" height="35"/>
-    <SubTexture name="btn_info" x="550" y="354" width="32" height="35"/>
-    <SubTexture name="btn_item" x="584" y="354" width="32" height="35"/>
-    <SubTexture name="btn_play" x="618" y="354" width="64" height="70"/>
-    <SubTexture name="btn_quit" x="684" y="354" width="16" height="16"/>
-    <SubTexture name="btn_quiz" x="702" y="354" width="32" height="35"/>
-    <SubTexture name="btn_sound" x="736" y="354" width="16" height="16"/>
-    <SubTexture name="lbl_title" x="754" y="354" width="254" height="128"/>
+    <SubTexture name="btn_1942" x="516" y="354" width="249" height="176"/>
+    <SubTexture name="btn_1945" x="767" y="354" width="249" height="176"/>
+    <SubTexture name="btn_1950" x="2" y="532" width="249" height="176"/>
+    <SubTexture name="btn_back" x="253" y="532" width="62" height="65"/>
+    <SubTexture name="btn_berhasil" x="317" y="532" width="127" height="33"/>
+    <SubTexture name="btn_credits" x="446" y="532" width="62" height="65"/>
+    <SubTexture name="btn_gagal" x="510" y="532" width="127" height="33"/>
+    <SubTexture name="btn_home" x="639" y="532" width="62" height="65"/>
+    <SubTexture name="btn_info" x="703" y="532" width="62" height="65"/>
+    <SubTexture name="btn_item" x="767" y="532" width="62" height="65"/>
+    <SubTexture name="btn_jawab" x="831" y="532" width="127" height="33"/>
+    <SubTexture name="btn_lanjutkan" x="2" y="710" width="127" height="33"/>
+    <SubTexture name="btn_mulai" x="131" y="710" width="127" height="33"/>
+    <SubTexture name="btn_play" x="260" y="710" width="128" height="131"/>
+    <SubTexture name="btn_quit" x="390" y="710" width="32" height="33"/>
+    <SubTexture name="btn_quiz" x="424" y="710" width="62" height="65"/>
+    <SubTexture name="btn_sebelumnya" x="488" y="710" width="127" height="33"/>
+    <SubTexture name="btn_selanjutnya" x="617" y="710" width="127" height="33"/>
+    <SubTexture name="btn_selesai" x="746" y="710" width="127" height="33"/>
+    <SubTexture name="btn_sound" x="875" y="710" width="32" height="33"/>
+    <SubTexture name="lbl_title" x="2" y="843" width="251" height="121"/>
 </TextureAtlas>

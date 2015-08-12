@@ -71,27 +71,29 @@
 			
 			
 			// Navigation buttons.
-			mainBtn = new Button(GameAssets.getAtlas().getTexture("gameOver_mainButton"));
-			mainBtn.x = stage.stageWidth * 0.5 - mainBtn.width * 0.5;
-			mainBtn.y = (stage.stageHeight * 70)/100;
+			mainBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_home"));
+			mainBtn.x = (stage.stageWidth/14);
+			mainBtn.y = stage.stageHeight - (stage.stageHeight/14) - mainBtn.height;
 			mainBtn.addEventListener(Event.TRIGGERED, onMainClick);
 			this.addChild(mainBtn);
 			
-			level1Btn = new Button(GameAssets.getAtlas().getTexture("gameOver_mainButton"));
-			level1Btn.x = stage.stageWidth * 0.2;
-			level1Btn.y = stage.stageHeight * 0.5;
-			level1Btn.addEventListener(Event.TRIGGERED, onPlayClick1);
-			this.addChild(level1Btn);
+			var yPosition:Number = stage.stageHeight/2;
 			
-			level2Btn = new Button(GameAssets.getAtlas().getTexture("gameOver_mainButton"));
-			level2Btn.x = level1Btn.x + level1Btn.width+50;
-			level2Btn.y = stage.stageHeight * 0.5;
+			level2Btn = new Button(GameAssets.getAtlasFix().getTexture("btn_1945"));
+			level2Btn.x = stage.stageWidth/2 - level2Btn.width/2;
+			level2Btn.y = yPosition - level2Btn.height/2;
 			level2Btn.addEventListener(Event.TRIGGERED, onPlayClick2);
 			this.addChild(level2Btn);
 			
-			level3Btn = new Button(GameAssets.getAtlas().getTexture("gameOver_mainButton"));
-			level3Btn.x = level2Btn.x + level2Btn.width+50;
-			level3Btn.y = stage.stageHeight * 0.5;
+			level1Btn = new Button(GameAssets.getAtlasFix().getTexture("btn_1942"));
+			level1Btn.x = level2Btn.x - level2Btn.width - 10;
+			level1Btn.y = yPosition- level2Btn.height/2;
+			level1Btn.addEventListener(Event.TRIGGERED, onPlayClick1);
+			this.addChild(level1Btn);
+			
+			level3Btn = new Button(GameAssets.getAtlasFix().getTexture("btn_1950"));
+			level3Btn.x = level2Btn.x + level2Btn.width + 10;
+            level3Btn.y = yPosition- level3Btn.height/2;
 			level3Btn.addEventListener(Event.TRIGGERED, onPlayClick3);
 			this.addChild(level3Btn);
 			

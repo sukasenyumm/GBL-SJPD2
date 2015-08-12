@@ -627,35 +627,7 @@
                                                             3,
                                                             "Jepang pemimpin Asia",
                                                             "Jepang pelindung Asia",
-                                                            "epang cahaya Asia",
-                                                            "Semua jawaban benar"));
-        }
-		
-		private function createQuestions3() {
-            quizQuestions.push(new QuizQuestion("Dummy",
-                                                            0,
-                                                            "Dummy",
-                                                            "Dummy",
-                                                            "Dummy",
-                                                            "Dummy"));
-            quizQuestions.push(new QuizQuestion("Didaerah mana pertama kali tentara jepang menduduki Indonesia?",
-                                                            2,
-                                                            "Semarang",
-                                                            "Solo",
-                                                            "Tarakan",
-                                                            "Makasar"));
-            quizQuestions.push(new QuizQuestion("Pemerintah Hindia Belanda menyerah tanpa syarat kepada Jepang?",
-                                                            1,
-                                                            "8 Januari 1942",
-                                                            "8 Maret 1942",
-                                                            "17 Agustus 1945",
-                                                            "8 Januari 1945",
-                                                            "8 Maret 1945"));
-            quizQuestions.push(new QuizQuestion("Untuk memikat hari rakyat, Jepang membuat propaganda Tiga A, yang berisi?",
-                                                            3,
-                                                            "Jepang pemimpin Asia",
-                                                            "Jepang pelindung Asia",
-                                                            "epang cahaya Asia",
+                                                            "Jepang cahaya Asia",
                                                             "Semua jawaban benar"));
         }
 		
@@ -666,25 +638,56 @@
                                                             "Dummy",
                                                             "Dummy",
                                                             "Dummy"));
-            quizQuestions.push(new QuizQuestion("Didaerah mana pertama kali tentara jepang menduduki Indonesia?",
-                                                            2,
-                                                            "Semarang",
-                                                            "Solo",
-                                                            "Tarakan",
-                                                            "Makasar"));
-            quizQuestions.push(new QuizQuestion("Pemerintah Hindia Belanda menyerah tanpa syarat kepada Jepang?",
-                                                            1,
-                                                            "8 Januari 1942",
-                                                            "8 Maret 1942",
-                                                            "17 Agustus 1945",
-                                                            "8 Januari 1945",
-                                                            "8 Maret 1945"));
-            quizQuestions.push(new QuizQuestion("Untuk memikat hari rakyat, Jepang membuat propaganda Tiga A, yang berisi?",
+            quizQuestions.push(new QuizQuestion("Kapan hari lahirnya pancasila?",
                                                             3,
-                                                            "Jepang pemimpin Asia",
-                                                            "Jepang pelindung Asia",
-                                                            "epang cahaya Asia",
+                                                            "17 Agustus 1945",
+                                                            "18 Agustus 1945",
+                                                            "5 Agustus 1945",
+                                                            "1 Juni 1945"));
+            quizQuestions.push(new QuizQuestion("Disebut apakah peristiwa penculikan Soekarno dan Hatta oleh sejumlah pemuda?",
+                                                            0,
+                                                            "Peristiwa Reangasdengklok",
+                                                            "Agresi Militer 1",
+                                                            "Agresi Militer 2"));
+            quizQuestions.push(new QuizQuestion("Kapan Soekarno dan Hatta memproklamasikan kemerdekaan Indonesia?",
+                                                            0,
+                                                            "17 Agustus 1945",
+                                                            "18 Agustus 1945",
+                                                            "5 Agustus 1945",
+                                                            "1 Juni 1945"));
+			 quizQuestions.push(new QuizQuestion("Hasil apa saja yang didapat dari sidang pertama PPKI?",
+                                                            3,
+                                                            "Mengesahkan UUD 1945",
+                                                            "Mengangkat Soekarno sebagai presiden RI dan Hatta sebagawai wakilnya",
+                                                            "Membentuk Komite Nasional Indonesia Pusat untuk membantu presiden",
                                                             "Semua jawaban benar"));
+        }
+		
+		private function createQuestions3() {
+            quizQuestions.push(new QuizQuestion("Dummy",
+                                                            0,
+                                                            "Dummy",
+                                                            "Dummy",
+                                                            "Dummy",
+                                                            "Dummy"));
+            quizQuestions.push(new QuizQuestion("Kapan Belanda melancarkan agresi militer pertamanya?",
+                                                            0,
+                                                            "21 Juli-5 Agustus 1947",
+                                                            "5 Juli-21 Agustus 1947",
+                                                            "19 Desember 1948-5 Januari 1949",
+                                                            "5 Desember 1948-19 Januari 1949"));
+            quizQuestions.push(new QuizQuestion("Kapan Belanda melancarkan agresi militer keduanya?",
+                                                            2,
+                                                            "21 Juli-5 Agustus 1947",
+                                                            "5 Juli-21 Agustus 1947",
+                                                            "19 Desember 1948-5 Januari 1949",
+                                                            "5 Desember 1948-19 Januari 1949"));
+            quizQuestions.push(new QuizQuestion("Dimanakah tempat berlangsungnya Konferensi Meja Bundar?",
+                                                            1,
+                                                            "Jakarta, Indonesia",
+                                                            "Den Haag, Belanda",
+                                                            "Amsterdam, Belanda",
+                                                            "Yogyakarta, DIY"));
         }
 		
 		 private function showMessage(theMessage:String) {

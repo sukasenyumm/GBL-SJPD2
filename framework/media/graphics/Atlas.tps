@@ -148,10 +148,23 @@
             <filename>button/btn_quit.png</filename>
             <filename>button/btn_quiz.png</filename>
             <filename>button/btn_sound.png</filename>
+            <filename>button/btn_gagal.png</filename>
+            <filename>button/btn_lanjutkan.png</filename>
+            <filename>button/btn_jawab.png</filename>
+            <filename>button/btn_mulai.png</filename>
+            <filename>button/btn_sebelumnya.png</filename>
+            <filename>button/btn_selesai.png</filename>
+            <filename>button/btn_selanjutnya.png</filename>
+            <filename>button/btn_berhasil.png</filename>
             <filename>button/lbl_title.png</filename>
+            <filename>button/btn_item.png</filename>
+            <filename>button/btn_back.png</filename>
+            <filename>button/btn_home.png</filename>
             <filename>button/btn_credits.png</filename>
             <filename>button/btn_info.png</filename>
-            <filename>button/btn_item.png</filename>
+            <filename>button/btn_1945.png</filename>
+            <filename>button/btn_1942.png</filename>
+            <filename>button/btn_1950.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

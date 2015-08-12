@@ -8,6 +8,7 @@
 	import framework.screenstates.ChooseLevel;
 	import framework.screenstates.CollectItems;
 	import framework.utils.SaveManager;
+	import starling.animation.Tween;
 	
 	public class GameRoot extends Sprite{
 
@@ -15,6 +16,7 @@
 		private var screenGamePlay:GamePlay;
 		private var screenGameLevels:ChooseLevel;
 		private var screenCollectItems:CollectItems;
+		
 		public function GameRoot() {
 			// constructor code
 			super();
@@ -119,6 +121,8 @@
 					break;
 			}
 		}
+		
+		
 		
 		private function onChangeScreen(event:NavigationEvent):void
 		{

@@ -68,7 +68,7 @@
 			return gameTextureAtlas;
 		}
 		
-		public static function getAtlasTest():TextureAtlas
+		public static function getAtlasFix():TextureAtlas
 		{
 			if (gameTextureAtlas2 == null)
 			{
