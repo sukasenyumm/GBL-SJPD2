@@ -14,8 +14,6 @@
 	import framework.gameobject.Item;
 	import framework.quiz.QuizQuestion;
 	import starling.text.TextField;
-	import framework.customobjects.Font;
-	import framework.utils.Fonts;
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
 	import framework.events.NavigationEvent;
@@ -24,6 +22,7 @@
 	import starling.utils.rad2deg;
 	import starling.display.Quad;
 	import framework.utils.SaveManager;
+	import framework.gameobject.Enemy;
 
 
 
@@ -32,6 +31,7 @@
 		private var startButton:Button;
 		private var bg:GameBackground;
 		private var hero:Hero;
+		private var enemy:Enemy;
 		
 		/** Time calculation for animation. */
 		private var timePrevious:Number;
@@ -40,6 +40,7 @@
 		
 		private var gameState:String;
 		private var playerSpeed:Number;
+		private var enemySpeed:Number;
 		private var hitObstacle:Number = 0;
 		
 		private const MIN_SPEED:Number = 650;
@@ -73,8 +74,6 @@
         private var score:int = 0;
         private var statusT:TextField;
 		/*end quiz declaration */
-		/** Font - Regular text. */
-		private var fontRegular:Font;
 		/** Is game currently in paused state? */
 		private var gamePaused:Boolean = false;
 		private var questionTemporary:Number;
@@ -103,11 +102,7 @@
 			bg.speed = 50;
 			this.addChild(bg);
 			
-			fontRegular = Fonts.getFont("Regular");
-			
-			//sementara pakai chiller, karena font regulernya masih ada karakter yang ilang
-			//sementara juga masih pakai box
-			scoreText = new TextField(300,100, "Score: 0","chiller", 14, 0xffffff);
+			scoreText = new TextField(300,100, "Score: 0","nulshock", 14, 0xffffff);
 			scoreText.hAlign = HAlign.LEFT;
 			scoreText.vAlign = VAlign.TOP;
 			scoreText.x = 20;
@@ -119,6 +114,11 @@
 			hero.x = stage.stageWidth/2;
 			hero.y = stage.stageHeight/2;
 			this.addChild(hero);
+			
+			enemy = new Enemy();
+			enemy.x = stage.stageWidth/2;
+			enemy.y = stage.stageHeight/2;
+			this.addChild(enemy);
 			
 			obstacleToAnimate = new Vector.<Obstacle>();
 			itemsToAnimate = new Vector.<Item>();
@@ -133,38 +133,39 @@
 			scoreLife.border = true;
 			this.addChild(scoreLife);
 			
-			startButton = new Button(GameAssets.getAtlas().getTexture("startButton"));
+			startButton = new Button(GameAssets.getAtlasFix().getTexture("btn_mulai"));
 			startButton.x = stage.stageWidth/2-startButton.width/2;
 			startButton.y = stage.stageHeight/2-startButton.height/2;
 			startButton.addEventListener(Event.TRIGGERED, onStartButtonClick);
 			this.addChild(startButton);
 			
 			//quiz
-			//statusT = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
-			//disi chiller dulu
-			statusT = new TextField(480, 600, "", "chiller", 18, 0xffffff);
-			statusT.x = 0;
-			statusT.y = 100;
-			statusT.hAlign = HAlign.CENTER;
-			statusT.vAlign = VAlign.TOP;
-			this.addChild(statusT);
+			
 			
 			/* quiz button */
-			 var yPosition:Number = 300;
+			 var yPosition:Number = stage.stageHeight - stage.stageHeight/10;
 
-            finishButton = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
-            finishButton.x = 30;
-            finishButton.y = yPosition;
+            finishButton = new Button(GameAssets.getAtlasFix().getTexture("btn_jawab"));
+            finishButton.x =  stage.stageWidth/2 - finishButton.width/2;
+            finishButton.y = yPosition- finishButton.height*2;
             finishButton.addEventListener(Event.TRIGGERED, finishHandler);
             this.addChild(finishButton);
 			finishButton.visible = false;
 			
-			nextButton = new Button(GameAssets.getAtlas().getTexture("welcome_playButton"));
-            nextButton.x = 30;
-            nextButton.y = yPosition;
+			nextButton = new Button(GameAssets.getAtlasFix().getTexture("btn_lanjutkan"));
+            nextButton.x = stage.stageWidth/2 - nextButton.width/2;
+            nextButton.y = yPosition - nextButton.height*2;
             nextButton.addEventListener(Event.TRIGGERED, nextHandler);
             this.addChild(nextButton);
 			nextButton.visible = false;
+			
+			statusT = new TextField(stage.stageWidth, 50, "", "Consolas", 14, 0xffffff);
+			statusT.x = stage.stageWidth/2 - statusT.width/2;
+			statusT.y = finishButton.y - statusT.height*2;
+			statusT.hAlign = HAlign.CENTER;
+			statusT.vAlign = VAlign.TOP;
+			//statusT.border = true;
+			this.addChild(statusT);
 			
 			//quizQuestions = new Array();
             //questionLevels();
@@ -204,6 +205,7 @@
 			
 			level = nLevel;
 			playerSpeed = 0;
+			enemySpeed = 0;
 			hitObstacle = 0;
 			bg.speed = 0;
 			scoreDistance = 0;
@@ -214,6 +216,10 @@
 			hero.state = 1;//"idle";
 			hero.x = -stage.stageWidth;
 			hero.y = stage.stageHeight * 0.5;
+			
+			enemy.state = 1;//"idle";
+			enemy.x = -stage.stageWidth;
+			enemy.y = stage.stageHeight * 0.5 + 100;
 			
 			scoreText.text = "Score: "+scoreDistance;
 			lives = 5;
@@ -258,14 +264,20 @@
 				{
 					case "idle":
 						//take off
+						if(enemy.x < stage.stageWidth * 0.5 + stage.stageWidth * 0.25)
+						{
+							enemy.x += (stage.stageWidth * 0.5 + stage.stageWidth * 0.25-enemy.x)*0.05;
+							enemy.y -= (enemy.y - touchY) * 0.5;
+							enemySpeed += (MIN_SPEED - enemySpeed)* 0.2;
+						}
+											
 						if(hero.x < stage.stageWidth * 0.5 * 0.5)
 						{
 							hero.x += ((stage.stageWidth * 0.5 * 0.5 + 10)-hero.x)*0.05;
 							hero.y -= (hero.y - touchY) * 0.1;
-							
 							playerSpeed += (MIN_SPEED - playerSpeed)* 0.05;
+							
 							bg.speed = playerSpeed * elapsed;
-			
 						}
 						else
 						{
@@ -301,7 +313,9 @@
 					
 						if(hitObstacle <= 0)
 						{
+							//hero
 							hero.y -= (hero.y - touchY) * 0.1;
+							
 							
 							if(-(hero.y - touchY)<150 && -(hero.y - touchY)>-150)
 							{
@@ -336,6 +350,18 @@
 						
 						createFoodItems();
 						animateItems();
+						
+						if(scoreDistance > 100)
+						{
+							enemy.x -= (playerSpeed + enemySpeed) * elapsed * 0.1;
+							trace(enemy.x);
+							if(enemy.x <= stage.stageWidth/2)
+								gameState = "over";
+						}
+						else
+						{
+							enemy.x += (stage.stageWidth* 3-enemy.x)*0.05;
+						}
 						
 						if(lives <= 0)
 							gameState = "over";
@@ -439,7 +465,7 @@
 		{
 			if(Math.random() > 0.95)
 			{
-				var itemToTrack:Item = new Item(Math.ceil(Math.random() * 5));
+				var itemToTrack:Item = new Item(Math.ceil(Math.random() * 2));
 				itemToTrack.x = stage.stageWidth + 50;
 				itemToTrack.y = int(Math.random() * (gameArea.bottom - gameArea.top)) + gameArea.top;
 				this.addChild(itemToTrack);
@@ -604,26 +630,26 @@
 		}
 		
 		private function createQuestions1() {
-            quizQuestions.push(new QuizQuestion("Dummy",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Dummy",
                                                             0,
                                                             "Dummy",
                                                             "Dummy",
                                                             "Dummy",
                                                             "Dummy"));
-            quizQuestions.push(new QuizQuestion("Didaerah mana pertama kali tentara jepang menduduki Indonesia?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Didaerah mana pertama kali tentara jepang menduduki Indonesia?",
                                                             2,
                                                             "Semarang",
                                                             "Solo",
                                                             "Tarakan",
                                                             "Makasar"));
-            quizQuestions.push(new QuizQuestion("Pemerintah Hindia Belanda menyerah tanpa syarat kepada Jepang?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Kapan pemerintah Hindia Belanda menyerah tanpa syarat kepada Jepang?",
                                                             1,
                                                             "8 Januari 1942",
                                                             "8 Maret 1942",
                                                             "17 Agustus 1945",
                                                             "8 Januari 1945",
                                                             "8 Maret 1945"));
-            quizQuestions.push(new QuizQuestion("Untuk memikat hari rakyat, Jepang membuat propaganda Tiga A, yang berisi?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Untuk memikat hari rakyat, Jepang membuat propaganda Tiga A, yang berisi?",
                                                             3,
                                                             "Jepang pemimpin Asia",
                                                             "Jepang pelindung Asia",
@@ -632,30 +658,30 @@
         }
 		
 		private function createQuestions2() {
-            quizQuestions.push(new QuizQuestion("Dummy",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Dummy",
                                                             0,
                                                             "Dummy",
                                                             "Dummy",
                                                             "Dummy",
                                                             "Dummy"));
-            quizQuestions.push(new QuizQuestion("Kapan hari lahirnya pancasila?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Kapan hari lahirnya pancasila?",
                                                             3,
                                                             "17 Agustus 1945",
                                                             "18 Agustus 1945",
                                                             "5 Agustus 1945",
                                                             "1 Juni 1945"));
-            quizQuestions.push(new QuizQuestion("Disebut apakah peristiwa penculikan Soekarno dan Hatta oleh sejumlah pemuda?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Disebut apakah peristiwa penculikan Soekarno dan Hatta oleh sejumlah pemuda?",
                                                             0,
                                                             "Peristiwa Reangasdengklok",
                                                             "Agresi Militer 1",
                                                             "Agresi Militer 2"));
-            quizQuestions.push(new QuizQuestion("Kapan Soekarno dan Hatta memproklamasikan kemerdekaan Indonesia?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Kapan Soekarno dan Hatta memproklamasikan kemerdekaan Indonesia?",
                                                             0,
                                                             "17 Agustus 1945",
                                                             "18 Agustus 1945",
                                                             "5 Agustus 1945",
                                                             "1 Juni 1945"));
-			 quizQuestions.push(new QuizQuestion("Hasil apa saja yang didapat dari sidang pertama PPKI?",
+			 quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Hasil apa saja yang didapat dari sidang pertama PPKI?",
                                                             3,
                                                             "Mengesahkan UUD 1945",
                                                             "Mengangkat Soekarno sebagai presiden RI dan Hatta sebagawai wakilnya",
@@ -664,25 +690,25 @@
         }
 		
 		private function createQuestions3() {
-            quizQuestions.push(new QuizQuestion("Dummy",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Dummy",
                                                             0,
                                                             "Dummy",
                                                             "Dummy",
                                                             "Dummy",
                                                             "Dummy"));
-            quizQuestions.push(new QuizQuestion("Kapan Belanda melancarkan agresi militer pertamanya?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Kapan Belanda melancarkan agresi militer pertamanya?",
                                                             0,
                                                             "21 Juli-5 Agustus 1947",
                                                             "5 Juli-21 Agustus 1947",
                                                             "19 Desember 1948-5 Januari 1949",
                                                             "5 Desember 1948-19 Januari 1949"));
-            quizQuestions.push(new QuizQuestion("Kapan Belanda melancarkan agresi militer keduanya?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Kapan Belanda melancarkan agresi militer keduanya?",
                                                             2,
                                                             "21 Juli-5 Agustus 1947",
                                                             "5 Juli-21 Agustus 1947",
                                                             "19 Desember 1948-5 Januari 1949",
                                                             "5 Desember 1948-19 Januari 1949"));
-            quizQuestions.push(new QuizQuestion("Dimanakah tempat berlangsungnya Konferensi Meja Bundar?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Dimanakah tempat berlangsungnya Konferensi Meja Bundar?",
                                                             1,
                                                             "Jakarta, Indonesia",
                                                             "Den Haag, Belanda",
@@ -692,9 +718,11 @@
 		
 		 private function showMessage(theMessage:String) {
             statusT.text = theMessage;
-            statusT.x = 200;
+            statusT.x = stage.stageWidth/2 - statusT.width/2;
         }
         private function addQuestions(numQuestion:Number) {
+			quizQuestions[numQuestion].y = stage.stageHeight/2 - quizQuestions[numQuestion].height/2;
+
 			this.addChild(quizQuestions[numQuestion]);
         }
         private function removeQuestions(numQuestion:Number) {

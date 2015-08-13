@@ -1,32 +1,10 @@
 ﻿package framework.quiz{
-    import framework.customobjects.Font;
-    import framework.utils.Fonts;
     import starling.display.Sprite;
 	import feathers.controls.*;
 	import feathers.core.ToggleGroup;
 	import starling.text.TextField;
 	import starling.events.Event;
-	import feathers.themes.MetalWorksDesktopTheme;
-    
-	/*
-	 var group:ToggleGroup = new ToggleGroup();
-     group.addEventListener( Event.CHANGE, group_changeHandler );
-     
-     var radio1:Radio = new Radio();
-     radio1.label = "One";
-     radio1.toggleGroup = group;
-     this.addChild( radio1 );
-     
-     var radio2:Radio = new Radio();
-     radio2.label = "Two";
-     radio2.toggleGroup = group;
-     this.addChild( radio2 );
-     
-     var radio3:Radio = new Radio();
-     radio3.label = "Three";
-     radio3.toggleGroup = group;
-     this.addChild( radio3 );
-	*/
+   
     public class QuizQuestion extends Sprite {
         private var question:String;
         private var questionField:TextField;
@@ -38,25 +16,23 @@
         private var questionX:int = 5;
         private var questionY:int = 5;
         private var answerX:int = 60;
-        private var answerY:int = 55;
-        private var spacing:int = 25;
+        private var answerY:int = 75;
+        private var spacing:int = 35;
 		
-		/** Font - Regular text. */
-		private var fontRegular:Font;
-               
-        public function QuizQuestion(theQuestion:String, theAnswer:int, ...answers) {
+		        
+        public function QuizQuestion(rbX:int,theQuestion:String, theAnswer:int, ...answers) {
             //store the supplied arguments in the private variables:
             question = theQuestion;
             theCorrectAnswer = theAnswer;
             choices = answers;
             //create and position the textfield (question):
-            fontRegular = Fonts.getFont("Regular");
+            //fontRegular = Fonts.getFont("Regular");
 			
 			//questionField = new TextField(400, 50, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
-			questionField = new TextField(400, 50, "", "chiller", 18, 0xffffff);
+			questionField = new TextField(400, 70, "", "nulshock", 14, 0xffffff);
 			
             questionField.text = question;
-            questionField.x = questionX;
+            questionField.x = rbX-questionField.width/2;
             questionField.y = questionY;
             this.addChild(questionField);
             //create and position the radio buttons (answers):
@@ -66,9 +42,8 @@
                 var rb:Radio  = new Radio();
                 rb.label = choices[i];
                 rb.toggleGroup  = myGroup;
-				//rb. = i + 1;
-                rb.x = answerX;
-                rb.y = answerY + (i * spacing);
+               	rb.x = questionField.x;
+				rb.y = answerY + (i * spacing);
                 this.addChild(rb);
             }
         }

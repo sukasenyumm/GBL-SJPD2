@@ -141,9 +141,6 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>background png/bgLayer4.png</filename>
-            <filename>background png/bgLayer2.png</filename>
-            <filename>background png/bgLayer3.png</filename>
             <filename>button/btn_play.png</filename>
             <filename>button/btn_quit.png</filename>
             <filename>button/btn_quiz.png</filename>
@@ -165,6 +162,33 @@
             <filename>button/btn_1945.png</filename>
             <filename>button/btn_1942.png</filename>
             <filename>button/btn_1950.png</filename>
+            <filename>pes/hero_003.png</filename>
+            <filename>pes/hero_001.png</filename>
+            <filename>pes/hero_002.png</filename>
+            <filename>pes/obstacle4_0001.png</filename>
+            <filename>pes/obstacle4_0002.png</filename>
+            <filename>pes/enemy_002.png</filename>
+            <filename>pes/enemy_001.png</filename>
+            <filename>pes/item1.png</filename>
+            <filename>pes/item2.png</filename>
+            <filename>background/bgLayer4.png</filename>
+            <filename>background/bgLayer2.png</filename>
+            <filename>background/bgLayer3.png</filename>
+            <filename>item/P2-1.png</filename>
+            <filename>item/P2-2.png</filename>
+            <filename>item/P2-3.png</filename>
+            <filename>item/P2-4.png</filename>
+            <filename>item/P3-1.png</filename>
+            <filename>item/P3-2.png</filename>
+            <filename>item/P3-3.png</filename>
+            <filename>item/P1-1.png</filename>
+            <filename>item/P1-2.png</filename>
+            <filename>item/P1-3.png</filename>
+            <filename>pes/watchOut_0004.png</filename>
+            <filename>pes/watchOut_0001.png</filename>
+            <filename>pes/watchOut_0002.png</filename>
+            <filename>pes/watchOut_0003.png</filename>
+            <filename>pes/watchOut_0005.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

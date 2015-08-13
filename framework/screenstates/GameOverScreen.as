@@ -20,9 +20,7 @@ package framework.screenstates
 	import starling.events.Event;
 	import starling.text.TextField;
 	import starling.utils.VAlign;
-	import framework.customobjects.Font;
 	import framework.events.NavigationEvent;
-	import framework.utils.Fonts;
 	import framework.utils.GameAssets;
 	
 	public class GameOverScreen extends Sprite
@@ -50,12 +48,6 @@ package framework.screenstates
 		
 		/** About button. */
 		private var aboutBtn:Button;
-		
-		/** Font - score display. */
-		private var fontScore:Font;
-		
-		/** Font - message display. */
-		private var fontMessage:Font;
 		
 		/** Score value - distance. */
 		private var _distance:int;
@@ -88,9 +80,6 @@ package framework.screenstates
 		 */
 		private function drawGameOver():void
 		{
-			// Get fonts for text display.
-			fontMessage = Fonts.getFont("ScoreValue");
-			fontScore = Fonts.getFont("ScoreLabel");
 			
 			// Background quad.
 			bg = new Quad(stage.stageWidth, stage.stageHeight, 0x000000);
@@ -98,7 +87,7 @@ package framework.screenstates
 			this.addChild(bg);
 			
 			// Message text field.
-			messageText = new TextField(stage.stageWidth, stage.stageHeight * 0.5, "HERO WAS KILLED!", fontMessage.fontName, fontMessage.fontSize, 0xf3e75f);
+			messageText = new TextField(stage.stageWidth, stage.stageHeight * 0.5, "HERO WAS KILLED!", "nulshock", 18, 0xf3e75f);
 			messageText.vAlign = VAlign.TOP;
 			messageText.height = messageText.textBounds.height;
 			messageText.y = (stage.stageHeight * 20)/100;
@@ -109,29 +98,29 @@ package framework.screenstates
 			scoreContainer.y = (stage.stageHeight * 40)/100;
 			this.addChild(scoreContainer);
 			
-			distanceText = new TextField(stage.stageWidth, 100, "DISTANCE TRAVELLED: 0000000", fontScore.fontName, fontScore.fontSize, 0xffffff);
+			distanceText = new TextField(stage.stageWidth, 100, "DISTANCE TRAVELLED: 0000000", "nulshock", 18, 0xffffff);
 			distanceText.vAlign = VAlign.TOP;
 			distanceText.height = distanceText.textBounds.height;
 			scoreContainer.addChild(distanceText);
 			
-			scoreText = new TextField(stage.stageWidth, 100, "SCORE: 0000000", fontScore.fontName, fontScore.fontSize, 0xffffff);
+			scoreText = new TextField(stage.stageWidth, 100, "SCORE: 0000000", "nulshock", 18, 0xffffff);
 			scoreText.vAlign = VAlign.TOP;
 			scoreText.height = scoreText.textBounds.height;
 			scoreText.y = distanceText.bounds.bottom + scoreText.height * 0.5;
 			scoreContainer.addChild(scoreText);
 			
 			// Navigation buttons.
-			mainBtn = new Button(GameAssets.getAtlas().getTexture("gameOver_mainButton"));
+			mainBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_home"));
 			mainBtn.y = (stage.stageHeight * 70)/100;
 			mainBtn.addEventListener(Event.TRIGGERED, onMainClick);
 			this.addChild(mainBtn);
 			
-			playAgainBtn = new Button(GameAssets.getAtlas().getTexture("gameOver_playAgainButton"));
+			playAgainBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_back"));
 			playAgainBtn.y = mainBtn.y + mainBtn.height * 0.5 - playAgainBtn.height * 0.5;
 			playAgainBtn.addEventListener(Event.TRIGGERED, onPlayAgainClick);
 			this.addChild(playAgainBtn);
 			
-			aboutBtn = new Button(GameAssets.getAtlas().getTexture("gameOver_aboutButton"));
+			aboutBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_credits"));
 			aboutBtn.y = playAgainBtn.y + playAgainBtn.height * 0.5 - aboutBtn.height * 0.5;
 			aboutBtn.addEventListener(Event.TRIGGERED, onAboutClick);
 			this.addChild(aboutBtn);

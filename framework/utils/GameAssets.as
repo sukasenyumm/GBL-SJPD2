@@ -33,7 +33,7 @@
 		/**
 		 * Background Assets 
 		 */
-		[Embed(source="../media/graphics/bgLayer1.jpg")]
+		[Embed(source="../media/graphics/bgLayer1.png")]
 		public static const BgLayer1:Class;
 		
 		[Embed(source="../media/graphics/bgWelcome.jpg")]
@@ -44,6 +44,9 @@
 		
 		[Embed(source="../media/graphics/selected-page-symbol.png")]
 		public static const scrollOn:Class;
+		
+		[Embed(source="../media/graphics/nulshock bd.TTF", fontFamily="nulshock", embedAsCFF="false")]
+		public static var MyFont:Class;		
 		
 		/**
 		 * Texture Cache 

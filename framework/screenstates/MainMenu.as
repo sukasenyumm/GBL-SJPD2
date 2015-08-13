@@ -7,13 +7,10 @@
 	import starling.events.Event;
 	import starling.display.Button;
 	import starling.text.TextField;
-	import framework.customobjects.Font;
 	import starling.utils.HAlign;
 	import starling.utils.VAlign;
-	import framework.utils.Fonts;
 	import framework.quiz.QuizQuestion;
 	import flash.text.TextFieldAutoSize;
-	import feathers.themes.MetalWorksDesktopTheme;
 	import starling.animation.Tween;
 	import starling.animation.Transitions;
 	import starling.core.Starling;
@@ -21,6 +18,9 @@
 	import framework.utils.SaveManager;
 	import flash.desktop.NativeApplication;
 	import starling.display.Quad;
+	import feathers.themes.MetalWorksDesktopTheme;
+	import feathers.controls.Alert;
+	import feathers.data.ListCollection;
 	
 	
 	/**
@@ -57,8 +57,8 @@
 		private var screenMode:String;
 		/** About text field. */
 		private var aboutText:TextField;
-		/** Font - Regular text. */
-		private var fontRegular:Font;
+		/** Quiz Tilte text field. */
+		private var quizText:TextField;
 		
 		/* for quiz declaration */
 		//for managing questions:
@@ -130,9 +130,9 @@
 			this.addChild(title);
 			
 			// ABOUT ELEMENTS
-			fontRegular = Fonts.getFont("Regular");
+			//fontRegular = Fonts.getFont("Regular");
 			
-			aboutText = new TextField(stage.stageWidth - stage.stageWidth/14, stage.stageHeight -  stage.stageHeight/14, "", "Consolas", 14, 0x000000);
+			aboutText = new TextField(stage.stageWidth - stage.stageWidth/14, stage.stageHeight -  stage.stageHeight/14, "", "nulshock", 14, 0x000000);
 			aboutText.text = "PESAWAT INSULINDE adalah sebuah game untuk mempelajari Sejarah Indonesia.\n\n" +
 				" Pesawat Insulinde bertugas untuk mengejar pesawat X yang telah mencuri lembaran-lembaran sejarah yang ada di Indonesia." +
 				" Dalam perjalanannya, pesawat X tadi menjatuhkan lembaran-lembaran sejarah disepanjang jalan." +
@@ -199,6 +199,12 @@
 			this.addChild(itemsBtn);
 			
 			/* quiz button */
+			quizText = new TextField(stage.stageWidth, 50, "", "nulshock", 20, 0xFFFFFF);
+			quizText.text = "KUIS";
+			quizText.x = stage.stageWidth/2-quizText.width/2;
+			quizText.y = (stage.stageHeight/14);
+			this.addChild(quizText);
+			
 			quizBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_quiz"));
 			quizBtn.x = itemsBtn.x-(stage.stageHeight/20)-quizBtn.height;
 			quizBtn.y = helpBtn.y;
@@ -228,7 +234,7 @@
             this.addChild(finishButton);
 			
 			//statusT = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
-			statusT = new TextField(480, 50, "", "Consolas", 14, 0xffffff);
+			statusT = new TextField(stage.stageWidth, 50, "", "nulshock", 14, 0xffffff);
 			statusT.x = stage.stageWidth/2 - statusT.width/2;
 			statusT.y = finishButton.y - statusT.height*2;
 			statusT.hAlign = HAlign.CENTER;
@@ -302,6 +308,7 @@
 		public function showQuiz():void
 		{
 			screenMode = "quiz";
+			quizText.visible = true;
 			hero.visible = false;
 			title.visible = false;
 			playBtn.visible = false;
@@ -326,6 +333,7 @@
 			title.visible = true;
 			hero.visible = true;
 			aboutText.visible = false;
+			quizText.visible = false;
 			backBtn.visible = false;
 			aboutBtn.visible = true;
 			playBtn.visible = true;
@@ -377,26 +385,26 @@
 		*/
 		 private function createQuestions() {
 			score = 0;
-            quizQuestions.push(new QuizQuestion("What color is an orange?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"What color is an orange?",
                                                             0,
                                                             "Orange",
                                                             "Blue",
                                                             "Purple",
                                                             "Brown"));
-            quizQuestions.push(new QuizQuestion("What is the shape of planet earth?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"What is the shape of planet earth?",
                                                             2,
                                                             "Flat",
                                                             "Cube",
                                                             "Round",
                                                             "Shabby"));
-            quizQuestions.push(new QuizQuestion("Who created SpiderMan?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Who created SpiderMan?",
                                                             1,
                                                             "Jack Kirby",
                                                             "Stan Lee and Steve Ditko",
                                                             "Stan Lee",
                                                             "Steve Ditko",
                                                             "none of the above"));
-            quizQuestions.push(new QuizQuestion("Who created Mad?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Who created Mad?",
                                                             1,
                                                             "Al Feldstein",
                                                             "Harvey Kurtzman",
@@ -413,7 +421,7 @@
 		
         private function addAllQuestions() {
             for(var i:int = 0; i < quizQuestions.length; i++) {
-				quizQuestions[i].x = stage.stageWidth/2 - quizQuestions[i].width/2;
+				//quizQuestions[i].x = stage.stageWidth/2 - quizQuestions[i].width/2;
 				quizQuestions[i].y = stage.stageHeight/14+stage.stageHeight/20;
                 this.addChild(quizQuestions[i]);
             }
@@ -435,14 +443,14 @@
                 currentQuestion = quizQuestions[currentIndex];
                 currentQuestion.visible = true;
             } else {
-                showMessage("sebelumnya");
+               // showMessage("sebelumnya");
             }
         }
         private function nextHandler(event:Event) {
-            showMessage("error");
-			trace("user: "+currentQuestion.userAnswer)
+           // showMessage("error");
+			//trace("user: "+currentQuestion.userAnswer)
             if(currentQuestion.userAnswer < 0) {
-                showMessage("sesudahnya");
+                //showMessage("sesudahnya");
                 return;
             }
             if(currentIndex < (quizQuestions.length - 1)) {
@@ -451,7 +459,11 @@
                 currentQuestion = quizQuestions[currentIndex];
                 currentQuestion.visible = true;
             } else {
-                showMessage("That's all the questions! Click Finish to Score, or Previous to go back");
+               var alert:Alert = Alert.show("Semua pertanyaan telah dijawab! Lihat jawaban kembali atau tekan selesai!", "Peringatan", new ListCollection(
+				[
+					{ label: "OK"}
+				]) );
+				alert.addEventListener( Event.CLOSE, alert_closeHandler );
             }
         }
         private function finishHandler(event:Event) {
@@ -470,11 +482,26 @@
                 finishButton.visible = false;
                 hideAllQuestions();
                 computeScore();
-            	
+				score = 0;
+				currentIndex = 0;
+				finished = false;
             } else {
-                showMessage("belum selesai semua");
+                var alert:Alert = Alert.show("Selesaikan semua soal dahulu!", "Peringatan", new ListCollection(
+				[
+					{ label: "OK"}
+				]) );
+				alert.addEventListener( Event.CLOSE, alert_closeHandler );
             }
         }
+		
+		private function alert_closeHandler( event:Event, data:Object ):void
+		{
+			if( data.label == "OK" )
+			{
+				// the OK button was clicked
+			}
+		}
+		
         private function computeScore() {
             for(var i:int = 0; i < quizQuestions.length; i++) {
                 if(quizQuestions[i].userAnswer == quizQuestions[i].correctAnswer) {

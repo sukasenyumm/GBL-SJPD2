@@ -45,7 +45,7 @@
 		
 		private function createWatchOutAnimation():void
 		{
-			watchOutAnimation = new MovieClip(GameAssets.getAtlas().getTextures("watchOut_"),10);
+			watchOutAnimation = new MovieClip(GameAssets.getAtlasFix().getTextures("watchOut_"),10);
 			Starling.juggler.add(watchOutAnimation);
 			
 			if(_type == 4)
@@ -74,7 +74,7 @@
 		{
 			if(_type == 4)
 			{
-				obstacleAnimation = new MovieClip(GameAssets.getAtlas().getTextures("obstacle" + _type + "_0"),10);
+				obstacleAnimation = new MovieClip(GameAssets.getAtlasFix().getTextures("obstacle" + _type + "_0"),10);
 				Starling.juggler.add(obstacleAnimation);
 				obstacleAnimation.x = 0;
 				obstacleAnimation.y = 0;

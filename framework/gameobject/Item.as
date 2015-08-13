@@ -30,7 +30,7 @@
 		public function set foodItemType(value:int):void
 		{
 			_foodItemType = value;
-			itemImage = new Image(GameAssets.getAtlas().getTexture("item" + _foodItemType));
+			itemImage = new Image(GameAssets.getAtlasFix().getTexture("item" + _foodItemType));
 			itemImage.x = itemImage.texture.width * 0.5;
 			itemImage.y = itemImage.texture.height * 0.5;
 			this.addChild(itemImage);

@@ -5,12 +5,12 @@
 	import framework.utils.GameAssets;
 	import starling.core.Starling;
 	
-	public class Hero extends Sprite{
+	public class Enemy extends Sprite{
 
-		private var heroArt:MovieClip;
+		private var enemyArt:MovieClip;
 		/** State of the hero. */
 		private var _state:int;
-		public function Hero() {
+		public function Enemy() {
 			// constructor code
 			super();
 			this.addEventListener(Event.ADDED_TO_STAGE,onAddedToStage);
@@ -24,12 +24,12 @@
 		
 		private function createHeroArt():void
 		{
-			heroArt = new MovieClip(GameAssets.getAtlasFix().getTextures("hero_"), 20);
-			heroArt.x = Math.ceil(-heroArt.width/2);
-			heroArt.y = Math.ceil(-heroArt.height/2);
+			enemyArt = new MovieClip(GameAssets.getAtlasFix().getTextures("enemy_"), 20);
+			enemyArt.x = Math.ceil(-enemyArt.width/2);
+			enemyArt.y = Math.ceil(-enemyArt.height/2);
 			
-			Starling.juggler.add(heroArt);
-			this.addChild(heroArt);
+			Starling.juggler.add(enemyArt);
+			this.addChild(enemyArt);
 		}
 		
 		/**

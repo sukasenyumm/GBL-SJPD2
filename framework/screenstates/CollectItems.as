@@ -6,9 +6,7 @@
 	import starling.events.Event;
 	import starling.text.TextField;
 	import starling.utils.VAlign;
-	import framework.customobjects.Font;
 	import framework.events.NavigationEvent;
-	import framework.utils.Fonts;
 	import framework.utils.GameAssets;
 	
 	import feathers.controls.LayoutGroup;
@@ -81,10 +79,10 @@
 			mainBtn.addEventListener(Event.TRIGGERED, onMainClick);
 			this.addChild(mainBtn);
 		
-			galeriInfo = new TextField(50, 100, "", "Consolas", 14, 0x000000);
+			galeriInfo = new TextField(stage.stageWidth, 50, "", "nulshock", 20, 0x000000);
 			galeriInfo.text = "GALERI INFO";
-			galeriInfo.x = stage.stageWidth/2-galeriInfo.textBounds.width/2;
-			galeriInfo.y = stage.stageHeight/6-galeriInfo.textBounds.height*2;
+			galeriInfo.x = stage.stageWidth/2-galeriInfo.width/2;
+			galeriInfo.y = (stage.stageHeight/14);
 			this.addChild(galeriInfo);
 			
 			//a nice, fluid layout

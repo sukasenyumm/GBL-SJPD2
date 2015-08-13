@@ -7,9 +7,7 @@
 	import starling.events.Event;
 	import starling.text.TextField;
 	import starling.utils.VAlign;
-	import framework.customobjects.Font;
 	import framework.events.NavigationEvent;
-	import framework.utils.Fonts;
 	import framework.utils.GameAssets;
 	
 	public class ChooseLevel extends Sprite
@@ -63,12 +61,11 @@
 			this.addChild(bg);
 			
 			// Message text field.
-			messageText = new TextField(stage.stageWidth, stage.stageHeight * 0.5, "CHOOSE LEVEL!", "chiller", 18, 0xf3e75f);
+			messageText = new TextField(stage.stageWidth, stage.stageHeight * 0.5, "CHOOSE LEVEL!", "nulshock", 20, 0xFFFFFF);
 			messageText.vAlign = VAlign.TOP;
 			messageText.height = messageText.textBounds.height;
-			messageText.y = (stage.stageHeight * 20)/100;
+			messageText.y = (stage.stageHeight/14);
 			this.addChild(messageText);
-			
 			
 			// Navigation buttons.
 			mainBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_home"));
