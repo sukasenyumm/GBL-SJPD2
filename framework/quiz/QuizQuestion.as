@@ -4,6 +4,7 @@
 	import feathers.core.ToggleGroup;
 	import starling.text.TextField;
 	import starling.events.Event;
+	import flash.text.TextFormat;
    
     public class QuizQuestion extends Sprite {
         private var question:String;
@@ -18,6 +19,7 @@
         private var answerX:int = 60;
         private var answerY:int = 75;
         private var spacing:int = 35;
+		private var smallLightTextFormat:TextFormat;
 		
 		        
         public function QuizQuestion(rbX:int,theQuestion:String, theAnswer:int, ...answers) {
@@ -29,7 +31,7 @@
             //fontRegular = Fonts.getFont("Regular");
 			
 			//questionField = new TextField(400, 50, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
-			questionField = new TextField(400, 70, "", "nulshock", 14, 0xffffff);
+			questionField = new TextField(400, 70, "", "nulshock", 14, 0x000000);
 			
             questionField.text = question;
             questionField.x = rbX-questionField.width/2;
@@ -46,6 +48,7 @@
 				rb.y = answerY + (i * spacing);
                 this.addChild(rb);
             }
+			
         }
        
         private function changeHandler(event:Event) {

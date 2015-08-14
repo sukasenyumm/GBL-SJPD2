@@ -11,6 +11,7 @@
 	
 	import feathers.controls.LayoutGroup;
 	import feathers.controls.List;
+	import feathers.controls.renderers.BaseDefaultItemRenderer;
 	import feathers.controls.PageIndicator;
 	import feathers.controls.renderers.DefaultListItemRenderer;
 	import feathers.controls.renderers.IListItemRenderer;
@@ -25,6 +26,9 @@
 	import starling.events.TouchEvent;
 	import feathers.controls.Alert;
 	import framework.utils.SaveManager;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
+	import feathers.themes.MetalWorksMobileTheme;
 	
 	public class CollectItems extends Sprite
 	{
@@ -39,6 +43,7 @@
 		private var layout:AnchorLayout;
 		private var group:LayoutGroup;
 		private var galeriInfo:TextField;
+		private var _themes:MetalWorksMobileTheme;
 		
 		
 		public function CollectItems()
@@ -55,6 +60,9 @@
 		private function onAddedToStage(event:Event):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			this._themes = new MetalWorksMobileTheme();
+			this._themes.getStyleProviderForClass( DefaultListItemRenderer ).setFunctionForStyleName( "my-tile-renderer", myTileRenderer );
+	//setStyleProviderForClass(DefaultListItemRenderer, myTileRenderer, "my-tile-renderer");
 			
 			drawChooseLevel();
 		}
@@ -130,39 +138,16 @@
 			//the data that will be displayed in the list
 			var collection:ListCollection = new ListCollection(
 			[
-				{ label: "Facebook", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "Twitter", texture:GameAssets.getTexture("scrollOn") },
-				{ label: "Google", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "YouTube", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "StumbleUpon", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "Yahoo", texture:GameAssets.getTexture("scrollOn") },
-				{ label: "Facebook", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "Twitter", texture:GameAssets.getTexture("scrollOn") },
-				{ label: "Facebook", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "Twitter", texture:GameAssets.getTexture("scrollOn") },
-				{ label: "Google", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "YouTube", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "StumbleUpon", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "Yahoo", texture:GameAssets.getTexture("scrollOn") },
-				{ label: "Facebook", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "Twitter", texture:GameAssets.getTexture("scrollOn") },
-				{ label: "Facebook", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "Twitter", texture:GameAssets.getTexture("scrollOn") },
-				{ label: "Google", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "YouTube", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "StumbleUpon", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "Yahoo", texture:GameAssets.getTexture("scrollOn") },
-				{ label: "Facebook", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "Twitter", texture:GameAssets.getTexture("scrollOn") },
-				{ label: "Facebook", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "Twitter", texture:GameAssets.getTexture("scrollOn") },
-				{ label: "Google", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "YouTube", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "StumbleUpon", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "Yahoo", texture:GameAssets.getTexture("scrollOn") },
-				{ label: "Facebook", texture: GameAssets.getTexture("scrollOn") },
-				{ label: "Twitter", texture:GameAssets.getTexture("scrollOn") },
-				
+				{ label: "Batu Nisan ", texture: GameAssets.getAtlasFix().getTexture("P1-1") },
+				{ label: "Belanda Menyerah ", texture: GameAssets.getAtlasFix().getTexture("P1-2") },
+				{ label: "Semboyan Jepang ", texture: GameAssets.getAtlasFix().getTexture("P1-3") },
+				{ label: "Garuda Pancasila ", texture: GameAssets.getAtlasFix().getTexture("P2-1") },
+				{ label: "Rengasdengklok ", texture: GameAssets.getAtlasFix().getTexture("P2-2") },
+				{ label: "Naskah Proklamasi ", texture: GameAssets.getAtlasFix().getTexture("P2-3") },
+				{ label: "Sidang PPKI ", texture: GameAssets.getAtlasFix().getTexture("P2-4") },
+				{ label: "Agresi Belanda I ", texture: GameAssets.getAtlasFix().getTexture("P3-1") },
+				{ label: "Agresi Belanda II ", texture: GameAssets.getAtlasFix().getTexture("P3-2") },
+				{ label: "Konferensi Meja Bundar ", texture: GameAssets.getAtlasFix().getTexture("P3-3") },
 			]);
 			
 			this._list = new List();
@@ -175,15 +160,15 @@
 			//we listen to the scroll event to update the page indicator
 			this._list.addEventListener(Event.SCROLL, list_scrollHandler);
 			this._list.addEventListener(Event.CHANGE, onItemClicked);
-
+			
 			//this is the list's layout...
 			var listLayout:TiledRowsLayout = new TiledRowsLayout();
 			listLayout.paging = TiledRowsLayout.PAGING_HORIZONTAL;
 			listLayout.useSquareTiles = false;
 			listLayout.tileHorizontalAlign = TiledRowsLayout.TILE_HORIZONTAL_ALIGN_CENTER;
 			listLayout.horizontalAlign = TiledRowsLayout.HORIZONTAL_ALIGN_CENTER;
-			listLayout.padding = 20;
-			listLayout.gap = 30;
+			listLayout.padding = 2;
+			listLayout.gap = 2;
 			this._list.layout = listLayout;
 			group.layout = layout;
 			this.addChild( group );
@@ -234,16 +219,28 @@
 		private function tileListItemRendererFactory():IListItemRenderer
 		{
 			var renderer:DefaultListItemRenderer = new DefaultListItemRenderer();
-			renderer.labelField = "label";
+			//renderer.labelField = "label";
 			renderer.iconSourceField = "texture";
-			//renderer.iconPosition = Button.ICON_POSITION_TOP;
-			//renderer.defaultLabelProperties.textFormat = new BitmapFontTextFormat("chiller", NaN, 0x000000);
-			renderer.width = 140;
-			renderer.height = 100;
-			//renderer.addEventListener( Event.TRIGGERED, onItemClicked );
+			renderer.nameList.add("my-tile-renderer");
+			renderer.width = 300;
 			return renderer;
 		}
 
+		private function myTileRenderer(renderer:BaseDefaultItemRenderer):void
+		{
+			const defaultSkin:Quad = new Quad(stage.stageWidth, stage.stageHeight, 0x1a1a1a);
+			renderer.defaultSkin = defaultSkin;
+			renderer.defaultSelectedSkin = defaultSkin;
+			
+			var tf:TextFormat = new TextFormat("nulshock", 18, 0xFFFFFF);
+			tf.align = TextFormatAlign.CENTER;
+			renderer.defaultLabelProperties.textFormat = tf;
+			renderer.downLabelProperties.textFormat = tf;
+			renderer.defaultSelectedLabelProperties.textFormat = tf;
+			renderer.iconPosition = feathers.controls.Button.ICON_POSITION_TOP;
+			renderer.horizontalAlign = feathers.controls.Button.HORIZONTAL_ALIGN_CENTER;
+			
+		}
 
 		private function onItemClicked(event:Event):void
 		{
@@ -251,7 +248,7 @@
     		trace("selected item:", p_List.selectedIndex);
 			if( p_List.selectedIndex == 0)
 			{
-				if(SaveManager.getInstance().loadDataItemSingle())
+				if(/*SaveManager.getInstance().loadDataItemSingle()*/0)
 				{
 					var alert:Alert = Alert.show( "Item ini merupakan simbol kedatangan jepang pada tahun xxxx di xxxx.", "Penjelasan", new ListCollection(
 					[

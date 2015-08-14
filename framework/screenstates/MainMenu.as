@@ -61,6 +61,7 @@
 		private var quizText:TextField;
 		
 		/* for quiz declaration */
+		private var quizBg:Quad;
 		//for managing questions:
         private var quizQuestions:Array;
         private var currentQuestion:QuizQuestion;
@@ -212,7 +213,12 @@
 			this.addChild(quizBtn);
 			
 			/* quiz button */
-			var yPosition:Number = backBtn.y - stage.stageHeight/14;
+			quizBg = new Quad(stage.stageWidth, stage.stageHeight - (stage.stageHeight/14)*2 - backBtn.height*2, 0xFFFFFF);
+			quizBg.y = stage.stageHeight/2-quizBg.height/2;
+			quizBg.alpha = 0.5;
+			this.addChild(quizBg);
+			
+			var yPosition:Number = backBtn.y - 10;
 	
 			nextButton = new Button(GameAssets.getAtlasFix().getTexture("btn_selanjutnya"));
             nextButton.x = stage.stageWidth/2 - nextButton.width/2;
@@ -260,7 +266,16 @@
 		
 		private function onQuizClick(event:Event):void
 		{
-			showQuiz();
+			if(int(SaveManager.getInstance().loadDataScore()) > 1000000)
+				showQuiz();
+			else
+			{
+				var alert:Alert = Alert.show("Belum bisa dibuka!! Kumpulkan skor akumulasi sebanyak lebih dari 1.000.000", "Peringatan", new ListCollection(
+				[
+					{ label: "OK"}
+				]) );
+				alert.addEventListener( Event.CLOSE, alert_closeHandler );
+			}
 		}
 		
 		private function onAboutClick(event:Event):void
@@ -308,6 +323,7 @@
 		public function showQuiz():void
 		{
 			screenMode = "quiz";
+			quizBg.visible = true;
 			quizText.visible = true;
 			hero.visible = false;
 			title.visible = false;
@@ -329,6 +345,7 @@
 		public function initialize():void
 		{
 			disposeTemporarily();		
+			quizBg.visible = false;
 			this.visible = true;
 			title.visible = true;
 			hero.visible = true;
@@ -385,32 +402,36 @@
 		*/
 		 private function createQuestions() {
 			score = 0;
-            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"What color is an orange?",
-                                                            0,
-                                                            "Orange",
-                                                            "Blue",
-                                                            "Purple",
-                                                            "Brown"));
-            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"What is the shape of planet earth?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Didaerah mana pertama kali tentara jepang menduduki Indonesia?",
                                                             2,
-                                                            "Flat",
-                                                            "Cube",
-                                                            "Round",
-                                                            "Shabby"));
-            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Who created SpiderMan?",
+                                                            "Semarang",
+                                                            "Solo",
+                                                            "Tarakan"));
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Kapan pemerintah Hindia Belanda menyerah tanpa syarat kepada Jepang?",
                                                             1,
-                                                            "Jack Kirby",
-                                                            "Stan Lee and Steve Ditko",
-                                                            "Stan Lee",
-                                                            "Steve Ditko",
-                                                            "none of the above"));
-            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Who created Mad?",
+                                                            "8 Januari 1942",
+                                                            "8 Maret 1942",
+                                                            "17 Agustus 1945"));
+           quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Disebut apakah peristiwa penculikan Soekarno dan Hatta oleh sejumlah pemuda?",
+                                                            0,
+                                                            "Peristiwa Reangasdengklok",
+                                                            "Agresi Militer 1",
+                                                            "Agresi Militer 2"));
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Kapan Soekarno dan Hatta memproklamasikan kemerdekaan Indonesia?",
+                                                            0,
+                                                            "17 Agustus 1945",
+                                                            "18 Agustus 1945",
+                                                            "5 Agustus 1945"));
+			 quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Kapan Belanda melancarkan agresi militer keduanya?",
+                                                            2,
+                                                            "21 Juli-5 Agustus 1947",
+                                                            "5 Juli-21 Agustus 1947",
+                                                            "19 Desember 1948-5 Januari 1949"));
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Dimanakah tempat berlangsungnya Konferensi Meja Bundar?",
                                                             1,
-                                                            "Al Feldstein",
-                                                            "Harvey Kurtzman",
-                                                            "William M. Gaines",
-                                                            "Jack Davis",
-                                                            "none of the above"));
+                                                            "Jakarta, Indonesia",
+                                                            "Den Haag, Belanda",
+                                                            "Amsterdam, Belanda"));
         }
 		
    

@@ -22,6 +22,7 @@ package framework.screenstates
 	import starling.utils.VAlign;
 	import framework.events.NavigationEvent;
 	import framework.utils.GameAssets;
+	import framework.utils.SaveManager;
 	
 	public class GameOverScreen extends Sprite
 	{
@@ -30,6 +31,7 @@ package framework.screenstates
 		
 		/** Message text field. */
 		private var messageText:TextField;
+		private var messageTextWin:TextField;
 		
 		/** Score container. */
 		private var scoreContainer:Sprite;
@@ -87,11 +89,19 @@ package framework.screenstates
 			this.addChild(bg);
 			
 			// Message text field.
-			messageText = new TextField(stage.stageWidth, stage.stageHeight * 0.5, "HERO WAS KILLED!", "nulshock", 18, 0xf3e75f);
+			messageText = new TextField(stage.stageWidth, stage.stageHeight * 0.5, "MISI GAGAL!", "nulshock", 18, 0xf3e75f);
 			messageText.vAlign = VAlign.TOP;
 			messageText.height = messageText.textBounds.height;
 			messageText.y = (stage.stageHeight * 20)/100;
 			this.addChild(messageText);
+			messageText.visible = false;
+			
+			messageTextWin = new TextField(stage.stageWidth, stage.stageHeight * 0.5, "MISI BERHASIL!", "nulshock", 18, 0xf3e75f);
+			messageTextWin.vAlign = VAlign.TOP;
+			messageTextWin.height = messageTextWin.textBounds.height;
+			messageTextWin.y = (stage.stageHeight * 20)/100;
+			this.addChild(messageTextWin);
+			messageTextWin.visible = false;
 			
 			// Score container.
 			scoreContainer = new Sprite();
@@ -119,6 +129,7 @@ package framework.screenstates
 			playAgainBtn.y = mainBtn.y + mainBtn.height * 0.5 - playAgainBtn.height * 0.5;
 			playAgainBtn.addEventListener(Event.TRIGGERED, onPlayAgainClick);
 			this.addChild(playAgainBtn);
+			playAgainBtn.visible = false;
 			
 			aboutBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_credits"));
 			aboutBtn.y = playAgainBtn.y + playAgainBtn.height * 0.5 - aboutBtn.height * 0.5;
@@ -172,8 +183,21 @@ package framework.screenstates
 		 * @param _distance
 		 * 
 		 */
-		public function initialize(_score:int, _distance:int):void
+		public function initialize(_score:int, _distance:int, win:Boolean):void
 		{
+			SaveManager.getInstance().saveDataScore(_distance);
+			
+			if(win)
+			{
+				messageTextWin.visible = true;
+				playAgainBtn.visible = false;
+			}
+			else
+			{
+				messageText.visible = true;
+				playAgainBtn.visible = true;
+			}
+			
 			this._distance = _distance;
 			this._score = _score;
 

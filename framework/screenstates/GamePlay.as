@@ -23,6 +23,9 @@
 	import starling.display.Quad;
 	import framework.utils.SaveManager;
 	import framework.gameobject.Enemy;
+	import feathers.controls.Label;
+	import feathers.controls.Callout;
+	import starling.display.Image;
 
 
 
@@ -44,7 +47,6 @@
 		private var hitObstacle:Number = 0;
 		
 		private const MIN_SPEED:Number = 650;
-		private var scoreDistance:int;
 		private var obstacleGapCount:int;
 		
 		private var gameArea:Rectangle;
@@ -56,7 +58,11 @@
 		private var touchY:Number;
 		
 		private var itemsToAnimate:Vector.<Item>;
+		
+		private var scoreDistance:int;
+		private var scoreItem:int;
 		private var scoreText:TextField;
+			
 		/** Lives Count. */		
 		private var lives:int;
 		private var scoreLife:TextField;
@@ -83,6 +89,24 @@
 		private var tween_gameOverContainer:Tween;
 		private var level:int;
 		
+		private var labelIntro:TextField;
+		private var labelLose:TextField;
+		private var labelTips:TextField;
+		
+		/*ITEM INFO*/
+		private var quizBg:Quad;
+		private var itemInfo11:Image;
+		private var itemInfo12:Image;
+		private var itemInfo13:Image;
+		private var itemInfo21:Image;
+		private var itemInfo22:Image;
+		private var itemInfo23:Image;
+		private var itemInfo24:Image;
+		private var itemInfo31:Image;
+		private var itemInfo32:Image;
+		private var itemInfo33:Image;
+		
+		
 		public function GamePlay() {
 			// constructor code
 			super();
@@ -105,9 +129,8 @@
 			scoreText = new TextField(300,100, "Score: 0","nulshock", 14, 0xffffff);
 			scoreText.hAlign = HAlign.LEFT;
 			scoreText.vAlign = VAlign.TOP;
-			scoreText.x = 20;
-			scoreText.y = 20;
-			scoreText.border = true;
+			scoreText.x = (stage.stageWidth/14);
+			scoreText.y = (stage.stageHeight/14);
 			this.addChild(scoreText);
 			
 			hero = new Hero();
@@ -125,25 +148,84 @@
 			
 			// Define lives. 5 nyawa broh,..
 			lives = 5;
-			scoreLife = new TextField(300,100, "Score Life: initialize","chiller", 14, 0xffffff);
-			scoreLife.hAlign = HAlign.LEFT;
+			scoreLife = new TextField(140,100, "Energi: -","nulshock", 14, 0xffffff);
+			scoreLife.hAlign = HAlign.RIGHT;
 			scoreLife.vAlign = VAlign.TOP;
-			scoreLife.x = stage.stageWidth*0.5;
-			scoreLife.y = 20;
-			scoreLife.border = true;
+			scoreLife.x = stage.stageWidth - scoreLife.width - (stage.stageWidth/14);
+			scoreLife.y = (stage.stageHeight/14);
 			this.addChild(scoreLife);
+			
+			
+			labelTips = new TextField(stage.stageWidth,stage.stageHeight/2+stage.stageHeight/14, "","nulshock", 14, 0xffffff);
+			labelTips.hAlign = HAlign.CENTER;
+			labelTips.vAlign = VAlign.TOP;
+			labelTips.x = stage.stageWidth/2-labelTips.width/2;
+			labelTips.y = stage.stageHeight/2-labelTips.height/2;
+			this.addChild(labelTips);
 			
 			startButton = new Button(GameAssets.getAtlasFix().getTexture("btn_mulai"));
 			startButton.x = stage.stageWidth/2-startButton.width/2;
-			startButton.y = stage.stageHeight/2-startButton.height/2;
+			startButton.y = labelTips.height+10;
 			startButton.addEventListener(Event.TRIGGERED, onStartButtonClick);
 			this.addChild(startButton);
 			
+			
+			/*item info
+			*/
+			itemInfo11 = new Image(GameAssets.getAtlasFix().getTexture("P1-1"));
+			itemInfo11.x = stage.stageWidth/2-itemInfo11.width/2;
+			itemInfo11.y = stage.stageHeight/2-itemInfo11.height/2;
+			this.addChild(itemInfo11);
+			itemInfo12 = new Image(GameAssets.getAtlasFix().getTexture("P1-2"));
+			itemInfo12.x = stage.stageWidth/2-itemInfo12.width/2;
+			itemInfo12.y = stage.stageHeight/2-itemInfo12.height/2;
+			this.addChild(itemInfo12);
+			itemInfo13 = new Image(GameAssets.getAtlasFix().getTexture("P1-3"));
+			itemInfo13.x = stage.stageWidth/2-itemInfo13.width/2;
+			itemInfo13.y = stage.stageHeight/2-itemInfo13.height/2;
+			this.addChild(itemInfo13);
+			
+			itemInfo21 = new Image(GameAssets.getAtlasFix().getTexture("P2-1"));
+			itemInfo21.x = stage.stageWidth/2-itemInfo21.width/2;
+			itemInfo21.y = stage.stageHeight/2-itemInfo21.height/2;
+			this.addChild(itemInfo21);
+			itemInfo22 = new Image(GameAssets.getAtlasFix().getTexture("P2-2"));
+			itemInfo22.x = stage.stageWidth/2-itemInfo22.width/2;
+			itemInfo22.y = stage.stageHeight/2-itemInfo22.height/2;
+			this.addChild(itemInfo22);
+			itemInfo23 = new Image(GameAssets.getAtlasFix().getTexture("P2-3"));
+			itemInfo23.x = stage.stageWidth/2-itemInfo23.width/2;
+			itemInfo23.y = stage.stageHeight/2-itemInfo23.height/2;
+			this.addChild(itemInfo23);
+			itemInfo24 = new Image(GameAssets.getAtlasFix().getTexture("P2-4"));
+			itemInfo24.x = stage.stageWidth/2-itemInfo24.width/2;
+			itemInfo24.y = stage.stageHeight/2-itemInfo24.height/2;
+			this.addChild(itemInfo24);
+			
+			itemInfo31 = new Image(GameAssets.getAtlasFix().getTexture("P3-1"));
+			itemInfo31.x = stage.stageWidth/2-itemInfo31.width/2;
+			itemInfo31.y = stage.stageHeight/2-itemInfo31.height/2;
+			this.addChild(itemInfo31);
+			itemInfo32 = new Image(GameAssets.getAtlasFix().getTexture("P3-2"));
+			itemInfo32.x = stage.stageWidth/2-itemInfo32.width/2;
+			itemInfo32.y = stage.stageHeight/2-itemInfo32.height/2;
+			this.addChild(itemInfo32);
+			itemInfo33 = new Image(GameAssets.getAtlasFix().getTexture("P3-3"));
+			itemInfo33.x = stage.stageWidth/2-itemInfo33.width/2;
+			itemInfo33.y = stage.stageHeight/2-itemInfo33.height/2;
+			this.addChild(itemInfo33);
+						
+			//end
 			//quiz
 			
-			
 			/* quiz button */
-			 var yPosition:Number = stage.stageHeight - stage.stageHeight/10;
+			
+			quizBg = new Quad(stage.stageWidth, stage.stageHeight - (stage.stageHeight/14)*2, 0xFFFFFF);
+			quizBg.y = stage.stageHeight/2-quizBg.height/2;
+			quizBg.alpha = 0.5;
+			this.addChild(quizBg);
+			
+			var yPosition:Number = stage.stageHeight - stage.stageHeight/10;
 
             finishButton = new Button(GameAssets.getAtlasFix().getTexture("btn_jawab"));
             finishButton.x =  stage.stageWidth/2 - finishButton.width/2;
@@ -159,9 +241,9 @@
             this.addChild(nextButton);
 			nextButton.visible = false;
 			
-			statusT = new TextField(stage.stageWidth, 50, "", "Consolas", 14, 0xffffff);
+			statusT = new TextField(stage.stageWidth, 50, "", "nulshock", 14, 0xffffff);
 			statusT.x = stage.stageWidth/2 - statusT.width/2;
-			statusT.y = finishButton.y - statusT.height*2;
+			statusT.y = itemInfo11.y - statusT.height;
 			statusT.hAlign = HAlign.CENTER;
 			statusT.vAlign = VAlign.TOP;
 			//statusT.border = true;
@@ -175,6 +257,16 @@
 			//questionTemporary = questionTemp;
 			
 			//end quiz
+			
+			
+			labelIntro = new TextField(stage.stageWidth/2, 50, "", "nulshock", 10, 0xffffff);
+			this.addChild(labelIntro);
+			labelIntro.visible = false;
+			//dialog
+			labelLose = new TextField(stage.stageWidth/2, 50, "", "nulshock", 10, 0xffffff);
+			this.addChild(labelLose);
+			labelLose.visible = false;
+			//end dialog
 		}
 		
 		public function disposeTemporarily():void
@@ -209,6 +301,7 @@
 			hitObstacle = 0;
 			bg.speed = 0;
 			scoreDistance = 0;
+			scoreItem = 0;
 			obstacleGapCount = 0;
 			// Reset background's state to idle.
 			bg.state = 1;//"idle";
@@ -223,21 +316,45 @@
 			
 			scoreText.text = "Score: "+scoreDistance;
 			lives = 5;
-			scoreLife.text = "Score Life: "+String(lives);
+			scoreLife.text = "Energi: "+String(lives);
 			
 			//bg.visible = false;
+			SaveManager.getInstance().Initialize();
+			labelTips.text = "Cara Main\n\nGerakkan tangganmu keatas dan kebawah.\nAmbil batu pengetahuan yang bewarna merah.\nAmbil kertas untuk mendapatkan informasi.\nHindari pesawat yang berlalu-lalang.\nScore:"+String(SaveManager.getInstance().loadDataScore());
 			startButton.visible = true;
+			labelTips.visible = true;
 			//force startButton always in top of layers.
 			this.setChildIndex(startButton, numChildren-1);
+			
+			quizBg.visible = false;
+			//item info
+			itemInfo11.visible = false;
+			itemInfo12.visible = false;
+			itemInfo13.visible = false;
+			
+			itemInfo21.visible = false;
+			itemInfo22.visible = false;
+			itemInfo23.visible = false;
+			itemInfo24.visible = false;
+			
+			itemInfo31.visible = false;
+			itemInfo32.visible = false;
+			itemInfo33.visible = false;
+			//end item info
+			
+			labelIntro.text = "Kembalikan lembaran sejarah INDONESIA !!";
+			labelIntro.visible = false;
+			labelLose.text = "Kamu masih belum bisa mengejarku! hahahaha..";
+			labelLose.visible = false;
 			
 		}
 		
 		private function onStartButtonClick(event:Event):void
 		{
-			trace("hiks")
+			//trace("hiks")
 			// Hide start button.
 			startButton.visible = false;
-			
+			labelTips.visible = false;
 			// Launch hero.
 			launchHero();
 		}
@@ -263,26 +380,40 @@
 				switch(gameState)
 				{
 					case "idle":
+						
 						//take off
 						if(enemy.x < stage.stageWidth * 0.5 + stage.stageWidth * 0.25)
 						{
-							enemy.x += (stage.stageWidth * 0.5 + stage.stageWidth * 0.25-enemy.x)*0.05;
+							enemy.x += (stage.stageWidth * 0.5 + stage.stageWidth * 0.25-enemy.x)*0.01;
 							enemy.y -= (enemy.y - touchY) * 0.5;
 							enemySpeed += (MIN_SPEED - enemySpeed)* 0.2;
 						}
 											
 						if(hero.x < stage.stageWidth * 0.5 * 0.5)
 						{
-							hero.x += ((stage.stageWidth * 0.5 * 0.5 + 10)-hero.x)*0.05;
+							hero.x += ((stage.stageWidth * 0.5 * 0.5 + 10)-hero.x)*0.01;
 							hero.y -= (hero.y - touchY) * 0.1;
-							playerSpeed += (MIN_SPEED - playerSpeed)* 0.05;
+							playerSpeed += (MIN_SPEED - playerSpeed)* 0.01;
+							
 							
 							bg.speed = playerSpeed * elapsed;
+							labelIntro.visible = true;
+							labelIntro.x = enemy.x-labelIntro.width/2;
+							labelIntro.y = enemy.y+enemy.height/2+10;
+							labelIntro.x = hero.x;
+							labelIntro.y = hero.y+hero.height/2+10;
+							if(enemy.x> stage.stageWidth/2)
+							{
+								labelIntro.text = "Coba ambil kalau bisa.. HAHAHA"
+								labelIntro.x = enemy.x-labelIntro.width/2;
+								labelIntro.y = enemy.y+enemy.height/2+10;
+							}
 						}
 						else
 						{
 							gameState = "flying";
 							hero.state = 2;
+							labelIntro.visible = false;
 						}
 						
 						trace(hero.rotation)
@@ -343,8 +474,6 @@
 						bg.speed = playerSpeed * elapsed;
 						scoreDistance += (playerSpeed * elapsed)*0.1;
 						
-						scoreText.text = "Score: "+scoreDistance;
-						
 						initObstacle();
 						animateObstacles();
 						
@@ -356,12 +485,14 @@
 							enemy.x -= (playerSpeed + enemySpeed) * elapsed * 0.1;
 							trace(enemy.x);
 							if(enemy.x <= stage.stageWidth/2)
-								gameState = "over";
+								gameState = "overWin";
 						}
 						else
 						{
 							enemy.x += (stage.stageWidth* 3-enemy.x)*0.05;
 						}
+						scoreDistance = scoreDistance+scoreItem;
+						scoreText.text = "Score: "+scoreDistance;
 						
 						if(lives <= 0)
 							gameState = "over";
@@ -407,7 +538,66 @@
 							this.removeEventListener(Event.ENTER_FRAME, onGameTick);
 							
 							// Game over.
-							gameOver();
+							gameOver(false);
+						}
+						
+						// Set the background's speed based on hero's speed.
+						bg.speed = Math.floor(playerSpeed * elapsed);
+					break;
+					case "overWin":
+						
+						for(var i:uint = 0; i < itemsToAnimate.length; i++)
+						{
+							if (itemsToAnimate[i] != null)
+							{
+								// Dispose the item temporarily.
+								disposeItemTemporarily(i, itemsToAnimate[i]);
+							}
+						}
+						
+						for(var j:uint = 0; j < obstacleToAnimate.length; j++)
+						{
+							if (obstacleToAnimate[j] != null)
+							{
+								// Dispose the obstacle temporarily.
+								disposeObstacleTemporarily(j, obstacleToAnimate[j]);
+							}
+						}
+						
+						if (playerSpeed>=40)
+						{
+							//do nothing
+							labelLose.visible = true;
+							labelLose.x = enemy.x-labelLose.width/2;
+							labelLose.y = enemy.y+enemy.height/2+10;
+							playerSpeed -= playerSpeed * elapsed;
+							trace("spee:"+playerSpeed)
+							
+						}
+						else if(playerSpeed>33 && playerSpeed<40)
+						{
+							enemy.x=enemy.x+enemy.x*elapsed*1.4;
+							labelLose.text = "Aku tidak akan menyerah!!";
+							labelLose.x = hero.x-labelLose.width/2;
+							labelLose.y = hero.y+hero.height/2+10;
+							trace("elapsed"+elapsed);
+							if(enemy.x > stage.stageWidth*2)
+								playerSpeed = 5;
+						}
+						else
+						{
+							
+							labelLose.visible = false;
+							//enemy.x = enemy.x + elapsed;
+							// Once he moves out, reset speed to 0.
+							playerSpeed = 0;
+							
+							// Stop game tick.
+							this.removeEventListener(Event.ENTER_FRAME, onGameTick);
+							
+							// Game over.
+							gameOver(true);
+							trace("game over")
 						}
 						
 						// Set the background's speed based on hero's speed.
@@ -444,6 +634,7 @@
 				itemToTrack.x -= playerSpeed * elapsed;
 				if(itemToTrack.bounds.intersects(hero.bounds))
 				{
+					scoreItem += 10;
 					itemsToAnimate.splice(i,1);
 					this.removeChild(itemToTrack);
 					if(itemToTrack.foodItemType == 1)
@@ -513,7 +704,7 @@
 						endGame();
 					}
 					
-					scoreLife.text = "Score Life: "+String(lives);
+					scoreLife.text = "Energi: "+String(lives);
 					
 				}
 				if(obstacleToTrack.distance > 0)
@@ -595,6 +786,7 @@
 		
 		private function initQuiz():void
 		{
+			quizBg.visible = true;
 			for(var i:uint = 0;i<itemsToAnimate.length;i++)
 			{
 				itemsToAnimate[i].visible = false;
@@ -637,24 +829,17 @@
                                                             "Dummy",
                                                             "Dummy"));
             quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Didaerah mana pertama kali tentara jepang menduduki Indonesia?",
-                                                            2,
-                                                            "Semarang",
-                                                            "Solo",
+                                                            0,
                                                             "Tarakan",
                                                             "Makasar"));
             quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Kapan pemerintah Hindia Belanda menyerah tanpa syarat kepada Jepang?",
                                                             1,
                                                             "8 Januari 1942",
-                                                            "8 Maret 1942",
-                                                            "17 Agustus 1945",
-                                                            "8 Januari 1945",
-                                                            "8 Maret 1945"));
+                                                            "8 Maret 1942"));
             quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Untuk memikat hari rakyat, Jepang membuat propaganda Tiga A, yang berisi?",
-                                                            3,
-                                                            "Jepang pemimpin Asia",
-                                                            "Jepang pelindung Asia",
-                                                            "Jepang cahaya Asia",
-                                                            "Semua jawaban benar"));
+                                                            0,
+                                                            "Jepang pemimpin Asia,Jepang pelindung Asia,Jepang cahaya Asia",
+                                                            "Jepang pemimpin Asia,Jepang perisai Asia,Jepang cahaya Asia"));
         }
 		
 		private function createQuestions2() {
@@ -665,28 +850,21 @@
                                                             "Dummy",
                                                             "Dummy"));
             quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Kapan hari lahirnya pancasila?",
-                                                            3,
-                                                            "17 Agustus 1945",
-                                                            "18 Agustus 1945",
+                                                            0,
                                                             "5 Agustus 1945",
                                                             "1 Juni 1945"));
             quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Disebut apakah peristiwa penculikan Soekarno dan Hatta oleh sejumlah pemuda?",
                                                             0,
                                                             "Peristiwa Reangasdengklok",
-                                                            "Agresi Militer 1",
                                                             "Agresi Militer 2"));
             quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Kapan Soekarno dan Hatta memproklamasikan kemerdekaan Indonesia?",
                                                             0,
                                                             "17 Agustus 1945",
-                                                            "18 Agustus 1945",
-                                                            "5 Agustus 1945",
-                                                            "1 Juni 1945"));
-			 quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Hasil apa saja yang didapat dari sidang pertama PPKI?",
-                                                            3,
-                                                            "Mengesahkan UUD 1945",
-                                                            "Mengangkat Soekarno sebagai presiden RI dan Hatta sebagawai wakilnya",
-                                                            "Membentuk Komite Nasional Indonesia Pusat untuk membantu presiden",
-                                                            "Semua jawaban benar"));
+                                                            "18 Agustus 1945"));
+			 quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Sebutkan salah satu hasil dari sidang pertama PPKI?",
+                                                            1,
+                                                            "Mengesahkan UUDs 1945",
+                                                            "Mengangkat Soekarno sebagai presiden RI dan Hatta sebagawai wakilnya"));
         }
 		
 		private function createQuestions3() {
@@ -699,21 +877,15 @@
             quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Kapan Belanda melancarkan agresi militer pertamanya?",
                                                             0,
                                                             "21 Juli-5 Agustus 1947",
-                                                            "5 Juli-21 Agustus 1947",
-                                                            "19 Desember 1948-5 Januari 1949",
                                                             "5 Desember 1948-19 Januari 1949"));
             quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Kapan Belanda melancarkan agresi militer keduanya?",
-                                                            2,
+                                                            1,
                                                             "21 Juli-5 Agustus 1947",
-                                                            "5 Juli-21 Agustus 1947",
-                                                            "19 Desember 1948-5 Januari 1949",
-                                                            "5 Desember 1948-19 Januari 1949"));
+                                                            "19 Desember 1948-5 Januari 1949"));
             quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Dimanakah tempat berlangsungnya Konferensi Meja Bundar?",
                                                             1,
                                                             "Jakarta, Indonesia",
-                                                            "Den Haag, Belanda",
-                                                            "Amsterdam, Belanda",
-                                                            "Yogyakarta, DIY"));
+                                                            "Den Haag, Belanda"));
         }
 		
 		 private function showMessage(theMessage:String) {
@@ -737,15 +909,29 @@
                     lives+=3;
 					removeQuestions(questionTemporary);	
 					hideQuestion(questionTemporary);
-					showMessage("Jawaban benar "+quizQuestions[questionTemporary].correctAnswer);
-					scoreLife.text = "Score Life: "+String(lives);
-					SaveManager.getInstance().saveDataItemSingle(true);
+					if(level == 1)
+					{
+						createImageLevel1(questionTemporary);
+					}
+					if(level == 2)
+					{
+						createImageLevel2(questionTemporary);
+					}
+					if(level == 3)
+					{
+						createImageLevel3(questionTemporary);
+					}
+					//showMessage("Jawaban benar "+quizQuestions[questionTemporary].correctAnswer);
+					showMessage("BENAR, Kamu mendapat gambar informasi dibawah ini.\n Detail silahkan dilihat di menu 'Galeri Info'");
+					scoreLife.text = "Energi: "+String(lives);
+					//SaveManager.getInstance().saveDataItemSingle(true);
             } else {
 				lives-=1;
 				removeQuestions(questionTemporary);	
 				hideQuestion(questionTemporary);
-				showMessage("Jawaban Salah "+quizQuestions[questionTemporary].userAnswer);
-				scoreLife.text = "Score Life: "+String(lives);
+				//showMessage("Jawaban Salah "+quizQuestions[questionTemporary].userAnswer);
+				showMessage("SALAH, Coba lagi!!\nPeringatan:Energi berkurang 1 poin.");
+				scoreLife.text = "Energi: "+String(lives);
             }
 			
 			nextButton.visible = true;
@@ -754,7 +940,21 @@
 		private function nextHandler(event:Event) {
 			gamePaused = false;
 			nextButton.visible = false;
+			if(level == 1)
+			{
+				resetImageLevel1();
+			}
+			if(level == 2)
+			{
+				resetImageLevel2();
+			}
+			if(level == 3)
+			{
+				resetImageLevel3();
+			}
+			
 			showMessage("");
+			quizBg.visible = false;
 			for(var i:uint = 0;i<itemsToAnimate.length;i++)
 			{
 				itemsToAnimate[i].visible = true;
@@ -770,6 +970,92 @@
 		
 		//end quiz
 		
+		
+		private function createImageLevel1(index:int) {
+			switch(index)
+			{
+				case 1:
+					itemInfo11.visible = true;
+					break;
+				case 2:
+					itemInfo12.visible = true;
+					break;
+				case 3:
+					itemInfo13.visible = true;
+					break;
+			}
+			
+		}
+		
+		private function createImageLevel2(index:int) {
+			switch(index)
+			{
+				case 1:
+					itemInfo21.visible = true;
+					break;
+				case 2:
+					itemInfo22.visible = true;
+					break;
+				case 3:
+					itemInfo23.visible = true;
+					break;
+				case 4:
+					itemInfo24.visible = true;
+					break;
+			}
+			
+		}
+		
+		private function createImageLevel3(index:int) {
+			switch(index)
+			{
+				case 1:
+					itemInfo31.visible = true;
+					break;
+				case 2:
+					itemInfo32.visible = true;
+					break;
+				case 3:
+					itemInfo33.visible = true;
+					break;
+			}
+			
+		}
+		
+		private function resetImageLevel1() {
+			
+			if(itemInfo11.visible == true)
+			itemInfo11.visible = false;
+			else if(itemInfo12.visible == true)
+			itemInfo12.visible = false;
+			else if(itemInfo13.visible == true)
+			itemInfo13.visible = false;
+			
+		}
+		
+		private function resetImageLevel2() {
+			
+			if(itemInfo21.visible == true)
+			itemInfo21.visible = false;
+			else if(itemInfo22.visible == true)
+			itemInfo22.visible = false;
+			else if(itemInfo23.visible == true)
+			itemInfo23.visible = false;
+			else if(itemInfo24.visible == true)
+			itemInfo24.visible = false;
+			
+		}
+		
+		private function resetImageLevel3() {
+			
+			if(itemInfo31.visible == true)
+			itemInfo31.visible = false;
+			else if(itemInfo32.visible == true)
+			itemInfo32.visible = false;
+			else if(itemInfo33.visible == true)
+			itemInfo33.visible = false;
+			
+		}
 		/**
 		 * End game. 
 		 * 
@@ -780,7 +1066,6 @@
 			this.y = 0;
 			
 			//temporary using distance
-			SaveManager.getInstance().saveDataScore(scoreDistance);
 			// Set Game Over state so all obstacles and items can remove themselves.
 			gameState = "over";
 		}
@@ -825,10 +1110,10 @@
 		 * Game Over - called when hero falls out of screen and when Game Over data should be displayed. 
 		 * 
 		 */
-		private function gameOver():void
+		private function gameOver(isWin:Boolean):void
 		{
 			this.setChildIndex(gameOverScreen, this.numChildren-1);
-			gameOverScreen.initialize(score, Math.round(scoreDistance));
+			gameOverScreen.initialize(score, Math.round(scoreDistance),isWin);
 			
 			tween_gameOverContainer = new Tween(gameOverScreen, 1);
 			tween_gameOverContainer.fadeTo(1);
