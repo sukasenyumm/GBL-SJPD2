@@ -51,6 +51,9 @@ package framework.screenstates
 		/** About button. */
 		private var aboutBtn:Button;
 		
+		/** Items button. */
+		private var itemsBtn:Button;
+		
 		/** Score value - distance. */
 		private var _distance:int;
 		
@@ -130,14 +133,23 @@ package framework.screenstates
 			playAgainBtn.addEventListener(Event.TRIGGERED, onPlayAgainClick);
 			this.addChild(playAgainBtn);
 			playAgainBtn.visible = false;
+
+			/* items button */
+			itemsBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_item"));
+			itemsBtn.y = mainBtn.y + mainBtn.height * 0.5 - itemsBtn.height * 0.5;
+			itemsBtn.addEventListener(Event.TRIGGERED, onItemsClick);
+			this.addChild(itemsBtn);			
+			itemsBtn.visible = false;
 			
 			aboutBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_credits"));
 			aboutBtn.y = playAgainBtn.y + playAgainBtn.height * 0.5 - aboutBtn.height * 0.5;
 			aboutBtn.addEventListener(Event.TRIGGERED, onAboutClick);
 			this.addChild(aboutBtn);
+		
 			
 			mainBtn.x = stage.stageWidth * 0.5 - (mainBtn.width + playAgainBtn.width + aboutBtn.width + 30) * 0.5;
 			playAgainBtn.x = mainBtn.bounds.right + 10;
+			itemsBtn.x = mainBtn.bounds.right + 10;
 			aboutBtn.x = playAgainBtn.bounds.right + 10;
 		}
 		
@@ -177,6 +189,11 @@ package framework.screenstates
 			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "about"}, true));
 		}
 		
+		private function onItemsClick(event:Event):void
+		{
+			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "items"},true));
+		}
+		
 		/**
 		 * Initialize Game Over container. 
 		 * @param _score
@@ -191,11 +208,13 @@ package framework.screenstates
 			{
 				messageTextWin.visible = true;
 				playAgainBtn.visible = false;
+				itemsBtn.visible = true;
 			}
 			else
 			{
 				messageText.visible = true;
 				playAgainBtn.visible = true;
+				itemsBtn.visible = false;
 			}
 			
 			this._distance = _distance;

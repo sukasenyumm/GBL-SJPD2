@@ -6,14 +6,6 @@
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 	
-	/**
-	 * This class holds all embedded textures, fonts and sounds and other embedded files.  
-	 * By using static access methods, only one instance of the asset file is instantiated. This 
-	 * means that all Image types that use the same bitmap will use the same Texture on the video card.
-	 * 
-	 * @author hsharma
-	 * 
-	 */
 	public class GameAssets
 	{
 		/**
@@ -47,6 +39,8 @@
 		
 		[Embed(source="../media/graphics/nulshock bd.TTF", fontFamily="nulshock", embedAsCFF="false")]
 		public static var MyFont:Class;		
+		
+		
 		
 		/**
 		 * Texture Cache 

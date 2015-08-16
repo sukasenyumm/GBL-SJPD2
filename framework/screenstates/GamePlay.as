@@ -26,7 +26,11 @@
 	import feathers.controls.Label;
 	import feathers.controls.Callout;
 	import starling.display.Image;
-
+	import framework.utils.SaveManager;
+	import framework.gameobject.Particle;
+	import starling.extensions.PDParticleSystem;
+	import starling.textures.Texture;
+	import framework.utils.ParticleAssets;
 
 
 	public class GamePlay extends Sprite{
@@ -58,6 +62,9 @@
 		private var touchY:Number;
 		
 		private var itemsToAnimate:Vector.<Item>;
+		private var eatParticlesToAnimate:Vector.<Particle>;
+		
+		private var particle:PDParticleSystem;
 		
 		private var scoreDistance:int;
 		private var scoreItem:int;
@@ -133,6 +140,14 @@
 			scoreText.y = (stage.stageHeight/14);
 			this.addChild(scoreText);
 			
+			particle = new PDParticleSystem(XML(new ParticleAssets.ParticleXML()),Texture.fromBitmap(new ParticleAssets.ParticleTexture()));
+			Starling.juggler.add(particle);
+			particle.x = -100;
+			particle.y = -100;
+			particle.scaleX = 1.2;
+			particle.scaleY = 1.2;
+			this.addChild(particle);
+			
 			hero = new Hero();
 			hero.x = stage.stageWidth/2;
 			hero.y = stage.stageHeight/2;
@@ -145,6 +160,7 @@
 			
 			obstacleToAnimate = new Vector.<Obstacle>();
 			itemsToAnimate = new Vector.<Item>();
+			eatParticlesToAnimate = new Vector.<Particle>();
 			
 			// Define lives. 5 nyawa broh,..
 			lives = 5;
@@ -291,7 +307,8 @@
 			
 			// Calculate elapsed time.
 			this.addEventListener(Event.ENTER_FRAME, calculateElapsed);
-			gameArea = new Rectangle(0,100,stage.stageWidth,stage.stage.stageHeight - 250);
+			gameArea = new Rectangle(0,(stage.stageHeight/14)*2,stage.stageWidth,stage.stageHeight - (stage.stageHeight/14)*2);
+			trace((stage.stageHeight/14)*2);
 			
 			gameState = "idle";
 			
@@ -319,8 +336,7 @@
 			scoreLife.text = "Energi: "+String(lives);
 			
 			//bg.visible = false;
-			SaveManager.getInstance().Initialize();
-			labelTips.text = "Cara Main\n\nGerakkan tangganmu keatas dan kebawah.\nAmbil batu pengetahuan yang bewarna merah.\nAmbil kertas untuk mendapatkan informasi.\nHindari pesawat yang berlalu-lalang.\nScore:"+String(SaveManager.getInstance().loadDataScore());
+			labelTips.text = (SaveManager.getInstance().loadDataGodlike()==1)?"Cara Main\n\nGerakkan tangganmu keatas dan kebawah.\nAmbil batu pengetahuan yang bewarna merah.\nAmbil kertas untuk mendapatkan informasi.\nHindari pesawat yang berlalu-lalang.\n'AURA KEMERDEKAAN' memberikan kekebalan jika bertabrakan dengan pesawat, maka ENERGI berkurang 1 poin saja.\nScore Akumulasi:"+String(SaveManager.getInstance().loadDataScore())+" ":"Cara Main\n\nGerakkan tangganmu keatas dan kebawah.\nAmbil batu pengetahuan yang bewarna merah.\nAmbil kertas untuk mendapatkan informasi.\nHindari pesawat yang berlalu-lalang.";
 			startButton.visible = true;
 			labelTips.visible = true;
 			//force startButton always in top of layers.
@@ -361,6 +377,8 @@
 		
 		private function launchHero():void
 		{
+			if(SaveManager.getInstance().loadDataGodlike() == 1)
+				particle.start();
 			this.addEventListener(TouchEvent.TOUCH, onTouch);
 			this.addEventListener(Event.ENTER_FRAME, onGameTick);
 		}
@@ -368,15 +386,26 @@
 		private function onTouch(event:TouchEvent):void
 		{
 			touch = event.getTouch(stage);
-			
 			touchX = touch.globalX;
 			touchY = touch.globalY;
+			
 		}
 		
 		private function onGameTick(event:Event):void
 		{
 			if (!gamePaused)
 			{
+				
+				// If no touch co-ordinates, reset touchX and touchY (for touch screen devices).
+				if (isNaN(touchX))
+				{
+					touchX = stage.stageWidth * 0.5;
+					touchY = stage.stageHeight * 0.5;
+				}
+				
+				particle.x = hero.x + 60;
+				particle.y = hero.y;
+				
 				switch(gameState)
 				{
 					case "idle":
@@ -419,7 +448,8 @@
 						trace(hero.rotation)
 						// Limit the hero's rotation to < 30.
 						hero.rotation = deg2rad(0);
-						
+						particle.rotation = deg2rad(0);
+						/*
 						// Rotate hero based on mouse position.
 						if ((-(hero.y - touchY) * 0.2) < 30 && (-(hero.y - touchY) * 0.2) > -30) hero.rotation = deg2rad(-(hero.y - touchY) * 0.2);
 						
@@ -438,7 +468,7 @@
 							hero.y = gameArea.top + hero.height * 0.5;
 							hero.rotation = deg2rad(0);
 						}
-						
+						*/
 						break;
 					case "flying":
 					
@@ -447,7 +477,7 @@
 							//hero
 							hero.y -= (hero.y - touchY) * 0.1;
 							
-							
+							/*
 							if(-(hero.y - touchY)<150 && -(hero.y - touchY)>-150)
 							{
 								hero.rotation = deg2rad(-(hero.y -touchY) * 0.2);
@@ -462,7 +492,7 @@
 								hero.y = gameArea.top;
 								hero.rotation = deg2rad(0);
 							}
-	
+							*/
 						}
 						else
 						{
@@ -479,6 +509,7 @@
 						
 						createFoodItems();
 						animateItems();
+						animateEatParticles();
 						
 						if(scoreDistance > 100)
 						{
@@ -519,6 +550,8 @@
 						
 						// Spin the hero.
 						hero.rotation -= deg2rad(30);
+						particle.rotation -= deg2rad(30);
+						particle.stop();
 						
 						// Make the hero fall.
 						
@@ -604,6 +637,8 @@
 						bg.speed = Math.floor(playerSpeed * elapsed);
 					break;
 				}
+				
+				
 			}
 		}
 		
@@ -634,6 +669,7 @@
 				itemToTrack.x -= playerSpeed * elapsed;
 				if(itemToTrack.bounds.intersects(hero.bounds))
 				{
+					createEatParticles(itemToTrack);
 					scoreItem += 10;
 					itemsToAnimate.splice(i,1);
 					this.removeChild(itemToTrack);
@@ -648,6 +684,59 @@
 				if(itemToTrack.x < -50 || gameState == "over")
 				{
 					disposeItemTemporarily(i, itemToTrack);
+				}
+			}
+		}
+		
+		private function createEatParticles(itemToTrack:Item):void
+		{
+			var count:int = 5;
+			
+			while(count > 0)
+			{
+				count--;
+				
+				var eatParticle:Particle = new Particle();
+				this.addChild(eatParticle);
+				
+				eatParticle.x = itemToTrack.x + Math.random() * 40 - 20;
+				eatParticle.y = itemToTrack.y - Math.random() * 40;
+				
+				eatParticle.speedX = Math.random() * 2+1;
+				eatParticle.speedY = Math.random() * 5;
+				eatParticle.spin = Math.random() * 15;
+				
+				eatParticle.scaleX = eatParticle.scaleY = Math.random() * 0.3 + 0.3;
+				eatParticlesToAnimate.push(eatParticle);
+			}
+		}
+		
+		private function animateEatParticles():void
+		{
+			for(var i:uint = 0;i<eatParticlesToAnimate.length;i++)
+			{
+				var eatParticleToTrack:Particle = eatParticlesToAnimate[i];
+				
+				if(eatParticleToTrack)
+				{
+					eatParticleToTrack.scaleX -= 0.03;
+					eatParticleToTrack.scaleY = eatParticleToTrack.scaleX;
+					eatParticleToTrack.y -= eatParticleToTrack.speedY;
+					eatParticleToTrack.speedY -= eatParticleToTrack.speedY * 0.2;
+					
+					eatParticleToTrack.x += eatParticleToTrack.speedX;
+					eatParticleToTrack.speedX --;
+					
+					eatParticleToTrack.rotation +=deg2rad(eatParticleToTrack.spin);
+					eatParticleToTrack.spin *= 1.1;
+					
+					if(eatParticleToTrack.scaleY <=0.02)
+					{
+						eatParticlesToAnimate.splice(i,1);
+						this.removeChild(eatParticleToTrack);
+						eatParticleToTrack = null;
+					}
+					
 				}
 			}
 		}
@@ -696,7 +785,10 @@
 					trace("aduh")
 					
 					// Update lives.
-					lives--;
+					if(SaveManager.getInstance().loadDataGodlike() == 1)
+						lives-=1;
+					else
+						lives-=5;
 					
 					if (lives <= 0)
 					{
@@ -976,12 +1068,15 @@
 			{
 				case 1:
 					itemInfo11.visible = true;
+					SaveManager.getInstance().saveGalInfo(true,1);
 					break;
 				case 2:
 					itemInfo12.visible = true;
+					SaveManager.getInstance().saveGalInfo(true,2);
 					break;
 				case 3:
 					itemInfo13.visible = true;
+					SaveManager.getInstance().saveGalInfo(true,3);
 					break;
 			}
 			
@@ -992,15 +1087,19 @@
 			{
 				case 1:
 					itemInfo21.visible = true;
+					SaveManager.getInstance().saveGalInfo(true,4);
 					break;
 				case 2:
 					itemInfo22.visible = true;
+					SaveManager.getInstance().saveGalInfo(true,5);
 					break;
 				case 3:
 					itemInfo23.visible = true;
+					SaveManager.getInstance().saveGalInfo(true,6);
 					break;
 				case 4:
 					itemInfo24.visible = true;
+					SaveManager.getInstance().saveGalInfo(true,7);
 					break;
 			}
 			
@@ -1011,12 +1110,15 @@
 			{
 				case 1:
 					itemInfo31.visible = true;
+					SaveManager.getInstance().saveGalInfo(true,8);
 					break;
 				case 2:
 					itemInfo32.visible = true;
+					SaveManager.getInstance().saveGalInfo(true,9);
 					break;
 				case 3:
 					itemInfo33.visible = true;
+					SaveManager.getInstance().saveGalInfo(true,10);
 					break;
 			}
 			

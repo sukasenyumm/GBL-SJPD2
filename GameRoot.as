@@ -20,7 +20,11 @@
 		public function GameRoot() {
 			// constructor code
 			super();
-			SaveManager.getInstance().Initialize();
+			if(GameSettings.RESET_SAVE)
+				SaveManager.getInstance().resetData();
+			if(GameSettings.CHEAT_MODE)
+				SaveManager.getInstance().cheatMode();
+			SaveManager.getInstance().initialize();
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 		
@@ -80,6 +84,10 @@
 					screenGamePlay.disposeTemporarily();
 					mainMenu.initialize();
 					mainMenu.showAbout();
+					break;
+				case "items":
+					screenGamePlay.disposeTemporarily();
+					screenCollectItems.initialize();
 					break;
 			}
 		}

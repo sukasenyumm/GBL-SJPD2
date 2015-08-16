@@ -21,6 +21,8 @@
 	import feathers.themes.MetalWorksDesktopTheme;
 	import feathers.controls.Alert;
 	import feathers.data.ListCollection;
+	import framework.gameobject.Hero;
+	import framework.gameobject.Enemy;
 	
 	
 	/**
@@ -36,7 +38,9 @@
 		/** Game title. */
 		private var title:Image;
 		/** hero */
-		private var hero:Image;
+		private var hero:Hero;
+		/** enemy */
+		private var enemy:Enemy;
 		/** About button. */
 		private var aboutBtn:Button;
 		/** Items button. */
@@ -77,6 +81,8 @@
 		
 		/*animation*/
 		private var tweenHero:Tween;
+		/*animation*/
+		private var tweenEnemy:Tween;
 		/** Current date. */
 		private var _currentDate:Date;
 		/*end animation*/
@@ -120,10 +126,15 @@
 			bg.setVertexColor(2, bottomColor);
 			bg.setVertexColor(3, bottomColor);
 			
-			hero = new Image(GameAssets.getAtlas().getTexture("welcome_hero"));
-			hero.width = hero.width*.5;
-			hero.width = hero.height*.5;
+			hero = new Hero();
+			hero.width = hero.width;
+			hero.width = hero.height;
 			this.addChild(hero);
+			
+			enemy = new Enemy();
+			enemy.width = enemy.width;
+			enemy.width = enemy.height;
+			this.addChild(enemy);
 			
 			title = new Image(GameAssets.getAtlasFix().getTexture("lbl_title"));
 			title.x = stage.stageWidth/14;
@@ -213,7 +224,7 @@
 			this.addChild(quizBtn);
 			
 			/* quiz button */
-			quizBg = new Quad(stage.stageWidth, stage.stageHeight - (stage.stageHeight/14)*2 - backBtn.height*2, 0xFFFFFF);
+			quizBg = new Quad(stage.stageWidth, stage.stageHeight - (stage.stageHeight/14)*2 - backBtn.height*1.5, 0xFFFFFF);
 			quizBg.y = stage.stageHeight/2-quizBg.height/2;
 			quizBg.alpha = 0.5;
 			this.addChild(quizBg);
@@ -240,7 +251,7 @@
             this.addChild(finishButton);
 			
 			//statusT = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
-			statusT = new TextField(stage.stageWidth, 50, "", "nulshock", 14, 0xffffff);
+			statusT = new TextField(stage.stageWidth, 150, "", "nulshock", 14, 0xffffff);
 			statusT.x = stage.stageWidth/2 - statusT.width/2;
 			statusT.y = finishButton.y - statusT.height*2;
 			statusT.hAlign = HAlign.CENTER;
@@ -311,6 +322,7 @@
 		{
 			screenMode = "about";
 			hero.visible = false;
+			enemy.visible = false;
 			playBtn.visible = false;
 			aboutBtn.visible = false;
 			helpBtn.visible = false;
@@ -326,6 +338,7 @@
 			quizBg.visible = true;
 			quizText.visible = true;
 			hero.visible = false;
+			enemy.visible = false;
 			title.visible = false;
 			playBtn.visible = false;
 			helpBtn.visible = false;
@@ -349,6 +362,7 @@
 			this.visible = true;
 			title.visible = true;
 			hero.visible = true;
+			enemy.visible = true;
 			aboutText.visible = false;
 			quizText.visible = false;
 			backBtn.visible = false;
@@ -365,12 +379,20 @@
 			
 			//animation
 			hero.x = -hero.width;
-			hero.y = 100;
+			hero.y = stage.stageWidth/2-hero.height;
+			
+			enemy.x = -enemy.width;
+			enemy.y = hero.y-enemy.height*2;
 			
 			tweenHero = new Tween(hero, 2, Transitions.EASE_OUT);
-			tweenHero.animate("x", 80);
+			tweenHero.animate("x", stage.stageWidth/4);
 			Starling.juggler.add(tweenHero);
 			Starling.juggler.removeTweens(tweenHero);
+			
+			tweenEnemy = new Tween(enemy, 2, Transitions.EASE_OUT);
+			tweenEnemy.animate("x", stage.stageWidth/2);
+			Starling.juggler.add(tweenEnemy);
+			Starling.juggler.removeTweens(tweenEnemy);
 			
 			this.addEventListener(Event.ENTER_FRAME, floatingAnimation);
 		}
@@ -383,7 +405,8 @@
 		private function floatingAnimation(event:Event):void
 		{
 			_currentDate = new Date();
-			hero.y = 130 + (Math.cos(_currentDate.getTime() * 0.002)) * 25;
+			hero.y = stage.stageWidth/2-hero.height+20 + (Math.cos(_currentDate.getTime() * 0.002)) * 25;
+			enemy.y = hero.y-enemy.height*2+20 + (Math.cos(_currentDate.getTime() * 0.002)) * 25;
 			playBtn.y = (stage.stageHeight/2 - playBtn.height/2) + (Math.cos(_currentDate.getTime() * 0.002)) * 10;
 		}
 		
@@ -480,7 +503,7 @@
                 currentQuestion = quizQuestions[currentIndex];
                 currentQuestion.visible = true;
             } else {
-               var alert:Alert = Alert.show("Semua pertanyaan telah dijawab! Lihat jawaban kembali atau tekan selesai!", "Peringatan", new ListCollection(
+               var alert:Alert = Alert.show("Semua pertanyaan telah dijawab! Lihat jawaban sebelumnya atau tekan selesai!", "Peringatan", new ListCollection(
 				[
 					{ label: "OK"}
 				]) );
@@ -527,9 +550,11 @@
             for(var i:int = 0; i < quizQuestions.length; i++) {
                 if(quizQuestions[i].userAnswer == quizQuestions[i].correctAnswer) {
                     score++;
+					if(score == quizQuestions.length)
+						SaveManager.getInstance().saveDataGodlike(true);
                 }
             }
-            showMessage("You answered " + score + " correct out of " + quizQuestions.length + " questions.");
+            showMessage("SELAMAT!!\n\nKamu berhasil menjawab " + score + " soal dari " + quizQuestions.length + " soal.\nKamu mendapatkan 'AURA KEMERDEKAAN', mainkan game dan lihat apa yang terjadi.");
 			//trace("You answered " + score + " correct out of " + quizQuestions.length + " questions.")
         }
 		
