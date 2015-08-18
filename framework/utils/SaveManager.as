@@ -106,7 +106,7 @@
 			var saveDataObject:SharedObject = SharedObject.getLocal("5v67575vd77d6sd");
 			if(saveDataObject.data.score != null)
 			{
-				trace("berhasil"+String(saveDataObject.data.score)+score);
+				//trace("berhasil"+String(saveDataObject.data.score)+score);
 				if(saveDataObject.data.score == "0")
 					saveDataObject.data.score = score; // set the saved score to the current score
 				else
@@ -114,15 +114,15 @@
 					
 				saveDataObject.flush(); // immediately save to the local drive
 			}
-			else
-			trace("gagaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaal")
+			else{}
+			//trace("gagaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaal")
 		}
 		
 		//loading score
 		public function loadDataScore():int
 		{
 			var saveDataObject:SharedObject = SharedObject.getLocal("5v67575vd77d6sd");
-			trace(saveDataObject.data.score)
+			//trace(saveDataObject.data.score)
      		return saveDataObject.data.score;
      	}
 		
@@ -185,8 +185,8 @@
 					break;
 				}
 			}
-			else
-			trace("gagaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaal")
+			else{}
+			//trace("gagaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaal")
 		}
 		
 		//loading score
@@ -239,8 +239,8 @@
 				saveDataObject.data.godlike = uint(x); // set the saved score to the current score
 				saveDataObject.flush(); // immediately save to the local drive
 			}
-			else
-			trace("gagaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaal")
+			else{}
+			//trace("gagaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaal")
 		}
 		
 		//loading score

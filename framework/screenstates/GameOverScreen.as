@@ -23,6 +23,7 @@ package framework.screenstates
 	import framework.events.NavigationEvent;
 	import framework.utils.GameAssets;
 	import framework.utils.SaveManager;
+	import flash.media.SoundMixer;
 	
 	public class GameOverScreen extends Sprite
 	{
@@ -90,6 +91,7 @@ package framework.screenstates
 			bg = new Quad(stage.stageWidth, stage.stageHeight, 0x000000);
 			bg.alpha = 0.75;
 			this.addChild(bg);
+			bg.visible = false;
 			
 			// Message text field.
 			messageText = new TextField(stage.stageWidth, stage.stageHeight * 0.5, "MISI GAGAL!", "nulshock", 18, 0xf3e75f);
@@ -111,22 +113,25 @@ package framework.screenstates
 			scoreContainer.y = (stage.stageHeight * 40)/100;
 			this.addChild(scoreContainer);
 			
-			distanceText = new TextField(stage.stageWidth, 100, "DISTANCE TRAVELLED: 0000000", "nulshock", 18, 0xffffff);
+			distanceText = new TextField(stage.stageWidth, 100, "SCORE: 0000000", "nulshock", 18, 0xffffff);
 			distanceText.vAlign = VAlign.TOP;
 			distanceText.height = distanceText.textBounds.height;
 			scoreContainer.addChild(distanceText);
 			
-			scoreText = new TextField(stage.stageWidth, 100, "SCORE: 0000000", "nulshock", 18, 0xffffff);
+			scoreText = new TextField(stage.stageWidth, 100, "ENERGI: 0000000", "nulshock", 18, 0xffffff);
 			scoreText.vAlign = VAlign.TOP;
 			scoreText.height = scoreText.textBounds.height;
 			scoreText.y = distanceText.bounds.bottom + scoreText.height * 0.5;
 			scoreContainer.addChild(scoreText);
 			
+			scoreContainer.visible = false;
+
 			// Navigation buttons.
 			mainBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_home"));
 			mainBtn.y = (stage.stageHeight * 70)/100;
 			mainBtn.addEventListener(Event.TRIGGERED, onMainClick);
 			this.addChild(mainBtn);
+			mainBtn.visible = false;
 			
 			playAgainBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_back"));
 			playAgainBtn.y = mainBtn.y + mainBtn.height * 0.5 - playAgainBtn.height * 0.5;
@@ -145,8 +150,8 @@ package framework.screenstates
 			aboutBtn.y = playAgainBtn.y + playAgainBtn.height * 0.5 - aboutBtn.height * 0.5;
 			aboutBtn.addEventListener(Event.TRIGGERED, onAboutClick);
 			this.addChild(aboutBtn);
+			aboutBtn.visible = false;
 		
-			
 			mainBtn.x = stage.stageWidth * 0.5 - (mainBtn.width + playAgainBtn.width + aboutBtn.width + 30) * 0.5;
 			playAgainBtn.x = mainBtn.bounds.right + 10;
 			itemsBtn.x = mainBtn.bounds.right + 10;
@@ -160,7 +165,7 @@ package framework.screenstates
 		 */
 		private function onPlayAgainClick(event:Event):void
 		{
-			//if (!Sounds.muted) Sounds.sndMushroom.play();
+			if (!Sounds.muted) Sounds.sndMushroom.play();
 			
 			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "playAgain"}));
 		}
@@ -172,8 +177,7 @@ package framework.screenstates
 		 */
 		private function onMainClick(event:Event):void
 		{
-			//if (!Sounds.muted) Sounds.sndMushroom.play();
-			
+			if (!Sounds.muted) Sounds.sndMushroom.play();
 			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "mainMenu"}, true));
 		}
 		
@@ -184,13 +188,13 @@ package framework.screenstates
 		 */
 		private function onAboutClick(event:Event):void
 		{
-			//if (!Sounds.muted) Sounds.sndMushroom.play();
-			
+			if (!Sounds.muted) Sounds.sndMushroom.play();
 			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "about"}, true));
 		}
 		
 		private function onItemsClick(event:Event):void
 		{
+			if (!Sounds.muted) Sounds.sndMushroom.play();
 			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "items"},true));
 		}
 		
@@ -202,17 +206,27 @@ package framework.screenstates
 		 */
 		public function initialize(_score:int, _distance:int, win:Boolean):void
 		{
+			disposeTemporarily();
+			this.visible = true;
 			SaveManager.getInstance().saveDataScore(_distance);
+			bg.visible = true;
+			scoreContainer.visible = true;
+			mainBtn.visible = true;
+			aboutBtn.visible = true;
 			
 			if(win)
 			{
+				if (!Sounds.muted) Sounds.sndWin.play();
 				messageTextWin.visible = true;
+				messageText.visible = false;
 				playAgainBtn.visible = false;
 				itemsBtn.visible = true;
 			}
 			else
 			{
+				if (!Sounds.muted) Sounds.sndLose.play();
 				messageText.visible = true;
+				messageTextWin.visible = false;
 				playAgainBtn.visible = true;
 				itemsBtn.visible = false;
 			}
@@ -220,8 +234,8 @@ package framework.screenstates
 			this._distance = _distance;
 			this._score = _score;
 
-			distanceText.text = "DISTANCE TRAVELLED: " + this._distance.toString();
-			scoreText.text = "SCORE: " + this._score.toString();
+			distanceText.text = "SCORE: " + this._distance.toString();
+			scoreText.text = "ENERGI: " + this._score.toString();
 			
 			this.alpha = 0;
 			this.visible = true;
@@ -229,6 +243,7 @@ package framework.screenstates
 		
 		public function disposeTemporarily():void
 		{
+			SoundMixer.stopAll();
 			this.visible = false;
 		}
 		

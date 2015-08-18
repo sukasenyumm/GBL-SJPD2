@@ -9,6 +9,11 @@
 	import framework.screenstates.CollectItems;
 	import framework.utils.SaveManager;
 	import starling.animation.Tween;
+	import framework.utils.GameAssets;
+	import flash.media.SoundMixer;
+	import framework.ui.SoundButton;
+	import framework.ui.ExitButton;
+	import flash.desktop.NativeApplication;
 	
 	public class GameRoot extends Sprite{
 
@@ -16,6 +21,10 @@
 		private var screenGamePlay:GamePlay;
 		private var screenGameLevels:ChooseLevel;
 		private var screenCollectItems:CollectItems;
+		/** Exit button. */
+		private var exitBtn:ExitButton;
+		/** Sound button. */
+		private var soundBtn:SoundButton;
 		
 		public function GameRoot() {
 			// constructor code
@@ -47,24 +56,37 @@
 			screenGamePlay.addEventListener(NavigationEvent.SWITCH_STATE, onInGameNavigation);
 			this.addChild(screenGamePlay);
 			//sembunyikan gameplay dari screen
-			screenGamePlay.disposeTemporarily();
+			//screenGamePlay.disposeTemporarily();
 			
 			screenGameLevels = new ChooseLevel();
 			screenGameLevels.addEventListener(NavigationEvent.SWITCH_STATE, onChooseLevelNavigation);
 			this.addChild(screenGameLevels);
-			screenGameLevels.disposeTemporarily();
+			//screenGameLevels.disposeTemporarily();
 			
 			screenCollectItems = new CollectItems();
 			screenCollectItems.addEventListener(NavigationEvent.SWITCH_STATE, onCollectItemsNavigation);
 			this.addChild(screenCollectItems);
-			screenCollectItems.disposeTemporarily();
-			
+			//screenCollectItems.disposeTemporarily();
 			
 			// Main menu screen.
 			mainMenu = new MainMenu();
 			this.addChild(mainMenu);
 			
+			/* exit button */
+			exitBtn = new ExitButton();
+			exitBtn.x = stage.stageWidth - exitBtn.width - (stage.stageWidth/14);
+			exitBtn.y = (stage.stageHeight/14);
+			exitBtn.addEventListener(Event.TRIGGERED, onExitClick);
+			this.addChild(exitBtn);
+			/* sound button */
+			soundBtn = new SoundButton();
+			soundBtn.x = stage.stageWidth - soundBtn.width - (stage.stageWidth/14) - soundBtn.width - (stage.stageHeight/20);
+			soundBtn.y = (stage.stageHeight/14);
+			soundBtn.addEventListener(Event.TRIGGERED, onSoundClick);
+			this.addChild(soundBtn);
+			
 			mainMenu.initialize();
+			
 		}
 		
 		/**
@@ -146,6 +168,32 @@
 					break;
 			}
 		}
+		
+		private function onSoundClick(event:Event = null):void
+		{
+			if (Sounds.muted)
+			{
+				Sounds.muted = false;
+				
+				if (mainMenu.visible) Sounds.sndBgMain.play(0, 999);
+				else if (mainMenu.visible) Sounds.sndBgGame.play(0, 999);
+				
+				soundBtn.showUnmuteState();
+			}
+			else
+			{
+				Sounds.muted = true;
+				SoundMixer.stopAll();
+				
+				soundBtn.showMuteState();
+			}
+		}
+		
+		private function onExitClick(event:Event):void
+		{
+			NativeApplication.nativeApplication.exit(); 
+		}
+		
 	}
 	
 }

@@ -29,6 +29,7 @@
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import feathers.themes.MetalWorksMobileTheme;
+	import flash.media.SoundMixer;
 	
 	public class CollectItems extends Sprite
 	{
@@ -64,8 +65,6 @@
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			this._themes = new MetalWorksMobileTheme();
 			this._themes.getStyleProviderForClass( DefaultListItemRenderer ).setFunctionForStyleName( "my-tile-renderer", myTileRenderer );
-	//setStyleProviderForClass(DefaultListItemRenderer, myTileRenderer, "my-tile-renderer");
-			
 			drawChooseLevel();
 		}
 		
@@ -80,6 +79,7 @@
 			bg = new Quad(stage.stageWidth, stage.stageHeight, 0xFFFFFF);
 			bg.alpha = 0.75;
 			this.addChild(bg);
+			bg.visible = false;
 			
 			
 			// Navigation buttons.
@@ -88,17 +88,19 @@
 			mainBtn.y = stage.stageHeight - (stage.stageHeight/14) - mainBtn.height;
 			mainBtn.addEventListener(Event.TRIGGERED, onMainClick);
 			this.addChild(mainBtn);
+			mainBtn.visible = false;
 		
 			galeriInfo = new TextField(stage.stageWidth, 50, "", "nulshock", 20, 0x000000);
 			galeriInfo.text = "GALERI INFO";
 			galeriInfo.x = stage.stageWidth/2-galeriInfo.width/2;
 			galeriInfo.y = (stage.stageHeight/14);
 			this.addChild(galeriInfo);
+			galeriInfo.visible = false;
 			
 			//a nice, fluid layout
 			group = new LayoutGroup();
     
-			this.layout = new AnchorLayout();
+			layout = new AnchorLayout();
 			group.y = stage.stageHeight/6;
 			group.width = stage.stageWidth;
 			group.height = stage.stageHeight - stage.stageHeight/6;
@@ -160,6 +162,7 @@
 			this._list.layout = listLayout;
 			group.layout = layout;
 			this.addChild( group );
+			group.visible = false;
 
 			//...while this is the layout data used by the list's parent
 			var listLayoutData:AnchorLayoutData = new AnchorLayoutData();
@@ -183,8 +186,7 @@
 		 */
 		private function onMainClick(event:Event):void
 		{
-			//if (!Sounds.muted) Sounds.sndMushroom.play();
-			
+			if (!Sounds.muted) Sounds.sndMushroom.play();
 			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "mainMenu"}, true));
 		}
 		
@@ -196,6 +198,13 @@
 		 */
 		public function initialize():void
 		{
+			disposeTemporarily();
+			this.visible = true;
+			bg.visible = true;
+			mainBtn.visible = true;
+			galeriInfo.visible = true;
+			group.visible = true;
+			
 			//the data that will be displayed in the list
 			collection = new ListCollection(
 			[
@@ -211,12 +220,12 @@
 				{ label: (SaveManager.getInstance().loadGalInfo(10) == 1)?"Konferensi Meja Bundar ":"Terkunci", texture: (SaveManager.getInstance().loadGalInfo(10) == 1)?GameAssets.getAtlasFix().getTexture("P3-3"):GameAssets.getAtlasFix().getTexture("P0") },
 			]);
 			this._list.dataProvider = collection;
-			this.visible = true;
 		}
 		
 		public function disposeTemporarily():void
 		{
 			this.visible = false;
+			//if (!Sounds.muted) SoundMixer.stopAll();
 		}
 		
 		private function tileListItemRendererFactory():IListItemRenderer
@@ -248,24 +257,24 @@
 		private function onItemClicked(event:Event):void
 		{
 			var p_List:List  = List (event.currentTarget);
-    		trace("selected item:", p_List.selectedIndex);
+    		//trace("selected item:", p_List.selectedIndex);
 			if( p_List.selectedIndex == 0)
 			{
 				if(SaveManager.getInstance().loadGalInfo(1) == 1)
 				{
-					var alert:Alert = Alert.show( "Tugu perabuan Jepang terletak di jalan Markoni Gg.III dengan jarak 4 km dari pusat Kota Tarakan (Kalimantan), tugu ini merupakan saksi sejarah kehadiran orang-orang Jepang ini berbentuk segi empat pipih di lengkapi dengan tulisan kanji. Pertempuran Tarakan terjadi pada tanggal 11-12 Januari 1942. Meskipun Tarakan hanya pulau berawa-rawa kecil di Kalimantan timur laut di Hindia Belanda, tetapi terdapat 700 sumur minyak, penyulingan minyak dan lapangan udara, yang merupakan tujuan utama Kekaisaran Jepang dalam Perang Pasifik.", "Penjelasan", new ListCollection(
+					var alert1:Alert = Alert.show( "Tugu perabuan Jepang terletak di jalan Markoni Gg.III dengan jarak 4 km dari pusat Kota Tarakan (Kalimantan), tugu ini merupakan saksi sejarah kehadiran orang-orang Jepang ini berbentuk segi empat pipih di lengkapi dengan tulisan kanji. Pertempuran Tarakan terjadi pada tanggal 11-12 Januari 1942. Meskipun Tarakan hanya pulau berawa-rawa kecil di Kalimantan timur laut di Hindia Belanda, tetapi terdapat 700 sumur minyak, penyulingan minyak dan lapangan udara, yang merupakan tujuan utama Kekaisaran Jepang dalam Perang Pasifik.", "Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert1.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 				else
 				{
-					var alert:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
+					var alert2:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert2.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 			}
 			
@@ -273,19 +282,19 @@
 			{
 				if(SaveManager.getInstance().loadGalInfo(2) == 1)
 				{
-					var alert:Alert = Alert.show( "Pada 1 Maret 1942, Tentara Jepang melancarkan serangan ke Pulau Jawa, setelah sebelumnya Angkatan Laut Jepang menghancurkan armada Sekutu dalam pertempuran sengit di Laut Jawa, yang dikenal sebagai The Battle of Java Sea. Setelah digempur selama satu pekan, tentara Belanda di Hindia-Belanda menyerah kepada tentara Jepang. Pada 8 Maret 1942 di Kalijati, dekat Subang, Jawa Barat, Ter Poorten (mewakili Gubernur Jenderal Hindia-Belanda, Jonkheer Alidus Warmmoldus Lambertus Tjarda van Starkenborgh-Stachouwer) menandatangani dokumen menyerah tanpa syarat.", "Penjelasan", new ListCollection(
+					var alert3:Alert = Alert.show( "Pada 1 Maret 1942, Tentara Jepang melancarkan serangan ke Pulau Jawa, setelah sebelumnya Angkatan Laut Jepang menghancurkan armada Sekutu dalam pertempuran sengit di Laut Jawa, yang dikenal sebagai The Battle of Java Sea. Setelah digempur selama satu pekan, tentara Belanda di Hindia-Belanda menyerah kepada tentara Jepang. Pada 8 Maret 1942 di Kalijati, dekat Subang, Jawa Barat, Ter Poorten (mewakili Gubernur Jenderal Hindia-Belanda, Jonkheer Alidus Warmmoldus Lambertus Tjarda van Starkenborgh-Stachouwer) menandatangani dokumen menyerah tanpa syarat.", "Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert3.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 				else
 				{
-					var alert:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
+					var alert4:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert4.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 			}
 			
@@ -293,19 +302,19 @@
 			{
 				if(SaveManager.getInstance().loadGalInfo(3) == 1)
 				{
-					var alert:Alert = Alert.show( "Tiga A adalah propaganda Kekaisaran Jepang pada masa Perang Dunia 2 yaitu 'Jepang Pemimpin Asia', 'Jepang Pelindung Asia' dan 'Jepang Cahaya Asia'. Gerakan Tiga A didirikan pada tanggal 29 April 1942. Pelopor gerakan Tiga A ialah Shimizu Hitoshi. Ketua Gerakan Tiga A dipercayakan kapada Mr. Syamsuddin. Gerakan Tiga A bukanlah gerakan kebangsaan Indonesia. Gerakan ini lahir semata - mata untuk memikat hati dan menarik simpati bangsa Indonesia agar mau membantu Jepang.", "Penjelasan", new ListCollection(
+					var alert5:Alert = Alert.show( "Tiga A adalah propaganda Kekaisaran Jepang pada masa Perang Dunia 2 yaitu 'Jepang Pemimpin Asia', 'Jepang Pelindung Asia' dan 'Jepang Cahaya Asia'. Gerakan Tiga A didirikan pada tanggal 29 April 1942. Pelopor gerakan Tiga A ialah Shimizu Hitoshi. Ketua Gerakan Tiga A dipercayakan kapada Mr. Syamsuddin. Gerakan Tiga A bukanlah gerakan kebangsaan Indonesia. Gerakan ini lahir semata - mata untuk memikat hati dan menarik simpati bangsa Indonesia agar mau membantu Jepang.", "Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert5.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 				else
 				{
-					var alert:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
+					var alert6:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert6.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 			}
 			
@@ -313,19 +322,19 @@
 			{
 				if(SaveManager.getInstance().loadGalInfo(4) == 1)
 				{
-					var alert:Alert = Alert.show( "Lahirnya Pancasila adalah judul pidato yang disampaikan oleh Soekarno dalam sidang Dokuritsu Junbi Cosakai (bahasa Indonesia: 'Badan Penyelidik Usaha Persiapan Kemerdekaan') pada tanggal 1 Juni 1945. Dalam pidato inilah konsep dan rumusan awal 'Pancasila' pertama kali dikemukakan oleh Soekarno sebagai dasar negara Indonesia merdeka.", "Penjelasan", new ListCollection(
+					var alert7:Alert = Alert.show( "Lahirnya Pancasila adalah judul pidato yang disampaikan oleh Soekarno dalam sidang Dokuritsu Junbi Cosakai (bahasa Indonesia: 'Badan Penyelidik Usaha Persiapan Kemerdekaan') pada tanggal 1 Juni 1945. Dalam pidato inilah konsep dan rumusan awal 'Pancasila' pertama kali dikemukakan oleh Soekarno sebagai dasar negara Indonesia merdeka.", "Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert7.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 				else
 				{
-					var alert:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
+					var alert8:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert8.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 			}
 			
@@ -333,19 +342,19 @@
 			{
 				if(SaveManager.getInstance().loadGalInfo(5) == 1)
 				{
-					var alert:Alert = Alert.show( "Peristiwa Rengasdengklok adalah peristiwa penculikan yang dilakukan oleh sejumlah pemuda antara lain Soekarni, Wikana dan Chaerul Saleh dari perkumpulan 'Menteng 31' terhadap Soekarno dan Hatta. Peristiwa ini terjadi pada tanggal 16 Agustus 1945 pukul 03.00. WIB, Soekarno dan Hatta dibawa ke Rengasdengklok, Karawang, untuk kemudian didesak agar mempercepat proklamasi kemerdekaan Republik Indonesia", "Penjelasan", new ListCollection(
+					var alert9:Alert = Alert.show( "Peristiwa Rengasdengklok adalah peristiwa penculikan yang dilakukan oleh sejumlah pemuda antara lain Soekarni, Wikana dan Chaerul Saleh dari perkumpulan 'Menteng 31' terhadap Soekarno dan Hatta. Peristiwa ini terjadi pada tanggal 16 Agustus 1945 pukul 03.00. WIB, Soekarno dan Hatta dibawa ke Rengasdengklok, Karawang, untuk kemudian didesak agar mempercepat proklamasi kemerdekaan Republik Indonesia", "Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert9.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 				else
 				{
-					var alert:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
+					var alert10:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert10.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 			}
 			
@@ -353,19 +362,19 @@
 			{
 				if(SaveManager.getInstance().loadGalInfo(6) == 1)
 				{
-					var alert:Alert = Alert.show( "Perundingan antara golongan muda dan golongan tua dalam penyusunan teks Proklamasi Kemerdekaan Indonesia berlangsung pukul 02.00 - 04.00 dini hari. Teks proklamasi ditulis di ruang makan di laksamana Tadashi Maeda Jln Imam Bonjol No 1. Para penyusun teks proklamasi itu adalah Ir. Soekarno, Drs. Moh. Hatta, dan Mr. Ahmad Soebarjo.Pagi harinya, 17 Agustus 1945, di kediaman Soekarno, Jalan Pegangsaan Timur 56 telah hadir antara lain Soewirjo, Wilopo, Gafar Pringgodigdo, Tabrani dan Trimurti. Acara dimulai pada pukul 10:00 dengan pembacaan proklamasi oleh Soekarno dan disambung pidato singkat tanpa teks. ", "Penjelasan", new ListCollection(
+					var alert11:Alert = Alert.show( "Perundingan antara golongan muda dan golongan tua dalam penyusunan teks Proklamasi Kemerdekaan Indonesia berlangsung pukul 02.00 - 04.00 dini hari. Teks proklamasi ditulis di ruang makan di laksamana Tadashi Maeda Jln Imam Bonjol No 1. Para penyusun teks proklamasi itu adalah Ir. Soekarno, Drs. Moh. Hatta, dan Mr. Ahmad Soebarjo.Pagi harinya, 17 Agustus 1945, di kediaman Soekarno, Jalan Pegangsaan Timur 56 telah hadir antara lain Soewirjo, Wilopo, Gafar Pringgodigdo, Tabrani dan Trimurti. Acara dimulai pada pukul 10:00 dengan pembacaan proklamasi oleh Soekarno dan disambung pidato singkat tanpa teks. ", "Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert11.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 				else
 				{
-					var alert:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
+					var alert12:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert12.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 			}
 			
@@ -373,19 +382,19 @@
 			{
 				if(SaveManager.getInstance().loadGalInfo(7) == 1)
 				{
-					var alert:Alert = Alert.show( "PPKI memiliki kepanjangan Panitia Persiapan Kemerdekaan Indonesia, tujuan dibentuknya panitia ini adalah untuk mempersiapkan kemerdekaan bangsa Indonesia. Hasil sidang PPKI yaitu mengesahkan Undang-Undang Dasar 1945, memilih Ir. Soekarno sebagai Presiden dan Drs. Mohammad Hatta sebagai wakil, dan dibentuk Komite Nasional untuk membantu tugas Presiden sementara, sebelum dibentuknya MPR dan DPR.", "Penjelasan", new ListCollection(
+					var alert13:Alert = Alert.show( "PPKI memiliki kepanjangan Panitia Persiapan Kemerdekaan Indonesia, tujuan dibentuknya panitia ini adalah untuk mempersiapkan kemerdekaan bangsa Indonesia. Hasil sidang PPKI yaitu mengesahkan Undang-Undang Dasar 1945, memilih Ir. Soekarno sebagai Presiden dan Drs. Mohammad Hatta sebagai wakil, dan dibentuk Komite Nasional untuk membantu tugas Presiden sementara, sebelum dibentuknya MPR dan DPR.", "Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert13.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 				else
 				{
-					var alert:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
+					var alert14:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert14.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 			}
 			
@@ -393,19 +402,19 @@
 			{
 				if(SaveManager.getInstance().loadGalInfo(8) == 1)
 				{
-					var alert:Alert = Alert.show( "Agresi Militer Belanda I adalah operasi militer Belanda di Jawa dan Sumatera terhadap Republik Indonesia yang dilaksanakan dari 21 Juli 1947 sampai 5 Agustus 1947. Operasi militer ini merupakan bagian dari Aksi Polisionil yang diberlakukan Belanda dalam rangka mempertahankan penafsiran Belanda atas Perundingan Linggarjati. Dari sudut pandang Republik Indonesia, operasi ini dianggap merupakan pelanggaran dari hasil Perundingan Linggarjati. ", "Penjelasan", new ListCollection(
+					var alert15:Alert = Alert.show( "Agresi Militer Belanda I adalah operasi militer Belanda di Jawa dan Sumatera terhadap Republik Indonesia yang dilaksanakan dari 21 Juli 1947 sampai 5 Agustus 1947. Operasi militer ini merupakan bagian dari Aksi Polisionil yang diberlakukan Belanda dalam rangka mempertahankan penafsiran Belanda atas Perundingan Linggarjati. Dari sudut pandang Republik Indonesia, operasi ini dianggap merupakan pelanggaran dari hasil Perundingan Linggarjati. ", "Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert15.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 				else
 				{
-					var alert:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
+					var alert16:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert16.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 			}
 			
@@ -413,19 +422,19 @@
 			{
 				if(SaveManager.getInstance().loadGalInfo(9) == 1)
 				{
-					var alert:Alert = Alert.show( "Agresi Militer Belanda II atau Operasi Gagak (bahasa Belanda: Operatie Kraai) terjadi pada 19 Desember 1948 yang diawali dengan serangan terhadap Yogyakarta, ibu kota Indonesia saat itu, serta penangkapan Soekarno, Mohammad Hatta, Sjahrir dan beberapa tokoh lainnya. Jatuhnya ibu kota negara ini menyebabkan dibentuknya Pemerintah Darurat Republik Indonesia di Sumatra yang dipimpin oleh Sjafruddin Prawiranegara. ", "Penjelasan", new ListCollection(
+					var alert17:Alert = Alert.show( "Agresi Militer Belanda II atau Operasi Gagak (bahasa Belanda: Operatie Kraai) terjadi pada 19 Desember 1948 yang diawali dengan serangan terhadap Yogyakarta, ibu kota Indonesia saat itu, serta penangkapan Soekarno, Mohammad Hatta, Sjahrir dan beberapa tokoh lainnya. Jatuhnya ibu kota negara ini menyebabkan dibentuknya Pemerintah Darurat Republik Indonesia di Sumatra yang dipimpin oleh Sjafruddin Prawiranegara. ", "Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert17.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 				else
 				{
-					var alert:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
+					var alert18:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert18.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 			}
 			
@@ -433,19 +442,19 @@
 			{
 				if(SaveManager.getInstance().loadGalInfo(10) == 1)
 				{
-					var alert:Alert = Alert.show( "Konferensi Meja Bundar adalah sebuah pertemuan yang dilaksanakan di Den Haag, Belanda, dari 23 Agustus hingga 2 November 1949 antara perwakilan Republik Indonesia, Belanda, dan BFO (Bijeenkomst voor Federaal Overleg), yang mewakili berbagai negara yang diciptakan Belanda di kepulauan Indonesia. Sebelum konferensi ini, berlangsung tiga pertemuan tingkat tinggi antara Belanda dan Indonesia, yaitu Perjanjian Linggarjati (1947), Perjanjian Renville (1948), dan Perjanjian Roem-Royen (1949). Konferensi ini berakhir dengan kesediaan Belanda untuk menyerahkan kedaulatan kepada Republik Indonesia Serikat. ", "Penjelasan", new ListCollection(
+					var alert19:Alert = Alert.show( "Konferensi Meja Bundar adalah sebuah pertemuan yang dilaksanakan di Den Haag, Belanda, dari 23 Agustus hingga 2 November 1949 antara perwakilan Republik Indonesia, Belanda, dan BFO (Bijeenkomst voor Federaal Overleg), yang mewakili berbagai negara yang diciptakan Belanda di kepulauan Indonesia. Sebelum konferensi ini, berlangsung tiga pertemuan tingkat tinggi antara Belanda dan Indonesia, yaitu Perjanjian Linggarjati (1947), Perjanjian Renville (1948), dan Perjanjian Roem-Royen (1949). Konferensi ini berakhir dengan kesediaan Belanda untuk menyerahkan kedaulatan kepada Republik Indonesia Serikat. ", "Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert19.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 				else
 				{
-					var alert:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
+					var alert20:Alert = Alert.show( "Item masih terkunci.","Penjelasan", new ListCollection(
 					[
 						{ label: "OK"}
 					]) );
-					alert.addEventListener( Event.CLOSE, alert_closeHandler );
+					alert20.addEventListener( Event.CLOSE, alert_closeHandler );
 				}
 			}
 			
@@ -453,6 +462,7 @@
 		
 		private function alert_closeHandler( event:Event, data:Object ):void
 		{
+			if (!Sounds.muted) Sounds.sndCoffee.play();
 			if( data.label == "OK" )
 			{
 				// the OK button was clicked

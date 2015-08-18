@@ -59,6 +59,7 @@
 			bg = new Quad(stage.stageWidth, stage.stageHeight, 0x000000);
 			//bg.alpha = 0.75;
 			this.addChild(bg);
+			bg.visible = false;
 			
 			// Message text field.
 			messageText = new TextField(stage.stageWidth, stage.stageHeight * 0.5, "CHOOSE LEVEL!", "nulshock", 20, 0xFFFFFF);
@@ -66,6 +67,7 @@
 			messageText.height = messageText.textBounds.height;
 			messageText.y = (stage.stageHeight/14);
 			this.addChild(messageText);
+			messageText.visible = false;
 			
 			// Navigation buttons.
 			mainBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_home"));
@@ -73,6 +75,7 @@
 			mainBtn.y = stage.stageHeight - (stage.stageHeight/14) - mainBtn.height;
 			mainBtn.addEventListener(Event.TRIGGERED, onMainClick);
 			this.addChild(mainBtn);
+			mainBtn.visible = false;
 			
 			var yPosition:Number = stage.stageHeight/2;
 			
@@ -81,22 +84,21 @@
 			level2Btn.y = yPosition - level2Btn.height/2;
 			level2Btn.addEventListener(Event.TRIGGERED, onPlayClick2);
 			this.addChild(level2Btn);
+			level2Btn.visible = false;
 			
 			level1Btn = new Button(GameAssets.getAtlasFix().getTexture("btn_1942"));
 			level1Btn.x = level2Btn.x - level2Btn.width - 10;
 			level1Btn.y = yPosition- level2Btn.height/2;
 			level1Btn.addEventListener(Event.TRIGGERED, onPlayClick1);
 			this.addChild(level1Btn);
+			level1Btn.visible = false;
 			
 			level3Btn = new Button(GameAssets.getAtlasFix().getTexture("btn_1950"));
 			level3Btn.x = level2Btn.x + level2Btn.width + 10;
             level3Btn.y = yPosition- level3Btn.height/2;
 			level3Btn.addEventListener(Event.TRIGGERED, onPlayClick3);
 			this.addChild(level3Btn);
-			
-			
-			
-			
+			level3Btn.visible = false;
 		}
 		
 		/**
@@ -106,24 +108,26 @@
 		 */
 		private function onMainClick(event:Event):void
 		{
-			//if (!Sounds.muted) Sounds.sndMushroom.play();
-			
 			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "mainMenu"}, true));
+			if (!Sounds.muted) Sounds.sndMushroom.play();
 		}
 		
 		private function onPlayClick1(event:Event):void
 		{
 			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "play1"},true));
+			if (!Sounds.muted) Sounds.sndCoffee.play();
 		}
 		
 		private function onPlayClick2(event:Event):void
 		{
 			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "play2"},true));
+			if (!Sounds.muted) Sounds.sndCoffee.play();
 		}
 		
 		private function onPlayClick3(event:Event):void
 		{
 			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "play3"},true));
+			if (!Sounds.muted) Sounds.sndCoffee.play();
 		}
 		
 		/**
@@ -134,7 +138,15 @@
 		 */
 		public function initialize():void
 		{
+			disposeTemporarily();
+			if (!Sounds.muted) Sounds.sndBgMain.play(0, 999);
 			this.visible = true;
+			bg.visible = true;
+			messageText.visible = true;
+			level1Btn.visible = true;
+			level2Btn.visible = true;
+			level3Btn.visible = true;
+			mainBtn.visible = true;
 		}
 		
 		public function disposeTemporarily():void

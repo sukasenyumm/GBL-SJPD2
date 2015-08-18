@@ -31,6 +31,7 @@
 	import starling.extensions.PDParticleSystem;
 	import starling.textures.Texture;
 	import framework.utils.ParticleAssets;
+	import flash.media.SoundMixer;
 
 
 	public class GamePlay extends Sprite{
@@ -132,6 +133,7 @@
 			bg = new GameBackground();
 			bg.speed = 50;
 			this.addChild(bg);
+			bg.visible = false;
 			
 			scoreText = new TextField(300,100, "Score: 0","nulshock", 14, 0xffffff);
 			scoreText.hAlign = HAlign.LEFT;
@@ -139,6 +141,7 @@
 			scoreText.x = (stage.stageWidth/14);
 			scoreText.y = (stage.stageHeight/14);
 			this.addChild(scoreText);
+			scoreText.visible = false;
 			
 			particle = new PDParticleSystem(XML(new ParticleAssets.ParticleXML()),Texture.fromBitmap(new ParticleAssets.ParticleTexture()));
 			Starling.juggler.add(particle);
@@ -147,16 +150,19 @@
 			particle.scaleX = 1.2;
 			particle.scaleY = 1.2;
 			this.addChild(particle);
+			particle.visible = false;
 			
 			hero = new Hero();
 			hero.x = stage.stageWidth/2;
 			hero.y = stage.stageHeight/2;
 			this.addChild(hero);
+			hero.visible = false;
 			
 			enemy = new Enemy();
 			enemy.x = stage.stageWidth/2;
 			enemy.y = stage.stageHeight/2;
 			this.addChild(enemy);
+			enemy.visible = false;
 			
 			obstacleToAnimate = new Vector.<Obstacle>();
 			itemsToAnimate = new Vector.<Item>();
@@ -167,10 +173,10 @@
 			scoreLife = new TextField(140,100, "Energi: -","nulshock", 14, 0xffffff);
 			scoreLife.hAlign = HAlign.RIGHT;
 			scoreLife.vAlign = VAlign.TOP;
-			scoreLife.x = stage.stageWidth - scoreLife.width - (stage.stageWidth/14);
+			scoreLife.x = stage.stageWidth/2;
 			scoreLife.y = (stage.stageHeight/14);
 			this.addChild(scoreLife);
-			
+			scoreLife.visible = false;
 			
 			labelTips = new TextField(stage.stageWidth,stage.stageHeight/2+stage.stageHeight/14, "","nulshock", 14, 0xffffff);
 			labelTips.hAlign = HAlign.CENTER;
@@ -178,13 +184,14 @@
 			labelTips.x = stage.stageWidth/2-labelTips.width/2;
 			labelTips.y = stage.stageHeight/2-labelTips.height/2;
 			this.addChild(labelTips);
+			labelTips.visible = false;
 			
 			startButton = new Button(GameAssets.getAtlasFix().getTexture("btn_mulai"));
 			startButton.x = stage.stageWidth/2-startButton.width/2;
 			startButton.y = labelTips.height+10;
 			startButton.addEventListener(Event.TRIGGERED, onStartButtonClick);
 			this.addChild(startButton);
-			
+			startButton.visible = false;
 			
 			/*item info
 			*/
@@ -235,11 +242,11 @@
 			//quiz
 			
 			/* quiz button */
-			
 			quizBg = new Quad(stage.stageWidth, stage.stageHeight - (stage.stageHeight/14)*2, 0xFFFFFF);
 			quizBg.y = stage.stageHeight/2-quizBg.height/2;
 			quizBg.alpha = 0.5;
 			this.addChild(quizBg);
+			quizBg.visible = false;
 			
 			var yPosition:Number = stage.stageHeight - stage.stageHeight/10;
 
@@ -287,8 +294,11 @@
 		
 		public function disposeTemporarily():void
 		{
+			SoundMixer.stopAll();
+			
 			this.visible = false;
 			gameOverScreen.visible = false;
+			
 			
 			if (this.hasEventListener(Event.ENTER_FRAME)) this.removeEventListener(Event.ENTER_FRAME, calculateElapsed);
 			
@@ -305,12 +315,24 @@
 			
 			this.visible = true;
 			
+			// Play screen background music.
+			if (!Sounds.muted) Sounds.sndBgGame.play(0, 999);
+			
 			// Calculate elapsed time.
 			this.addEventListener(Event.ENTER_FRAME, calculateElapsed);
-			gameArea = new Rectangle(0,(stage.stageHeight/14)*2,stage.stageWidth,stage.stageHeight - (stage.stageHeight/14)*2);
-			trace((stage.stageHeight/14)*2);
+			gameArea = new Rectangle(0,(stage.stageHeight/14)*2,stage.stageWidth,stage.stageHeight - (stage.stageHeight/14)*3);
+			//trace((stage.stageHeight/14)*2);
 			
 			gameState = "idle";
+			
+			bg.visible = true;
+			scoreText.visible = true;
+			particle.visible = false;
+			hero.visible = true;
+			enemy.visible = true;
+			scoreLife.visible = true;
+			labelTips.visible = true;
+			quizBg.visible = false;
 			
 			level = nLevel;
 			playerSpeed = 0;
@@ -336,7 +358,7 @@
 			scoreLife.text = "Energi: "+String(lives);
 			
 			//bg.visible = false;
-			labelTips.text = (SaveManager.getInstance().loadDataGodlike()==1)?"Cara Main\n\nGerakkan tangganmu keatas dan kebawah.\nAmbil batu pengetahuan yang bewarna merah.\nAmbil kertas untuk mendapatkan informasi.\nHindari pesawat yang berlalu-lalang.\n'AURA KEMERDEKAAN' memberikan kekebalan jika bertabrakan dengan pesawat, maka ENERGI berkurang 1 poin saja.\nScore Akumulasi:"+String(SaveManager.getInstance().loadDataScore())+" ":"Cara Main\n\nGerakkan tangganmu keatas dan kebawah.\nAmbil batu pengetahuan yang bewarna merah.\nAmbil kertas untuk mendapatkan informasi.\nHindari pesawat yang berlalu-lalang.";
+			labelTips.text = (SaveManager.getInstance().loadDataGodlike()==1)?"Cara Main\n\nGerakkan tangganmu keatas dan kebawah.\nAmbil batu pengetahuan yang bewarna merah.\nAmbil kertas untuk mendapatkan informasi.\nHindari pesawat yang berlalu-lalang.\n'AURA KEMERDEKAAN' memberikan kekebalan jika bertabrakan dengan pesawat, maka ENERGI berkurang 1 poin saja.\nScore Akumulasi:"+String(SaveManager.getInstance().loadDataScore())+" ":"Cara Main\n\nGerakkan tangganmu keatas dan kebawah.\nAmbil batu pengetahuan yang bewarna merah.\nAmbil kertas untuk mendapatkan informasi.\nHindari pesawat yang berlalu-lalang.\nScore Akumulasi:"+String(SaveManager.getInstance().loadDataScore());
 			startButton.visible = true;
 			labelTips.visible = true;
 			//force startButton always in top of layers.
@@ -358,19 +380,38 @@
 			itemInfo33.visible = false;
 			//end item info
 			
-			labelIntro.text = "Kembalikan lembaran sejarah INDONESIA !!";
-			labelIntro.visible = false;
-			labelLose.text = "Kamu masih belum bisa mengejarku! hahahaha..";
-			labelLose.visible = false;
-			
+			if(level == 1)
+			{
+				labelIntro.text = "Kembalikan lembaran sejarah INDONESIA !!";
+				labelIntro.visible = false;
+				labelLose.text = "Kamu masih belum bisa mengejarku! hahahaha..";
+				labelLose.visible = false;
+			}
+			else if(level == 2)
+			{
+				labelIntro.text = "Kali ini aku pasti bisa mengejarmu !!";
+				labelIntro.visible = false;
+				labelLose.text = "Ayo berusaha kejar aku! hahahaha..";
+				labelLose.visible = false;
+			}
+			else if(level == 3)
+			{
+				labelIntro.text = "Jangan lari kau !!";
+				labelIntro.visible = false;
+				labelLose.text = "Kamu sudah berhasil membawa lembaran tahun 1942 sampai 1949, tapi aku masih punya yang lain..";
+				labelLose.visible = false;
+			}
+
 		}
 		
 		private function onStartButtonClick(event:Event):void
 		{
-			//trace("hiks")
+			// Play coffee sound for button click.
+			if (!Sounds.muted) Sounds.sndCoffee.play();
 			// Hide start button.
 			startButton.visible = false;
 			labelTips.visible = false;
+			particle.visible = true;
 			// Launch hero.
 			launchHero();
 		}
@@ -414,7 +455,7 @@
 						if(enemy.x < stage.stageWidth * 0.5 + stage.stageWidth * 0.25)
 						{
 							enemy.x += (stage.stageWidth * 0.5 + stage.stageWidth * 0.25-enemy.x)*0.01;
-							enemy.y -= (enemy.y - touchY) * 0.5;
+							enemy.y -= (enemy.y - touchY) * 0.1;
 							enemySpeed += (MIN_SPEED - enemySpeed)* 0.2;
 						}
 											
@@ -445,10 +486,11 @@
 							labelIntro.visible = false;
 						}
 						
-						trace(hero.rotation)
+						//trace(hero.rotation)
 						// Limit the hero's rotation to < 30.
 						hero.rotation = deg2rad(0);
 						particle.rotation = deg2rad(0);
+						
 						/*
 						// Rotate hero based on mouse position.
 						if ((-(hero.y - touchY) * 0.2) < 30 && (-(hero.y - touchY) * 0.2) > -30) hero.rotation = deg2rad(-(hero.y - touchY) * 0.2);
@@ -456,19 +498,20 @@
 						// Limit the hero's rotation to < 30.
 						if (rad2deg(hero.rotation) > 30 ) hero.rotation = rad2deg(30);
 						if (rad2deg(hero.rotation) < -30 ) hero.rotation = -rad2deg(30);
-						
+						*/
 						// Confine the hero to stage area limit
 						if (hero.y > gameArea.bottom - hero.height * 0.5)    
 						{
 							hero.y = gameArea.bottom - hero.height * 0.5;
-							hero.rotation = deg2rad(0);
+							enemy.y = gameArea.bottom - enemy.height * 0.5;
+							//hero.rotation = deg2rad(0);
 						}
 						if (hero.y < gameArea.top + hero.height * 0.5)    
 						{
 							hero.y = gameArea.top + hero.height * 0.5;
-							hero.rotation = deg2rad(0);
+							enemy.y = gameArea.top + enemy.height * 0.5;
+							//hero.rotation = deg2rad(0);
 						}
-						*/
 						break;
 					case "flying":
 					
@@ -481,18 +524,17 @@
 							if(-(hero.y - touchY)<150 && -(hero.y - touchY)>-150)
 							{
 								hero.rotation = deg2rad(-(hero.y -touchY) * 0.2);
-							}
+							}*/
 							if(hero.y > gameArea.bottom)
 							{
 								hero.y = gameArea.bottom;
-								hero.rotation = deg2rad(0);
+								//hero.rotation = deg2rad(0);
 							}
 							if(hero.y < gameArea.top)
 							{
 								hero.y = gameArea.top;
-								hero.rotation = deg2rad(0);
+								//hero.rotation = deg2rad(0);
 							}
-							*/
 						}
 						else
 						{
@@ -514,7 +556,7 @@
 						if(scoreDistance > 100)
 						{
 							enemy.x -= (playerSpeed + enemySpeed) * elapsed * 0.1;
-							trace(enemy.x);
+							//trace(enemy.x);
 							if(enemy.x <= stage.stageWidth/2)
 								gameState = "overWin";
 						}
@@ -579,21 +621,21 @@
 					break;
 					case "overWin":
 						
-						for(var i:uint = 0; i < itemsToAnimate.length; i++)
+						for(var x:uint = 0; x < itemsToAnimate.length; x++)
 						{
-							if (itemsToAnimate[i] != null)
+							if (itemsToAnimate[x] != null)
 							{
 								// Dispose the item temporarily.
-								disposeItemTemporarily(i, itemsToAnimate[i]);
+								disposeItemTemporarily(x, itemsToAnimate[x]);
 							}
 						}
 						
-						for(var j:uint = 0; j < obstacleToAnimate.length; j++)
+						for(var y:uint = 0; y < obstacleToAnimate.length; y++)
 						{
-							if (obstacleToAnimate[j] != null)
+							if (obstacleToAnimate[y] != null)
 							{
 								// Dispose the obstacle temporarily.
-								disposeObstacleTemporarily(j, obstacleToAnimate[j]);
+								disposeObstacleTemporarily(y, obstacleToAnimate[y]);
 							}
 						}
 						
@@ -604,7 +646,7 @@
 							labelLose.x = enemy.x-labelLose.width/2;
 							labelLose.y = enemy.y+enemy.height/2+10;
 							playerSpeed -= playerSpeed * elapsed;
-							trace("spee:"+playerSpeed)
+							//trace("spee:"+playerSpeed)
 							
 						}
 						else if(playerSpeed>33 && playerSpeed<40)
@@ -613,7 +655,7 @@
 							labelLose.text = "Aku tidak akan menyerah!!";
 							labelLose.x = hero.x-labelLose.width/2;
 							labelLose.y = hero.y+hero.height/2+10;
-							trace("elapsed"+elapsed);
+							//trace("elapsed"+elapsed);
 							if(enemy.x > stage.stageWidth*2)
 								playerSpeed = 5;
 						}
@@ -630,7 +672,7 @@
 							
 							// Game over.
 							gameOver(true);
-							trace("game over")
+							//trace("game over")
 						}
 						
 						// Set the background's speed based on hero's speed.
@@ -669,6 +711,7 @@
 				itemToTrack.x -= playerSpeed * elapsed;
 				if(itemToTrack.bounds.intersects(hero.bounds))
 				{
+					if (!Sounds.muted) Sounds.sndEat.play();
 					createEatParticles(itemToTrack);
 					scoreItem += 10;
 					itemsToAnimate.splice(i,1);
@@ -678,6 +721,8 @@
 						gameState = "idle";
 						initQuiz();
 						gamePaused = true;
+						playerSpeed = 2;
+						bg.speed = playerSpeed;
 					}
 				}
 				
@@ -782,7 +827,7 @@
 					hitObstacle = 30;
 					playerSpeed *= 0.5;
 					
-					trace("aduh")
+					if (!Sounds.muted) Sounds.sndHit.play();
 					
 					// Update lives.
 					if(SaveManager.getInstance().loadDataGodlike() == 1)
@@ -882,6 +927,11 @@
 			for(var i:uint = 0;i<itemsToAnimate.length;i++)
 			{
 				itemsToAnimate[i].visible = false;
+			}
+			
+			for(var j:uint = 0;j<obstacleToAnimate.length;j++)
+			{
+				obstacleToAnimate[j].visible = false;
 			}
 			//statusT = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
 			statusT.visible = true;
@@ -994,6 +1044,7 @@
         }
    
         private function finishHandler(event:Event) {
+			if (!Sounds.muted) Sounds.sndMushroom.play();
             showMessage("");
 			var questionTemp:Number = Math.ceil(Math.random() * ((quizQuestions.length - 1) - 0)+0);
                 
@@ -1030,6 +1081,7 @@
         }
 		
 		private function nextHandler(event:Event) {
+			if (!Sounds.muted) Sounds.sndMushroom.play();
 			gamePaused = false;
 			nextButton.visible = false;
 			if(level == 1)
@@ -1050,6 +1102,10 @@
 			for(var i:uint = 0;i<itemsToAnimate.length;i++)
 			{
 				itemsToAnimate[i].visible = true;
+			}
+			for(var j:uint = 0;j<obstacleToAnimate.length;j++)
+			{
+				obstacleToAnimate[j].visible = true;
 			}
 		}
 		
@@ -1215,7 +1271,7 @@
 		private function gameOver(isWin:Boolean):void
 		{
 			this.setChildIndex(gameOverScreen, this.numChildren-1);
-			gameOverScreen.initialize(score, Math.round(scoreDistance),isWin);
+			gameOverScreen.initialize(lives, Math.round(scoreDistance),isWin);
 			
 			tween_gameOverContainer = new Tween(gameOverScreen, 1);
 			tween_gameOverContainer.fadeTo(1);

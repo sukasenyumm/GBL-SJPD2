@@ -16,13 +16,13 @@
 	import starling.core.Starling;
 	import framework.events.NavigationEvent;
 	import framework.utils.SaveManager;
-	import flash.desktop.NativeApplication;
 	import starling.display.Quad;
 	import feathers.themes.MetalWorksDesktopTheme;
 	import feathers.controls.Alert;
 	import feathers.data.ListCollection;
 	import framework.gameobject.Hero;
 	import framework.gameobject.Enemy;
+	import flash.media.SoundMixer;
 	
 	
 	/**
@@ -49,10 +49,6 @@
 		private var helpBtn:Button;
 		/** Quiz button. */
 		private var quizBtn:Button;
-		/** Sound button. */
-		private var soundBtn:Button;
-		/** Exit button. */
-		private var exitBtn:Button;
 		/** Play button. */
 		private var playBtn:Button;
 		/** Back button. */
@@ -144,7 +140,7 @@
 			// ABOUT ELEMENTS
 			//fontRegular = Fonts.getFont("Regular");
 			
-			aboutText = new TextField(stage.stageWidth - stage.stageWidth/14, stage.stageHeight -  stage.stageHeight/14, "", "nulshock", 14, 0x000000);
+			aboutText = new TextField(stage.stageWidth - stage.stageWidth/14, stage.stageHeight -  stage.stageHeight/14, "", "nulshock", 12, 0x000000);
 			aboutText.text = "PESAWAT INSULINDE adalah sebuah game untuk mempelajari Sejarah Indonesia.\n\n" +
 				" Pesawat Insulinde bertugas untuk mengejar pesawat X yang telah mencuri lembaran-lembaran sejarah yang ada di Indonesia." +
 				" Dalam perjalanannya, pesawat X tadi menjatuhkan lembaran-lembaran sejarah disepanjang jalan." +
@@ -167,20 +163,6 @@
 			playBtn.addEventListener(Event.TRIGGERED, onPlayClick);
 			this.addChild(playBtn);
 			
-			/* exit button */
-			exitBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_quit"));
-			exitBtn.x = stage.stageWidth - exitBtn.width - (stage.stageWidth/14);
-			exitBtn.y = (stage.stageHeight/14);
-			exitBtn.addEventListener(Event.TRIGGERED, onExitClick);
-			this.addChild(exitBtn);
-			
-			/* sound button */
-			soundBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_sound"));
-			soundBtn.x = exitBtn.x - exitBtn.width - (stage.stageHeight/20);
-			soundBtn.y = exitBtn.y;
-			soundBtn.addEventListener(Event.TRIGGERED, onSoundClick);
-			this.addChild(soundBtn);
-			
 			/* back button */
 			backBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_home"));
 			backBtn.x = (stage.stageWidth/14);
@@ -190,7 +172,7 @@
 			
 			/* help button */
 			helpBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_info"));
-			helpBtn.x = exitBtn.x - exitBtn.width;
+			helpBtn.x = stage.stageWidth - helpBtn.width/2 - (stage.stageWidth/14) - helpBtn.width/2;
 			helpBtn.y = stage.stageHeight - (stage.stageHeight/14) - helpBtn.height;
 			helpBtn.addEventListener(Event.TRIGGERED, onHelpClick);
 			this.addChild(helpBtn);
@@ -224,7 +206,7 @@
 			this.addChild(quizBtn);
 			
 			/* quiz button */
-			quizBg = new Quad(stage.stageWidth, stage.stageHeight - (stage.stageHeight/14)*2 - backBtn.height*1.5, 0xFFFFFF);
+			quizBg = new Quad(stage.stageWidth, stage.stageHeight - (stage.stageHeight/14)*2 - backBtn.height*2, 0xFFFFFF);
 			quizBg.y = stage.stageHeight/2-quizBg.height/2;
 			quizBg.alpha = 0.5;
 			this.addChild(quizBg);
@@ -267,16 +249,22 @@
 		
 		private function onPlayClick(event:Event):void
 		{
+			screenMode = "play";
+			if (!Sounds.muted) Sounds.sndCoffee.play();
 			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "level"},true));
 		}
 		
 		private function onItemsClick(event:Event):void
 		{
+			screenMode = "about";
+			if (!Sounds.muted) Sounds.sndCoffee.play();
 			this.dispatchEvent(new NavigationEvent(NavigationEvent.SWITCH_STATE, {id: "items"},true));
 		}
 		
 		private function onQuizClick(event:Event):void
 		{
+			screenMode = "about";
+			if (!Sounds.muted) Sounds.sndCoffee.play();
 			if(int(SaveManager.getInstance().loadDataScore()) > 1000000)
 				showQuiz();
 			else
@@ -291,29 +279,21 @@
 		
 		private function onAboutClick(event:Event):void
 		{
+			if (!Sounds.muted) Sounds.sndCoffee.play();
 			showMessage("");
 			showAbout();
 		}
 		
 		private function onHelpClick(event:Event):void
 		{
+			if (!Sounds.muted) Sounds.sndCoffee.play();
 			showMessage("");
 			//showInfo();
 		}
 		
-		private function onSoundClick(event:Event):void
-		{
-			showMessage("");
-		}
-		
-		private function onExitClick(event:Event):void
-		{
-			showMessage("");
-			NativeApplication.nativeApplication.exit(); 
-		}
-		
 		private function onAboutBackClick(event:Event):void
 		{
+			if (!Sounds.muted) Sounds.sndMushroom.play();
 			showMessage("");
 			initialize();
 		}
@@ -334,7 +314,7 @@
 		
 		public function showQuiz():void
 		{
-			screenMode = "quiz";
+			screenMode = "about";
 			quizBg.visible = true;
 			quizText.visible = true;
 			hero.visible = false;
@@ -358,6 +338,15 @@
 		public function initialize():void
 		{
 			disposeTemporarily();		
+			this.visible = true;
+			
+			////trace(screenMode)
+			// If not coming from about, restart playing background music.
+			if (screenMode != "about")
+			{
+				if (!Sounds.muted) Sounds.sndBgMain.play(0, 999);
+			}
+			
 			quizBg.visible = false;
 			this.visible = true;
 			title.visible = true;
@@ -418,6 +407,8 @@
 		{
 			this.visible = false;
 			if(this.hasEventListener(Event.ENTER_FRAME)) this.removeEventListener(Event.ENTER_FRAME,floatingAnimation);
+			
+			if (screenMode != "about") SoundMixer.stopAll();
 		}
 		
 		/* quiz only here
@@ -466,7 +457,7 @@
         private function addAllQuestions() {
             for(var i:int = 0; i < quizQuestions.length; i++) {
 				//quizQuestions[i].x = stage.stageWidth/2 - quizQuestions[i].width/2;
-				quizQuestions[i].y = stage.stageHeight/14+stage.stageHeight/20;
+				quizQuestions[i].y = stage.stageHeight/14+stage.stageHeight/14 + 5;
                 this.addChild(quizQuestions[i]);
             }
         }
@@ -480,6 +471,7 @@
             currentQuestion.visible = true;
         }
         private function prevHandler(event:Event) {
+			if (!Sounds.muted) Sounds.sndMushroom.play();
             showMessage("");
             if(currentIndex > 0) {
                 currentQuestion.visible = false;
@@ -491,8 +483,9 @@
             }
         }
         private function nextHandler(event:Event) {
+			if (!Sounds.muted) Sounds.sndMushroom.play();
            // showMessage("error");
-			//trace("user: "+currentQuestion.userAnswer)
+			////trace("user: "+currentQuestion.userAnswer)
             if(currentQuestion.userAnswer < 0) {
                 //showMessage("sesudahnya");
                 return;
@@ -511,6 +504,7 @@
             }
         }
         private function finishHandler(event:Event) {
+			if (!Sounds.muted) Sounds.sndMushroom.play();
             showMessage("");
             var finished:Boolean = true;
             for(var i:int = 0; i < quizQuestions.length; i++) {
@@ -519,7 +513,7 @@
                     break;
                 }
             }
-			trace(quizQuestions.length)
+			//trace(quizQuestions.length)
             if(finished || currentIndex == quizQuestions.length -1) {
                 prevButton.visible = false;
                 nextButton.visible = false;
@@ -554,8 +548,8 @@
 						SaveManager.getInstance().saveDataGodlike(true);
                 }
             }
-            showMessage("SELAMAT!!\n\nKamu berhasil menjawab " + score + " soal dari " + quizQuestions.length + " soal.\nKamu mendapatkan 'AURA KEMERDEKAAN', mainkan game dan lihat apa yang terjadi.");
-			//trace("You answered " + score + " correct out of " + quizQuestions.length + " questions.")
+            showMessage("\n\nSELAMAT!!\n\nKamu berhasil menjawab " + score + " soal dari " + quizQuestions.length + " soal.\nKamu mendapatkan 'AURA KEMERDEKAAN', mainkan game dan lihat apa yang terjadi.");
+			////trace("You answered " + score + " correct out of " + quizQuestions.length + " questions.")
         }
 		
 		/*end quiz here*/

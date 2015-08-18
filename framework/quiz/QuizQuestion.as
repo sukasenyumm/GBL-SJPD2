@@ -14,10 +14,10 @@
         private var theUserAnswer:int = -1;
        
         //variables for positioning:
-        private var questionX:int = 5;
-        private var questionY:int = 5;
+        private var questionX:int = 20;
+        private var questionY:int = 20;
         private var answerX:int = 60;
-        private var answerY:int = 75;
+        private var answerY:int = 85;
         private var spacing:int = 35;
 		private var smallLightTextFormat:TextFormat;
 		
@@ -53,7 +53,7 @@
        
         private function changeHandler(event:Event) {
 			var group:ToggleGroup = ToggleGroup( event.currentTarget );
-			trace("error sini: "+group.selectedIndex)
+			//trace("error sini: "+group.selectedIndex)
 			theUserAnswer = group.selectedIndex;
         }
         public function get correctAnswer():int {
