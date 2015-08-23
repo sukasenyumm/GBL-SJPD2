@@ -2,7 +2,9 @@
 	import framework.gameobject.Hero;
 	import starling.events.Event;
 	import starling.display.Sprite;
-	import framework.gameobject.GameBackground;
+	import framework.gameobject.GameBackground1;
+	import framework.gameobject.GameBackground2;
+	import framework.gameobject.GameBackground3;
 	import flash.utils.getTimer;
 	import starling.display.Button;
 	import framework.utils.GameAssets;
@@ -37,7 +39,9 @@
 	public class GamePlay extends Sprite{
 
 		private var startButton:Button;
-		private var bg:GameBackground;
+		private var bg1:GameBackground1;
+		private var bg2:GameBackground2;
+		private var bg3:GameBackground3;
 		private var hero:Hero;
 		private var enemy:Enemy;
 		
@@ -114,6 +118,7 @@
 		private var itemInfo32:Image;
 		private var itemInfo33:Image;
 		
+		private var bgHud:Image;
 		
 		public function GamePlay() {
 			// constructor code
@@ -130,10 +135,18 @@
 
 		private function drawGame():void
 		{
-			bg = new GameBackground();
-			bg.speed = 50;
-			this.addChild(bg);
-			bg.visible = false;
+			bg1 = new GameBackground1();
+			bg1.speed = 50;
+			this.addChild(bg1);
+			bg1.visible = false;
+			bg2 = new GameBackground2();
+			bg2.speed = 50;
+			this.addChild(bg2);
+			bg2.visible = false;
+			bg3 = new GameBackground3();
+			bg3.speed = 50;
+			this.addChild(bg3);
+			bg3.visible = false;
 			
 			scoreText = new TextField(300,100, "Score: 0","nulshock", 14, 0xffffff);
 			scoreText.hAlign = HAlign.LEFT;
@@ -192,6 +205,13 @@
 			startButton.addEventListener(Event.TRIGGERED, onStartButtonClick);
 			this.addChild(startButton);
 			startButton.visible = false;
+			
+			bgHud = new Image(GameAssets.getAtlasFix().getTexture("bgHud"));
+			bgHud.height = stage.stageHeight/14;
+			bgHud.width = stage.stageWidth;
+			bgHud.y = stage.stageHeight/14 - bgHud.height/2;
+			this.addChild(bgHud);
+			bgHud.visible = false;
 			
 			/*item info
 			*/
@@ -322,10 +342,32 @@
 			this.addEventListener(Event.ENTER_FRAME, calculateElapsed);
 			gameArea = new Rectangle(0,(stage.stageHeight/14)*2,stage.stageWidth,stage.stageHeight - (stage.stageHeight/14)*3);
 			//trace((stage.stageHeight/14)*2);
+			level = nLevel;
 			
 			gameState = "idle";
 			
-			bg.visible = true;
+			switch(level)
+			{
+				case 1:
+				bg1.visible = true;
+				bg1.speed = 0;
+				// Reset background's state to idle.
+				bg1.state = 1;//"idle";
+				break;
+				case 2:
+				bg2.visible = true;
+				bg2.speed = 0;
+				// Reset background's state to idle.
+				bg2.state = 1;//"idle";
+				break;
+				case 3:
+				bg3.visible = true;
+				bg3.speed = 0;
+				// Reset background's state to idle.
+				bg3.state = 1;//"idle";
+				break;
+			}
+			
 			scoreText.visible = true;
 			particle.visible = false;
 			hero.visible = true;
@@ -333,17 +375,14 @@
 			scoreLife.visible = true;
 			labelTips.visible = true;
 			quizBg.visible = false;
+			bgHud.visible = true;
 			
-			level = nLevel;
 			playerSpeed = 0;
 			enemySpeed = 0;
 			hitObstacle = 0;
-			bg.speed = 0;
 			scoreDistance = 0;
 			scoreItem = 0;
 			obstacleGapCount = 0;
-			// Reset background's state to idle.
-			bg.state = 1;//"idle";
 			// Reset hero's state to idle.
 			hero.state = 1;//"idle";
 			hero.x = -stage.stageWidth;
@@ -465,8 +504,19 @@
 							hero.y -= (hero.y - touchY) * 0.1;
 							playerSpeed += (MIN_SPEED - playerSpeed)* 0.01;
 							
+							switch(level)
+							{
+								case 1:
+								bg1.speed = playerSpeed * elapsed;
+								break;
+								case 2:
+								bg2.speed = playerSpeed * elapsed;
+								break;
+								case 3:
+								bg3.speed = playerSpeed * elapsed;
+								break;
+							}
 							
-							bg.speed = playerSpeed * elapsed;
 							labelIntro.visible = true;
 							labelIntro.x = enemy.x-labelIntro.width/2;
 							labelIntro.y = enemy.y+enemy.height/2+10;
@@ -543,7 +593,18 @@
 						}
 						 
 						playerSpeed -= (playerSpeed - MIN_SPEED) * 0.01;
-						bg.speed = playerSpeed * elapsed;
+						switch(level)
+						{
+							case 1:
+							bg1.speed = playerSpeed * elapsed;
+							break;
+							case 2:
+							bg2.speed = playerSpeed * elapsed;
+							break;
+							case 3:
+							bg3.speed = playerSpeed * elapsed;
+							break;
+						}
 						scoreDistance += (playerSpeed * elapsed)*0.1;
 						
 						initObstacle();
@@ -617,7 +678,18 @@
 						}
 						
 						// Set the background's speed based on hero's speed.
-						bg.speed = Math.floor(playerSpeed * elapsed);
+						switch(level)
+						{
+							case 1:
+							bg1.speed = Math.floor(playerSpeed * elapsed);
+							break;
+							case 2:
+							bg2.speed = Math.floor(playerSpeed * elapsed);
+							break;
+							case 3:
+							bg3.speed = Math.floor(playerSpeed * elapsed);
+							break;
+						}
 					break;
 					case "overWin":
 						
@@ -676,7 +748,19 @@
 						}
 						
 						// Set the background's speed based on hero's speed.
-						bg.speed = Math.floor(playerSpeed * elapsed);
+						
+						switch(level)
+						{
+							case 1:
+							bg1.speed = Math.floor(playerSpeed * elapsed);
+							break;
+							case 2:
+							bg2.speed = Math.floor(playerSpeed * elapsed);
+							break;
+							case 3:
+							bg3.speed = Math.floor(playerSpeed * elapsed);
+							break;
+						}
 					break;
 				}
 				
@@ -722,7 +806,18 @@
 						initQuiz();
 						gamePaused = true;
 						playerSpeed = 2;
-						bg.speed = playerSpeed;
+						switch(level)
+						{
+							case 1:
+							bg1.speed = playerSpeed;
+							break;
+							case 2:
+							bg2.speed = playerSpeed;
+							break;
+							case 3:
+							bg3.speed = playerSpeed;
+							break;
+						}
 					}
 				}
 				
@@ -873,7 +968,7 @@
 			else if(obstacleGapCount != 0)
 			{
 				obstacleGapCount = 0;
-				createObstacle(Math.ceil(Math.random() * 4),Math.random()*1000 + 1000);
+				createObstacle(Math.ceil(Math.random() * 2),Math.random()*1000 + 1000);
 			}
 		}
 		

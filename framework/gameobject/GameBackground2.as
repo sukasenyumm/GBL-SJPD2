@@ -2,7 +2,7 @@
 	import starling.display.Sprite;
 	import starling.events.Event;
 	
-	public class GameBackground extends Sprite{
+	public class GameBackground2 extends Sprite{
 
 		private var bgLayer1:BgLayer;
 		private var bgLayer2:BgLayer;
@@ -11,8 +11,10 @@
 		private var _speed:Number = 0;
 		/** State of the game. */		
 		private var _state:int;
+		//level
+		private var level:int = 2;
 		
-		public function GameBackground() {
+		public function GameBackground2() {
 			// constructor code
 			super();
 			this.addEventListener(Event.ADDED_TO_STAGE,onAddedToStage);
@@ -21,19 +23,19 @@
 		private function onAddedToStage(event:Event):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE,onAddedToStage);
-			bgLayer1 = new BgLayer(1);
+			bgLayer1 = new BgLayer(1,level);
 			bgLayer1.parallax = 0.02;
 			this.addChild(bgLayer1);
 			
-			bgLayer2 = new BgLayer(2);
+			bgLayer2 = new BgLayer(2,level);
 			bgLayer2.parallax = 0.2;
 			this.addChild(bgLayer2);
 			
-			bgLayer3 = new BgLayer(3);
+			bgLayer3 = new BgLayer(3,level);
 			bgLayer3.parallax = 0.5;
 			this.addChild(bgLayer3);
 			
-			bgLayer4 = new BgLayer(4);
+			bgLayer4 = new BgLayer(4,level);
 			bgLayer4.parallax = 1;
 			this.addChild(bgLayer4);
 			
@@ -80,7 +82,7 @@
 		 */
 		public function get state():int { return _state; }
 		public function set state(value:int):void { _state = value; }
-
+		
 	}
 	
 }

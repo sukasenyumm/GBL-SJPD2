@@ -16,8 +16,7 @@
 		private var _watchOut:Boolean;
 		private var _alreadyHit:Boolean;
 		private var _position:String;
-		private var obstacleImage:Image;
-		private var obstacleCrashImage:Image;
+		private var obstacleCrashAnimation:MovieClip;
 		private var obstacleAnimation:MovieClip;
 		private var watchOutAnimation:MovieClip;
 		
@@ -48,16 +47,8 @@
 			watchOutAnimation = new MovieClip(GameAssets.getAtlasFix().getTextures("watchOut_"),10);
 			Starling.juggler.add(watchOutAnimation);
 			
-			if(_type == 4)
-			{
-				watchOutAnimation.x = -watchOutAnimation.texture.width;
-				watchOutAnimation.y = obstacleAnimation.y + (obstacleAnimation.texture.height * 0.5)-(watchOutAnimation.texture.height * 0.5);
-			}
-			else
-			{
-				watchOutAnimation.x = -watchOutAnimation.texture.width;
-				watchOutAnimation.y = obstacleImage.y + (obstacleImage.texture.height * 0.5)-(watchOutAnimation.texture.height * 0.5);
-			}
+			watchOutAnimation.x = -watchOutAnimation.texture.width;
+			watchOutAnimation.y = obstacleAnimation.y + (obstacleAnimation.texture.height * 0.5)-(watchOutAnimation.texture.height * 0.5);
 			
 			this.addChild(watchOutAnimation);
 		}
@@ -65,28 +56,21 @@
 		
 		private function createObstacleCrashArt():void
 		{
-			obstacleCrashImage = new MovieClip(GameAssets.getAtlas().getTextures("obstacle" + _type + "_crash"));
-			obstacleCrashImage.visible = false;
-			this.addChild(obstacleCrashImage);
+			obstacleCrashAnimation = new MovieClip(GameAssets.getAtlasFix().getTextures("obstacle" + _type + "_crash" + "_0"),10);
+			Starling.juggler.add(obstacleCrashAnimation);
+			obstacleCrashAnimation.x = 0;
+			obstacleCrashAnimation.y = 0;
+			this.addChild(obstacleCrashAnimation);
+			obstacleCrashAnimation.visible = false;
 		}
 		
 		private function createObstacleArt():void
 		{
-			if(_type == 4)
-			{
-				obstacleAnimation = new MovieClip(GameAssets.getAtlasFix().getTextures("obstacle" + _type + "_0"),10);
-				Starling.juggler.add(obstacleAnimation);
-				obstacleAnimation.x = 0;
-				obstacleAnimation.y = 0;
-				this.addChild(obstacleAnimation);
-			}
-			else
-			{
-				obstacleImage = new Image(GameAssets.getAtlas().getTexture("obstacle" + _type));
-				obstacleImage.x = 0;
-				obstacleImage.y = 0;
-				this.addChild(obstacleImage);
-			}
+			obstacleAnimation = new MovieClip(GameAssets.getAtlasFix().getTextures("obstacle" + _type + "_0"),10);
+			Starling.juggler.add(obstacleAnimation);
+			obstacleAnimation.x = 0;
+			obstacleAnimation.y = 0;
+			this.addChild(obstacleAnimation);
 			
 		}
 		
@@ -132,12 +116,8 @@
 			
 			if(value)
 			{
-				obstacleCrashImage.visible = true;
-				if(_type == 4) obstacleAnimation.visible = false;
-				else 
-				{
-					obstacleImage.visible = false;
-				}
+				obstacleCrashAnimation.visible = true;
+				obstacleAnimation.visible = false;
 			}
 		}
 		

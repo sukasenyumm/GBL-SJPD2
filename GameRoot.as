@@ -176,7 +176,7 @@
 				Sounds.muted = false;
 				
 				if (mainMenu.visible) Sounds.sndBgMain.play(0, 999);
-				else if (mainMenu.visible) Sounds.sndBgGame.play(0, 999);
+				else if (screenGamePlay.visible) Sounds.sndBgGame.play(0, 999);
 				
 				soundBtn.showUnmuteState();
 			}

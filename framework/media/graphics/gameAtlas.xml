@@ -1,54 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker http://texturepacker.com-->
-<!-- $TexturePacker:SmartUpdate:056c3c895abe5151580c5cd888b54516$ -->
+<!-- $TexturePacker:SmartUpdate:0b1d74b00f9bc0d435a1650a0e217ad0$ -->
 <TextureAtlas imagePath="gameAtlas.png">
-    <SubTexture name="P0" x="459" y="464" width="150" height="150"/>
-    <SubTexture name="P1-1" x="154" y="464" width="150" height="150"/>
-    <SubTexture name="P1-2" x="842" y="312" width="150" height="150"/>
-    <SubTexture name="P1-3" x="2" y="464" width="150" height="150"/>
-    <SubTexture name="P2-1" x="538" y="312" width="150" height="150"/>
-    <SubTexture name="P2-2" x="690" y="312" width="150" height="150"/>
-    <SubTexture name="P2-3" x="385" y="312" width="151" height="150"/>
-    <SubTexture name="P2-4" x="763" y="464" width="150" height="150"/>
-    <SubTexture name="P3-1" x="306" y="464" width="151" height="150"/>
-    <SubTexture name="P3-2" x="2" y="616" width="151" height="150"/>
-    <SubTexture name="P3-3" x="611" y="464" width="150" height="150"/>
-    <SubTexture name="bgLayer2" x="2" y="221" width="970" height="89" frameX="-6" frameY="0" frameWidth="980" frameHeight="89"/>
-    <SubTexture name="bgLayer3" x="2" y="794" width="970" height="227" frameX="-3" frameY="0" frameWidth="980" frameHeight="227"/>
-    <SubTexture name="bgLayer4" x="155" y="616" width="86" height="155" frameX="-436" frameY="-58" frameWidth="980" frameHeight="213"/>
-    <SubTexture name="btn_1942" x="745" y="616" width="249" height="176"/>
-    <SubTexture name="btn_1945" x="494" y="616" width="249" height="176"/>
-    <SubTexture name="btn_1950" x="243" y="616" width="249" height="176"/>
-    <SubTexture name="btn_back" x="426" y="87" width="62" height="65"/>
-    <SubTexture name="btn_berhasil" x="895" y="2" width="127" height="33"/>
-    <SubTexture name="btn_credits" x="362" y="87" width="62" height="65"/>
-    <SubTexture name="btn_gagal" x="311" y="2" width="127" height="33"/>
-    <SubTexture name="btn_home" x="130" y="154" width="62" height="65"/>
-    <SubTexture name="btn_info" x="194" y="154" width="62" height="65"/>
-    <SubTexture name="btn_item" x="66" y="154" width="62" height="65"/>
-    <SubTexture name="btn_jawab" x="2" y="37" width="127" height="33"/>
-    <SubTexture name="btn_lanjutkan" x="569" y="2" width="127" height="33"/>
-    <SubTexture name="btn_mulai" x="732" y="2" width="127" height="33"/>
-    <SubTexture name="btn_play" x="255" y="312" width="128" height="131"/>
-    <SubTexture name="btn_quit" x="698" y="2" width="32" height="33"/>
-    <SubTexture name="btn_quiz" x="2" y="154" width="62" height="65"/>
-    <SubTexture name="btn_sebelumnya" x="53" y="2" width="127" height="33"/>
-    <SubTexture name="btn_selanjutnya" x="182" y="2" width="127" height="33"/>
-    <SubTexture name="btn_selesai" x="440" y="2" width="127" height="33"/>
-    <SubTexture name="btn_sound" x="861" y="2" width="32" height="33"/>
-    <SubTexture name="enemy_001" x="740" y="87" width="248" height="65" frameX="0" frameY="0" frameWidth="250" frameHeight="65"/>
-    <SubTexture name="enemy_002" x="490" y="87" width="248" height="65" frameX="0" frameY="0" frameWidth="250" frameHeight="65"/>
-    <SubTexture name="hero_001" x="610" y="37" width="124" height="46" frameX="0" frameY="0" frameWidth="124" frameHeight="50"/>
-    <SubTexture name="hero_002" x="879" y="37" width="124" height="48" frameX="0" frameY="-2" frameWidth="124" frameHeight="50"/>
-    <SubTexture name="hero_003" x="484" y="37" width="124" height="46" frameX="0" frameY="-2" frameWidth="124" frameHeight="50"/>
-    <SubTexture name="item1" x="25" y="2" width="26" height="26"/>
-    <SubTexture name="item2" x="2" y="2" width="21" height="21"/>
-    <SubTexture name="lbl_title" x="2" y="312" width="251" height="121"/>
-    <SubTexture name="obstacle4_0001" x="182" y="87" width="178" height="54"/>
-    <SubTexture name="obstacle4_0002" x="2" y="87" width="178" height="54"/>
-    <SubTexture name="watchOut_0001" x="131" y="37" width="102" height="33"/>
-    <SubTexture name="watchOut_0002" x="235" y="37" width="116" height="38"/>
-    <SubTexture name="watchOut_0003" x="353" y="37" width="129" height="42"/>
-    <SubTexture name="watchOut_0004" x="736" y="37" width="141" height="46"/>
-    <SubTexture name="watchOut_0005" x="736" y="37" width="141" height="46"/>
+    <SubTexture name="P0" x="2" y="2" width="150" height="150"/>
+    <SubTexture name="P1-1" x="154" y="2" width="150" height="150"/>
+    <SubTexture name="P1-2" x="306" y="2" width="150" height="150"/>
+    <SubTexture name="P1-3" x="458" y="2" width="150" height="150"/>
+    <SubTexture name="P2-1" x="610" y="2" width="150" height="150"/>
+    <SubTexture name="P2-2" x="762" y="2" width="150" height="150"/>
+    <SubTexture name="P2-3" x="914" y="2" width="151" height="150"/>
+    <SubTexture name="P2-4" x="1067" y="2" width="150" height="150"/>
+    <SubTexture name="P3-1" x="1219" y="2" width="151" height="150"/>
+    <SubTexture name="P3-2" x="1372" y="2" width="151" height="150"/>
+    <SubTexture name="P3-3" x="1525" y="2" width="150" height="150"/>
+    <SubTexture name="bgHud" x="2" y="154" width="1024" height="108"/>
+    <SubTexture name="bgLayer2" x="1028" y="154" width="970" height="89" frameX="-6" frameY="0" frameWidth="980" frameHeight="89"/>
+    <SubTexture name="bgLayer3" x="2" y="264" width="970" height="227" frameX="-3" frameY="0" frameWidth="980" frameHeight="227"/>
+    <SubTexture name="bgLayer4" x="974" y="264" width="86" height="155" frameX="-436" frameY="-58" frameWidth="980" frameHeight="213"/>
+    <SubTexture name="bgLayerEx2" x="2" y="493" width="1024" height="386" frameX="0" frameY="-56" frameWidth="1024" frameHeight="768"/>
+    <SubTexture name="bgLayerEx3" x="1028" y="493" width="994" height="131" frameX="-14" frameY="0" frameWidth="1024" frameHeight="131"/>
+    <SubTexture name="bgLayerEx4" x="2" y="881" width="1016" height="247" frameX="-8" frameY="-4" frameWidth="1024" frameHeight="251"/>
+    <SubTexture name="bgLayerExt2" x="1020" y="881" width="1014" height="414" frameX="-10" frameY="-74" frameWidth="1024" frameHeight="768"/>
+    <SubTexture name="bgLayerExt3" x="2" y="1297" width="952" height="241" frameX="-37" frameY="0" frameWidth="1024" frameHeight="241"/>
+    <SubTexture name="bgLayerExt4" x="956" y="1297" width="774" height="361" frameX="-103" frameY="0" frameWidth="1024" frameHeight="361"/>
+    <SubTexture name="btn_1942" x="1732" y="1297" width="199" height="141"/>
+    <SubTexture name="btn_1945" x="2" y="1660" width="199" height="141"/>
+    <SubTexture name="btn_1950" x="203" y="1660" width="199" height="141"/>
+    <SubTexture name="btn_back" x="404" y="1660" width="62" height="65"/>
+    <SubTexture name="btn_berhasil" x="468" y="1660" width="127" height="33"/>
+    <SubTexture name="btn_credits" x="597" y="1660" width="62" height="65"/>
+    <SubTexture name="btn_gagal" x="661" y="1660" width="127" height="33"/>
+    <SubTexture name="btn_home" x="790" y="1660" width="62" height="65"/>
+    <SubTexture name="btn_info" x="854" y="1660" width="62" height="65"/>
+    <SubTexture name="btn_item" x="918" y="1660" width="62" height="65"/>
+    <SubTexture name="btn_jawab" x="982" y="1660" width="127" height="33"/>
+    <SubTexture name="btn_lanjutkan" x="1111" y="1660" width="127" height="33"/>
+    <SubTexture name="btn_mulai" x="1240" y="1660" width="127" height="33"/>
+    <SubTexture name="btn_play" x="1369" y="1660" width="128" height="131"/>
+    <SubTexture name="btn_quit" x="1499" y="1660" width="32" height="33"/>
+    <SubTexture name="btn_quiz" x="1533" y="1660" width="62" height="65"/>
+    <SubTexture name="btn_sebelumnya" x="1597" y="1660" width="127" height="33"/>
+    <SubTexture name="btn_selanjutnya" x="1726" y="1660" width="127" height="33"/>
+    <SubTexture name="btn_selesai" x="1855" y="1660" width="127" height="33"/>
+    <SubTexture name="btn_sound" x="1984" y="1660" width="32" height="33"/>
+    <SubTexture name="btn_sound_off" x="2" y="1803" width="32" height="33"/>
+    <SubTexture name="enemy_001" x="36" y="1803" width="248" height="65" frameX="0" frameY="0" frameWidth="250" frameHeight="65"/>
+    <SubTexture name="enemy_002" x="286" y="1803" width="248" height="65" frameX="0" frameY="0" frameWidth="250" frameHeight="65"/>
+    <SubTexture name="hero_001" x="536" y="1803" width="124" height="46" frameX="0" frameY="0" frameWidth="124" frameHeight="50"/>
+    <SubTexture name="hero_002" x="662" y="1803" width="124" height="48" frameX="0" frameY="-2" frameWidth="124" frameHeight="50"/>
+    <SubTexture name="hero_003" x="788" y="1803" width="124" height="46" frameX="0" frameY="-2" frameWidth="124" frameHeight="50"/>
+    <SubTexture name="item1" x="914" y="1803" width="26" height="26"/>
+    <SubTexture name="item2" x="942" y="1803" width="21" height="21"/>
+    <SubTexture name="lbl_title" x="965" y="1803" width="250" height="120"/>
+    <SubTexture name="obstacle1_0001" x="1217" y="1803" width="178" height="54"/>
+    <SubTexture name="obstacle1_0002" x="1397" y="1803" width="178" height="54"/>
+    <SubTexture name="obstacle1_crash_0001" x="1577" y="1803" width="164" height="51" frameX="-9" frameY="-3" frameWidth="178" frameHeight="55"/>
+    <SubTexture name="obstacle1_crash_0002" x="1743" y="1803" width="164" height="50" frameX="-9" frameY="-4" frameWidth="178" frameHeight="54"/>
+    <SubTexture name="obstacle2_0001" x="2" y="1925" width="178" height="54"/>
+    <SubTexture name="obstacle2_0002" x="182" y="1925" width="178" height="54"/>
+    <SubTexture name="obstacle2_crash_0001" x="362" y="1925" width="164" height="51" frameX="-9" frameY="-3" frameWidth="178" frameHeight="55"/>
+    <SubTexture name="obstacle2_crash_0002" x="528" y="1925" width="164" height="50" frameX="-9" frameY="-4" frameWidth="178" frameHeight="54"/>
+    <SubTexture name="watchOut_0001" x="694" y="1925" width="102" height="33"/>
+    <SubTexture name="watchOut_0002" x="798" y="1925" width="116" height="38"/>
+    <SubTexture name="watchOut_0003" x="916" y="1925" width="129" height="42"/>
+    <SubTexture name="watchOut_0004" x="1047" y="1925" width="141" height="46"/>
+    <SubTexture name="watchOut_0005" x="1047" y="1925" width="141" height="46"/>
 </TextureAtlas>

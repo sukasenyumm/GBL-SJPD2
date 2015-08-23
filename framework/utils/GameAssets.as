@@ -27,6 +27,14 @@
 		 */
 		[Embed(source="../media/graphics/bgLayer1.png")]
 		public static const BgLayer1:Class;
+		[Embed(source="../media/graphics/bgLayerEx1.png")]
+		public static const BgLayerEx1:Class;
+		[Embed(source="../media/graphics/bgLayerExt1.png")]
+		public static const BgLayerExt1:Class;
+		[Embed(source="../media/graphics/bgHelper.png")]
+		public static const BgHelper:Class;
+		[Embed(source="../media/graphics/bgMenu.png")]
+		public static const BgMenu:Class;
 		
 		[Embed(source="../media/graphics/bgWelcome.jpg")]
 		public static const BgWelcome:Class;

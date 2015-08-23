@@ -34,7 +34,7 @@
 	public class MainMenu extends Sprite
 	{
 		/** Background image. */
-		private var bg:Quad;
+		private var bg:Image;
 		/** Game title. */
 		private var title:Image;
 		/** hero */
@@ -59,6 +59,8 @@
 		private var aboutText:TextField;
 		/** Quiz Tilte text field. */
 		private var quizText:TextField;
+		/** Quiz Keterangan text field. */
+		private var ketText:TextField;
 		
 		/* for quiz declaration */
 		private var quizBg:Quad;
@@ -82,6 +84,8 @@
 		/** Current date. */
 		private var _currentDate:Date;
 		/*end animation*/
+		
+		private var bgInfo:Image;
 		
 		public function MainMenu()
 		{
@@ -113,7 +117,9 @@
 			var bottomColor:uint = 0xFFFFFF; // blue
 			var topColor:uint    = 0xea0b0b; // red	
 			
-			bg = new Quad(stage.stageWidth, stage.stageHeight, 0x000000);
+			bg = new Image(GameAssets.getTexture("BgMenu"));
+			bg.width = stage.stageWidth;
+			bg.height = stage.stageHeight;
 			bg.blendMode = BlendMode.NONE;
 			this.addChild(bg);
 			
@@ -192,18 +198,30 @@
 			itemsBtn.addEventListener(Event.TRIGGERED, onItemsClick);
 			this.addChild(itemsBtn);
 			
-			/* quiz button */
+			/* quiz teks */
 			quizText = new TextField(stage.stageWidth, 50, "", "nulshock", 20, 0xFFFFFF);
 			quizText.text = "KUIS";
 			quizText.x = stage.stageWidth/2-quizText.width/2;
 			quizText.y = (stage.stageHeight/14);
 			this.addChild(quizText);
 			
+			ketText = new TextField(stage.stageWidth, 50, "", "nulshock", 20, 0xFFFFFF);
+			ketText.text = "KETERANGAN";
+			ketText.x = stage.stageWidth/2-ketText.width/2;
+			ketText.y = (stage.stageHeight/14);
+			this.addChild(ketText);
+			
 			quizBtn = new Button(GameAssets.getAtlasFix().getTexture("btn_quiz"));
 			quizBtn.x = itemsBtn.x-(stage.stageHeight/20)-quizBtn.height;
 			quizBtn.y = helpBtn.y;
 			quizBtn.addEventListener(Event.TRIGGERED, onQuizClick);
 			this.addChild(quizBtn);
+			
+			bgInfo = new Image(GameAssets.getTexture("BgHelper"));
+			bgInfo.width = stage.stageWidth;
+			bgInfo.height = stage.stageHeight - (stage.stageHeight/14)*2 - backBtn.height*2;
+			bgInfo.y = stage.stageHeight/2 - bgInfo.height/2;
+			this.addChild(bgInfo);
 			
 			/* quiz button */
 			quizBg = new Quad(stage.stageWidth, stage.stageHeight - (stage.stageHeight/14)*2 - backBtn.height*2, 0xFFFFFF);
@@ -288,7 +306,7 @@
 		{
 			if (!Sounds.muted) Sounds.sndCoffee.play();
 			showMessage("");
-			//showInfo();
+			showInfo();
 		}
 		
 		private function onAboutBackClick(event:Event):void
@@ -298,9 +316,29 @@
 			initialize();
 		}
 		
+		public function showInfo():void
+		{
+			screenMode = "about";
+			ketText.visible = true;
+			title.visible = false;
+			bgInfo.visible = true;
+			hero.visible = false;
+			enemy.visible = false;
+			playBtn.visible = false;
+			aboutBtn.visible = false;
+			helpBtn.visible = false;
+			aboutText.visible = false;
+			backBtn.visible = true;
+			quizBtn.visible = false;
+			itemsBtn.visible = false;
+		}
+		
+		
 		public function showAbout():void
 		{
 			screenMode = "about";
+			ketText.visible = false;
+			bgInfo.visible = false;
 			hero.visible = false;
 			enemy.visible = false;
 			playBtn.visible = false;
@@ -315,8 +353,10 @@
 		public function showQuiz():void
 		{
 			screenMode = "about";
+			bgInfo.visible = false;
 			quizBg.visible = true;
 			quizText.visible = true;
+			ketText.visible = false;
 			hero.visible = false;
 			enemy.visible = false;
 			title.visible = false;
@@ -347,6 +387,7 @@
 				if (!Sounds.muted) Sounds.sndBgMain.play(0, 999);
 			}
 			
+			bgInfo.visible = false;
 			quizBg.visible = false;
 			this.visible = true;
 			title.visible = true;
@@ -363,6 +404,7 @@
 			nextButton.visible =false;
 			finishButton.visible = false;
 			itemsBtn.visible = true;
+			ketText.visible = false;
 			
 			hideAllQuestions();
 			

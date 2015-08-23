@@ -165,8 +165,6 @@
             <filename>pes/hero_003.png</filename>
             <filename>pes/hero_001.png</filename>
             <filename>pes/hero_002.png</filename>
-            <filename>pes/obstacle4_0001.png</filename>
-            <filename>pes/obstacle4_0002.png</filename>
             <filename>pes/enemy_002.png</filename>
             <filename>pes/enemy_001.png</filename>
             <filename>pes/item1.png</filename>
@@ -189,6 +187,23 @@
             <filename>pes/watchOut_0002.png</filename>
             <filename>pes/watchOut_0003.png</filename>
             <filename>pes/watchOut_0005.png</filename>
+            <filename>pes/obstacle2_crash_0002.png</filename>
+            <filename>pes/obstacle1_0001.png</filename>
+            <filename>pes/obstacle1_0002.png</filename>
+            <filename>pes/obstacle1_crash_0001.png</filename>
+            <filename>pes/obstacle1_crash_0002.png</filename>
+            <filename>pes/obstacle2_0001.png</filename>
+            <filename>pes/obstacle2_0002.png</filename>
+            <filename>pes/obstacle2_crash_0001.png</filename>
+            <filename>item/P0.png</filename>
+            <filename>background/bgLayerExt2.png</filename>
+            <filename>background/bgLayerExt3.png</filename>
+            <filename>background/bgLayerExt4.png</filename>
+            <filename>background/bgLayerEx2.png</filename>
+            <filename>background/bgLayerEx3.png</filename>
+            <filename>background/bgLayerEx4.png</filename>
+            <filename>button/btn_sound_off.png</filename>
+            <filename>background/bgHud.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

@@ -56,7 +56,7 @@ package framework.ui
 			this.addChild(mcUnmuteState);
 			
 			// Selected state - animation
-			imageMuteState = new Image(GameAssets.getAtlasFix().getTexture("btn_sound"));
+			imageMuteState = new Image(GameAssets.getAtlasFix().getTexture("btn_sound_off"));
 			this.addChild(imageMuteState);
 		}
 		
