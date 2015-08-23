@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <application xmlns="http://ns.adobe.com/air/application/18.0">
   <id>com.pesawat.insulinde</id>
-  <versionNumber>1.0.0</versionNumber>
-  <versionLabel/>
+  <versionNumber>1.0.1</versionNumber>
+  <versionLabel>a</versionLabel>
   <filename>Insulinde</filename>
   <description/>
-  <!-- To localize the description, use the following format for the description element.<description><text xml:lang="en">English App description goes here</text><text xml:lang="fr">French App description goes here</text><text xml:lang="ja">Japanese App description goes here</text></description>-->
+<!-- To localize the description, use the following format for the description element.<description><text xml:lang="en">English App description goes here</text><text xml:lang="fr">French App description goes here</text><text xml:lang="ja">Japanese App description goes here</text></description>-->
   <name>Insulinde</name>
-  <!-- To localize the name, use the following format for the name element.<name><text xml:lang="en">English App name goes here</text><text xml:lang="fr">French App name goes here</text><text xml:lang="ja">Japanese App name goes here</text></name>-->
+<!-- To localize the name, use the following format for the name element.<name><text xml:lang="en">English App name goes here</text><text xml:lang="fr">French App name goes here</text><text xml:lang="ja">Japanese App name goes here</text></name>-->
   <copyright/>
   <initialWindow>
     <content>Main.swf</content>
@@ -28,7 +28,10 @@
   <android>
     <manifestAdditions>
       <![CDATA[<manifest>
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 </manifest>]]>
     </manifestAdditions>
   </android>
+  <supportedLanguages>en</supportedLanguages>
 </application>

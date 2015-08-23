@@ -15,7 +15,7 @@
 			// constructor code
 			super();
 			
-			_image = new Image(GameAssets.getAtlas().getTexture("particleEat"));
+			_image = new Image(GameAssets.getTexture("particle"));
 			_image.x = _image.width * 0.5;
 			_image.y = _image.height * 0.5;
 			this.addChild(_image);

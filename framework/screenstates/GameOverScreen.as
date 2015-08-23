@@ -113,7 +113,7 @@ package framework.screenstates
 			scoreContainer.y = (stage.stageHeight * 40)/100;
 			this.addChild(scoreContainer);
 			
-			distanceText = new TextField(stage.stageWidth, 100, "SCORE: 0000000", "nulshock", 18, 0xffffff);
+			distanceText = new TextField(stage.stageWidth, 100, "SKOR: 0000000", "nulshock", 18, 0xffffff);
 			distanceText.vAlign = VAlign.TOP;
 			distanceText.height = distanceText.textBounds.height;
 			scoreContainer.addChild(distanceText);
@@ -234,7 +234,7 @@ package framework.screenstates
 			this._distance = _distance;
 			this._score = _score;
 
-			distanceText.text = "SCORE: " + this._distance.toString();
+			distanceText.text = "SKOR: " + this._distance.toString();
 			scoreText.text = "ENERGI: " + this._score.toString();
 			
 			this.alpha = 0;

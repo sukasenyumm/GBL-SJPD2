@@ -54,7 +54,7 @@
 			starlingObj.antiAliasing = 1;
 			
 			// Lihat penggunaan status memory dan statistik CPU
-			starlingObj.showStats = true;
+			starlingObj.showStats = false;
 			
 			// Posisi status
 			starlingObj.showStatsAt("left", "bottom");

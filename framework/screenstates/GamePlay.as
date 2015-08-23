@@ -148,7 +148,7 @@
 			this.addChild(bg3);
 			bg3.visible = false;
 			
-			scoreText = new TextField(300,100, "Score: 0","nulshock", 14, 0xffffff);
+			scoreText = new TextField(300,100, "Skor: 0","nulshock", 14, 0xffffff);
 			scoreText.hAlign = HAlign.LEFT;
 			scoreText.vAlign = VAlign.TOP;
 			scoreText.x = (stage.stageWidth/14);
@@ -261,8 +261,8 @@
 			//end
 			//quiz
 			
-			/* quiz button */
-			quizBg = new Quad(stage.stageWidth, stage.stageHeight - (stage.stageHeight/14)*2, 0xFFFFFF);
+			/* quiz bg */
+			quizBg = new Quad(stage.stageWidth, stage.stageHeight - (stage.stageHeight/14)*2, 0x1A0000);
 			quizBg.y = stage.stageHeight/2-quizBg.height/2;
 			quizBg.alpha = 0.5;
 			this.addChild(quizBg);
@@ -292,16 +292,7 @@
 			//statusT.border = true;
 			this.addChild(statusT);
 			
-			//quizQuestions = new Array();
-            //questionLevels();
-			
-			//var questionTemp:Number = Math.ceil(Math.random() * ((quizQuestions.length - 1) - 0)+0);
-			//addQuestions(questionTemp);
-			//questionTemporary = questionTemp;
-			
 			//end quiz
-			
-			
 			labelIntro = new TextField(stage.stageWidth/2, 50, "", "nulshock", 10, 0xffffff);
 			this.addChild(labelIntro);
 			labelIntro.visible = false;
@@ -318,7 +309,6 @@
 			
 			this.visible = false;
 			gameOverScreen.visible = false;
-			
 			
 			if (this.hasEventListener(Event.ENTER_FRAME)) this.removeEventListener(Event.ENTER_FRAME, calculateElapsed);
 			
@@ -346,26 +336,33 @@
 			
 			gameState = "idle";
 			
-			switch(level)
+			if(level == 1)
 			{
-				case 1:
 				bg1.visible = true;
+				bg2.visible = false;
+				bg3.visible = false;
 				bg1.speed = 0;
 				// Reset background's state to idle.
 				bg1.state = 1;//"idle";
-				break;
-				case 2:
+			}
+			else if(level == 2)
+			{
+				bg1.visible = false;
 				bg2.visible = true;
+				bg3.visible = false;
 				bg2.speed = 0;
 				// Reset background's state to idle.
 				bg2.state = 1;//"idle";
-				break;
-				case 3:
+			}
+			else
+			{
+				bg1.visible = false;
+				bg2.visible = false;
 				bg3.visible = true;
 				bg3.speed = 0;
 				// Reset background's state to idle.
 				bg3.state = 1;//"idle";
-				break;
+				// GENERAL ELEMENTS
 			}
 			
 			scoreText.visible = true;
@@ -392,7 +389,7 @@
 			enemy.x = -stage.stageWidth;
 			enemy.y = stage.stageHeight * 0.5 + 100;
 			
-			scoreText.text = "Score: "+scoreDistance;
+			scoreText.text = "Skor: "+scoreDistance;
 			lives = 5;
 			scoreLife.text = "Energi: "+String(lives);
 			
@@ -403,7 +400,7 @@
 			//force startButton always in top of layers.
 			this.setChildIndex(startButton, numChildren-1);
 			
-			quizBg.visible = false;
+			quizBg.visible = true;
 			//item info
 			itemInfo11.visible = false;
 			itemInfo12.visible = false;
@@ -451,6 +448,7 @@
 			startButton.visible = false;
 			labelTips.visible = false;
 			particle.visible = true;
+			quizBg.visible = false;
 			// Launch hero.
 			launchHero();
 		}
@@ -518,7 +516,7 @@
 							}
 							
 							labelIntro.visible = true;
-							labelIntro.x = enemy.x-labelIntro.width/2;
+							labelIntro.x = enemy.x-labelIntro.width;
 							labelIntro.y = enemy.y+enemy.height/2+10;
 							labelIntro.x = hero.x;
 							labelIntro.y = hero.y+hero.height/2+10;
@@ -626,7 +624,7 @@
 							enemy.x += (stage.stageWidth* 3-enemy.x)*0.05;
 						}
 						scoreDistance = scoreDistance+scoreItem;
-						scoreText.text = "Score: "+scoreDistance;
+						scoreText.text = "Skor: "+scoreDistance;
 						
 						if(lives <= 0)
 							gameState = "over";
@@ -883,14 +881,24 @@
 		
 		private function createFoodItems():void
 		{
-			if(Math.random() > 0.95)
+			var rand:Number = Math.random();
+			if(rand > 0.87 && rand <= 0.98)
 			{
-				var itemToTrack:Item = new Item(Math.ceil(Math.random() * 2));
-				itemToTrack.x = stage.stageWidth + 50;
+				var itemToTrack:Item = new Item(2);
+				itemToTrack.x = stage.stageWidth * 2.5 + 50;
 				itemToTrack.y = int(Math.random() * (gameArea.bottom - gameArea.top)) + gameArea.top;
 				this.addChild(itemToTrack);
 				
 				itemsToAnimate.push(itemToTrack);
+			}
+			if(rand > 0.98 && rand <= 1)
+			{
+				var itemToTrack2:Item = new Item(1);
+				itemToTrack2.x = stage.stageWidth * 3 + 50;
+				itemToTrack2.y = int(Math.random() * (gameArea.bottom - gameArea.top)) + gameArea.top;
+				this.addChild(itemToTrack2);
+				
+				itemsToAnimate.push(itemToTrack2);
 			}
 		}
 		
@@ -1329,6 +1337,7 @@
 		 */
 		private function drawGameOverScreen():void
 		{
+			level = 0;
 			gameOverScreen = new GameOverScreen();
 			gameOverScreen.addEventListener(NavigationEvent.SWITCH_STATE, playAgain);
 			this.addChild(gameOverScreen);

@@ -114,7 +114,7 @@
 		private function drawScreen():void
 		{
 			// GENERAL ELEMENTS
-			var bottomColor:uint = 0xFFFFFF; // blue
+			var bottomColor:uint = 0xFFFFFF; // white
 			var topColor:uint    = 0xea0b0b; // red	
 			
 			bg = new Image(GameAssets.getTexture("BgMenu"));
@@ -146,14 +146,14 @@
 			// ABOUT ELEMENTS
 			//fontRegular = Fonts.getFont("Regular");
 			
-			aboutText = new TextField(stage.stageWidth - stage.stageWidth/14, stage.stageHeight -  stage.stageHeight/14, "", "nulshock", 12, 0x000000);
+			aboutText = new TextField(stage.stageWidth - stage.stageWidth/14, stage.stageHeight -  stage.stageHeight/14, "", "nulshock", 10, 0xffffff);
 			aboutText.text = "PESAWAT INSULINDE adalah sebuah game untuk mempelajari Sejarah Indonesia.\n\n" +
 				" Pesawat Insulinde bertugas untuk mengejar pesawat X yang telah mencuri lembaran-lembaran sejarah yang ada di Indonesia." +
 				" Dalam perjalanannya, pesawat X tadi menjatuhkan lembaran-lembaran sejarah disepanjang jalan." +
 				" Jangan lupa kumpulkan juga batu pengetahuan untuk membuka sesi quiz pada menu game.\n\n"+
 				" Game ini diciptakan oleh:\n"+
 				" Abas Setiawan (Produser dan Programmer)\n"+
-				" Yusuf Priambodo (Desainer dan Ilustrator)\n"+
+				" Muhammad Yusuf Priambodo (Desainer dan Ilustrator)\n"+
 				" Copyright @2015";
 			aboutText.x = stage.stageWidth/2 - aboutText.textBounds.width/2;
 			aboutText.y = title.y+title.height;
@@ -224,7 +224,7 @@
 			this.addChild(bgInfo);
 			
 			/* quiz button */
-			quizBg = new Quad(stage.stageWidth, stage.stageHeight - (stage.stageHeight/14)*2 - backBtn.height*2, 0xFFFFFF);
+			quizBg = new Quad(stage.stageWidth, stage.stageHeight - (stage.stageHeight/14)*2 - backBtn.height*2, 0x1A0000);
 			quizBg.y = stage.stageHeight/2-quizBg.height/2;
 			quizBg.alpha = 0.5;
 			this.addChild(quizBg);

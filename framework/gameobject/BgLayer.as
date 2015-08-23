@@ -33,6 +33,16 @@
 					image1.blendMode = BlendMode.NONE;
 					image2 = new Image(GameAssets.getTexture("BgLayerExt" + layer));
 					image2.blendMode = BlendMode.NONE;
+					var bottomColor1:uint = 0x000000; // white
+					var topColor1:uint    = 0x0000CC; // red	
+					image1.setVertexColor(0, topColor1);
+					image1.setVertexColor(1, topColor1);
+					image1.setVertexColor(2, bottomColor1);
+					image1.setVertexColor(3, bottomColor1);
+					image2.setVertexColor(0, topColor1);
+					image2.setVertexColor(1, topColor1);
+					image2.setVertexColor(2, bottomColor1);
+					image2.setVertexColor(3, bottomColor1);
 				}
 				else
 				{
@@ -49,6 +59,16 @@
 					image1.blendMode = BlendMode.NONE;
 					image2 = new Image(GameAssets.getTexture("BgLayer" + layer));
 					image2.blendMode = BlendMode.NONE;
+					var bottomColor2:uint = 0x000066;
+					var topColor2:uint    = 0xCCCCFF;
+					image1.setVertexColor(0, topColor2);
+					image1.setVertexColor(1, topColor2);
+					image1.setVertexColor(2, bottomColor2);
+					image1.setVertexColor(3, bottomColor2);
+					image2.setVertexColor(0, topColor2);
+					image2.setVertexColor(1, topColor2);
+					image2.setVertexColor(2, bottomColor2);
+					image2.setVertexColor(3, bottomColor2);
 				}
 				else
 				{
@@ -65,6 +85,16 @@
 					image1.blendMode = BlendMode.NONE;
 					image2 = new Image(GameAssets.getTexture("BgLayerEx" + layer));
 					image2.blendMode = BlendMode.NONE;
+					var bottomColor3:uint = 0xFFFFFF; // white
+					var topColor3:uint    = 0xea0b0b; // red	
+					image1.setVertexColor(0, topColor3);
+					image1.setVertexColor(1, topColor3);
+					image1.setVertexColor(2, bottomColor3);
+					image1.setVertexColor(3, bottomColor3);
+					image2.setVertexColor(0, topColor3);
+					image2.setVertexColor(1, topColor3);
+					image2.setVertexColor(2, bottomColor3);
+					image2.setVertexColor(3, bottomColor3);
 				}
 				else
 				{

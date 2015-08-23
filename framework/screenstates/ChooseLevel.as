@@ -9,11 +9,13 @@
 	import starling.utils.VAlign;
 	import framework.events.NavigationEvent;
 	import framework.utils.GameAssets;
+	import starling.display.Image;
+	import starling.display.BlendMode;
 	
 	public class ChooseLevel extends Sprite
 	{
 		/** Background image. */
-		private var bg:Quad;
+		private var bg:Image;
 		
 		/** Message text field. */
 		private var messageText:TextField;
@@ -28,6 +30,9 @@
 		private var level1Btn:Button;
 		private var level2Btn:Button;
 		private var level3Btn:Button;
+		
+		/** Current date. */
+		private var _currentDate:Date;
 		
 		public function ChooseLevel()
 		{
@@ -56,10 +61,21 @@
 		{
 			
 			// Background quad.
-			bg = new Quad(stage.stageWidth, stage.stageHeight, 0x000000);
+			bg = new Image(GameAssets.getTexture("BgMenu"));
+			bg.width = stage.stageWidth;
+			bg.height = stage.stageHeight;
 			//bg.alpha = 0.75;
 			this.addChild(bg);
+			bg.blendMode = BlendMode.NONE;
 			bg.visible = false;
+			
+			// GENERAL ELEMENTS
+			var bottomColor:uint = 0xFFFFFF; // white
+			var topColor:uint    = 0xea0b0b; // red	
+			bg.setVertexColor(0, topColor);
+			bg.setVertexColor(1, topColor);
+			bg.setVertexColor(2, bottomColor);
+			bg.setVertexColor(3, bottomColor);
 			
 			// Message text field.
 			messageText = new TextField(stage.stageWidth, stage.stageHeight * 0.5, "CHOOSE LEVEL!", "nulshock", 20, 0xFFFFFF);
@@ -99,6 +115,7 @@
 			level3Btn.addEventListener(Event.TRIGGERED, onPlayClick3);
 			this.addChild(level3Btn);
 			level3Btn.visible = false;
+			
 		}
 		
 		/**
@@ -147,11 +164,29 @@
 			level2Btn.visible = true;
 			level3Btn.visible = true;
 			mainBtn.visible = true;
+			this.addEventListener(Event.ENTER_FRAME, floatingAnimation);
+		
+		}
+		
+		/**
+		 * Animate floating objects. 
+		 * @param event
+		 * 
+		 */
+		private function floatingAnimation(event:Event):void
+		{
+			_currentDate = new Date();
+			level1Btn.y = (stage.stageHeight/2 - level1Btn.height/2) + (Math.cos(_currentDate.getTime() * 0.002)) * 10;
+			level2Btn.y = (stage.stageHeight/2 - level2Btn.height/2) + (Math.cos(_currentDate.getTime() * 0.002)) * 10;
+			level3Btn.y = (stage.stageHeight/2 - level3Btn.height/2) + (Math.cos(_currentDate.getTime() * 0.002)) * 10;
+			
 		}
 		
 		public function disposeTemporarily():void
 		{
 			this.visible = false;
+			if(this.hasEventListener(Event.ENTER_FRAME)) this.removeEventListener(Event.ENTER_FRAME,floatingAnimation);
+			
 		}
 		
 	}

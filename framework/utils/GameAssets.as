@@ -11,14 +11,9 @@
 		/**
 		 * Texture Atlas 
 		 */
-		[Embed(source="../media/graphics/mySpritesheet.png")]
-		public static const AtlasTextureGame:Class;
 		[Embed(source="../media/graphics/gameAtlas.png")]
 		public static const AtlasTextureGameTest:Class;
-		
-		[Embed(source="../media/graphics/mySpritesheet.xml", mimeType="application/octet-stream")]
-		public static const AtlasXmlGame:Class;
-		
+	
 		[Embed(source="../media/graphics/gameAtlas.xml", mimeType="application/octet-stream")]
 		public static const AtlasXmlGameTest:Class;
 		
@@ -36,8 +31,6 @@
 		[Embed(source="../media/graphics/bgMenu.png")]
 		public static const BgMenu:Class;
 		
-		[Embed(source="../media/graphics/bgWelcome.jpg")]
-		public static const BgWelcome:Class;
 		
 		[Embed(source="../media/graphics/normal-page-symbol.png")]
 		public static const scrollIdle:Class;
@@ -45,9 +38,11 @@
 		[Embed(source="../media/graphics/selected-page-symbol.png")]
 		public static const scrollOn:Class;
 		
+		[Embed(source="../media/graphics/particle.png")]
+		public static const particle:Class;
+		
 		[Embed(source="../media/graphics/nulshock bd.TTF", fontFamily="nulshock", embedAsCFF="false")]
 		public static var MyFont:Class;		
-		
 		
 		
 		/**
@@ -61,17 +56,6 @@
 		 * Returns the Texture atlas instance.
 		 * @return the TextureAtlas instance (there is only oneinstance per app)
 		 */
-		public static function getAtlas():TextureAtlas
-		{
-			if (gameTextureAtlas == null)
-			{
-				var texture:Texture = getTexture("AtlasTextureGame");
-				var xml:XML = XML(new AtlasXmlGame());
-				gameTextureAtlas=new TextureAtlas(texture, xml);
-			}
-			
-			return gameTextureAtlas;
-		}
 		
 		public static function getAtlasFix():TextureAtlas
 		{

@@ -30,6 +30,7 @@
 	import flash.text.TextFormatAlign;
 	import feathers.themes.MetalWorksMobileTheme;
 	import flash.media.SoundMixer;
+	import starling.display.BlendMode;
 	
 	public class CollectItems extends Sprite
 	{
@@ -48,6 +49,7 @@
 		
 		private var collection:ListCollection;
 		
+		private var backgroundSkin:Quad = new Quad(10,10,0x000000);
 		
 		public function CollectItems()
 		{
@@ -76,10 +78,21 @@
 		{
 			
 			// Background quad.
-			bg = new Quad(stage.stageWidth, stage.stageHeight, 0xFFFFFF);
-			bg.alpha = 0.75;
+			bg = new Image(GameAssets.getTexture("BgMenu"));
+			bg.width = stage.stageWidth;
+			bg.height = stage.stageHeight;
+			//bg.alpha = 0.75;
+			bg.blendMode = BlendMode.NONE;
 			this.addChild(bg);
 			bg.visible = false;
+			
+			// GENERAL ELEMENTS
+			var bottomColor:uint = 0xFFFFFF; // white
+			var topColor:uint    = 0xea0b0b; // red	
+			bg.setVertexColor(0, topColor);
+			bg.setVertexColor(1, topColor);
+			bg.setVertexColor(2, bottomColor);
+			bg.setVertexColor(3, bottomColor);
 			
 			
 			// Navigation buttons.
@@ -90,7 +103,7 @@
 			this.addChild(mainBtn);
 			mainBtn.visible = false;
 		
-			galeriInfo = new TextField(stage.stageWidth, 50, "", "nulshock", 20, 0x000000);
+			galeriInfo = new TextField(stage.stageWidth, 50, "", "nulshock", 20, 0xffffff);
 			galeriInfo.text = "GALERI INFO";
 			galeriInfo.x = stage.stageWidth/2-galeriInfo.width/2;
 			galeriInfo.y = (stage.stageHeight/14);
@@ -99,12 +112,11 @@
 			
 			//a nice, fluid layout
 			group = new LayoutGroup();
-    
+    		
 			layout = new AnchorLayout();
 			group.y = stage.stageHeight/6;
 			group.width = stage.stageWidth;
 			group.height = stage.stageHeight - stage.stageHeight/6;
-			
 			
 			group.autoSizeMode = LayoutGroup.AUTO_SIZE_MODE_STAGE;
 			
@@ -138,8 +150,6 @@
 			this._pageIndicator.layoutData = pageIndicatorLayoutData;
 
 			group.addChild(this._pageIndicator);
-
-			
 			
 			this._list = new List();
 			this._list.snapToPages = true;
@@ -159,6 +169,7 @@
 			listLayout.horizontalAlign = TiledRowsLayout.HORIZONTAL_ALIGN_CENTER;
 			listLayout.padding = 2;
 			listLayout.gap = 2;
+			listLayout.verticalAlign = TiledRowsLayout.VERTICAL_ALIGN_MIDDLE;
 			this._list.layout = listLayout;
 			group.layout = layout;
 			this.addChild( group );
@@ -174,7 +185,6 @@
 			//this list fills the container's width and the remaining height
 			//above the page indicator
 			this._list.layoutData = listLayoutData;
-
 			group.addChild(this._list);	
 			
 		}

@@ -31,7 +31,7 @@
             //fontRegular = Fonts.getFont("Regular");
 			
 			//questionField = new TextField(400, 50, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
-			questionField = new TextField(400, 70, "", "nulshock", 14, 0x000000);
+			questionField = new TextField(400, 70, "", "nulshock", 14, 0xffffff);
 			
             questionField.text = question;
             questionField.x = rbX-questionField.width/2;
