@@ -81,6 +81,10 @@
 			{
 				var bitmap:Bitmap = new GameAssets[name]();
 				gameTextures[name]=Texture.fromBitmap(bitmap);
+				gameTextures[name].root.onRestore = function():void
+				{
+					gameTextures[name].root.uploadBitmap(bitmap);
+				};
 			}
 			
 			return gameTextures[name];

@@ -251,13 +251,14 @@
             this.addChild(finishButton);
 			
 			//statusT = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
-			statusT = new TextField(stage.stageWidth, 150, "", "nulshock", 14, 0xffffff);
-			statusT.x = stage.stageWidth/2 - statusT.width/2;
-			statusT.y = finishButton.y - statusT.height*2;
+			statusT = new TextField(stage.stageWidth, stage.stageHeight/4, "", "nulshock", 14, 0xffffff);
+			statusT.x = stage.stageWidth/2 - statusT.textBounds.width/2;
+			statusT.y = stage.stageHeight/2 - statusT.textBounds.height/2;
 			statusT.hAlign = HAlign.CENTER;
 			statusT.vAlign = VAlign.TOP;
 			//statusT.border = true;
 			this.addChild(statusT);
+			statusT.visible = false;
 			
 			quizQuestions = new Array();
             createQuestions();
@@ -387,6 +388,7 @@
 				if (!Sounds.muted) Sounds.sndBgMain.play(0, 999);
 			}
 			
+			statusT.visible = false;
 			bgInfo.visible = false;
 			quizBg.visible = false;
 			this.visible = true;
@@ -492,8 +494,10 @@
 		
    
         private function showMessage(theMessage:String) {
+			statusT.visible = true;
             statusT.text = theMessage;
-            statusT.x = stage.stageWidth/2 - statusT.width/2;
+            statusT.x = stage.stageWidth/2 - statusT.textBounds.width/2;
+			statusT.y = stage.stageHeight/2 - statusT.textBounds.height/2;
         }
 		
         private function addAllQuestions() {
@@ -590,7 +594,10 @@
 						SaveManager.getInstance().saveDataGodlike(true);
                 }
             }
-            showMessage("\n\nSELAMAT!!\n\nKamu berhasil menjawab " + score + " soal dari " + quizQuestions.length + " soal.\nKamu mendapatkan 'AURA KEMERDEKAAN', mainkan game dan lihat apa yang terjadi.");
+			if(score==quizQuestions.length)
+            	showMessage("\n\nSELAMAT!!\n\nKamu berhasil menjawab " + score + " soal dari " + quizQuestions.length +" soal.\nKamu mendapatkan 'AURA KEMERDEKAAN', mainkan game dan lihat apa yang terjadi.");
+			else
+				showMessage("\n\nSELAMAT!!\n\nKamu berhasil menjawab " + score + " soal dari " + quizQuestions.length +" soal.\nCoba terus untuk mendapatkan 'AURA KEMERDEKAAN' pada Pesawat Insulinde!");
 			////trace("You answered " + score + " correct out of " + quizQuestions.length + " questions.")
         }
 		

@@ -4,6 +4,9 @@
 	import flash.events.Event;
 	import flash.geom.Rectangle;
 	import framework.events.TimelineEvent;
+	import flash.text.TextField;
+	import flash.text.TextFormat;
+	
 	
 	//Konfigurasi embed meta tag untuk screen
 	[SWF(backgroundColor="0x000000")]
@@ -15,6 +18,7 @@
 		//deklarasi objek starling
 		private var starlingObj:Starling;
 		private var splashScreenMc:SplashScreen;
+		private var preloader:LoaderGame;
 		
 		public function Main() {
 			// constructor code
@@ -41,6 +45,12 @@
 			splashScreenMc.removeEventListener(TimelineEvent.LAST_FRAME, onGame);
 			this.removeChild(splashScreenMc);
 			this.stage.frameRate = 60;
+			
+			preloader = new LoaderGame();
+			preloader.x = stage.stageWidth/2;
+			preloader.y = stage.stageHeight/2;
+		
+			Starling.handleLostContext = false;
 			var viewPort:Rectangle = new Rectangle(0, 0, stage.fullScreenWidth, stage.fullScreenHeight);
 
 			// inisialisasi starling object
@@ -54,13 +64,31 @@
 			starlingObj.antiAliasing = 1;
 			
 			// Lihat penggunaan status memory dan statistik CPU
-			starlingObj.showStats = false;
-			
+			//starlingObj.showStats = false;
 			// Posisi status
-			starlingObj.showStatsAt("left", "bottom");
+			//starlingObj.showStatsAt("left", "bottom");
 			
 			// Start Starling Framework.
 			starlingObj.start();
+			
+			starlingObj.nativeOverlay.addChild(preloader);
+			// Wait Context3D
+			starlingObj.stage3D.addEventListener(Event.CONTEXT3D_CREATE, context3DCreateHandler);
+			 
+		}
+		
+		private function context3DCreateHandler(e:Event):void
+		{
+			starlingObj.stage3D.addEventListener(Event.CONTEXT3D_CREATE, context3DCreateHandler);
+		 
+			// Start Starling
+			starlingObj.start();
+			// Remove loader
+			if ((null != preloader) && (starlingObj.nativeOverlay.contains(preloader)))
+			{
+				starlingObj.nativeOverlay.removeChild(preloader);
+				preloader = null;
+			}
 		}
 
 	}
