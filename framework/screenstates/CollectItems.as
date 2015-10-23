@@ -45,7 +45,7 @@
 		private var layout:AnchorLayout;
 		private var group:LayoutGroup;
 		private var galeriInfo:TextField;
-		private var _themes:MetalWorksMobileTheme;
+		//private var _themes:MetalWorksMobileTheme;
 		
 		private var collection:ListCollection;
 		
@@ -65,8 +65,8 @@
 		private function onAddedToStage(event:Event):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			this._themes = new MetalWorksMobileTheme();
-			this._themes.getStyleProviderForClass( DefaultListItemRenderer ).setFunctionForStyleName( "my-tile-renderer", myTileRenderer );
+			//this._themes = new MetalWorksMobileTheme();
+			//this._themes.getStyleProviderForClass( DefaultListItemRenderer ).setFunctionForStyleName( "my-tile-renderer", myTileRenderer );
 			drawChooseLevel();
 		}
 		
@@ -167,8 +167,8 @@
 			listLayout.useSquareTiles = false;
 			listLayout.tileHorizontalAlign = TiledRowsLayout.TILE_HORIZONTAL_ALIGN_CENTER;
 			listLayout.horizontalAlign = TiledRowsLayout.HORIZONTAL_ALIGN_CENTER;
-			listLayout.padding = 2;
-			listLayout.gap = 2;
+			listLayout.padding = 20;
+			listLayout.gap = 20;
 			listLayout.verticalAlign = TiledRowsLayout.VERTICAL_ALIGN_MIDDLE;
 			this._list.layout = listLayout;
 			group.layout = layout;

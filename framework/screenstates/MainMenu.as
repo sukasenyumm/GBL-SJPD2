@@ -17,7 +17,7 @@
 	import framework.events.NavigationEvent;
 	import framework.utils.SaveManager;
 	import starling.display.Quad;
-	import feathers.themes.MetalWorksDesktopTheme;
+	import feathers.themes.MetalWorksMobileTheme;
 	import feathers.controls.Alert;
 	import feathers.data.ListCollection;
 	import framework.gameobject.Hero;
@@ -90,7 +90,7 @@
 		public function MainMenu()
 		{
 			super();
-			new MetalWorksDesktopTheme();
+			new MetalWorksMobileTheme();
 			this.visible = false;
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
@@ -147,7 +147,7 @@
 			//fontRegular = Fonts.getFont("Regular");
 			
 			aboutText = new TextField(stage.stageWidth - stage.stageWidth/14, stage.stageHeight -  stage.stageHeight/14, "", "nulshock", 10, 0xffffff);
-			aboutText.text = "PESAWAT INSULINDE adalah sebuah game untuk mempelajari Sejarah Indonesia.\n\n" +
+			aboutText.text = "PESAWAT INSULINDE\n(Sejarah Indonesia 1942-1949)\n\nPESAWAT INSULINDE adalah sebuah game untuk mempelajari Sejarah Indonesia.\n\n" +
 				" Pesawat Insulinde bertugas untuk mengejar pesawat X yang telah mencuri lembaran-lembaran sejarah yang ada di Indonesia." +
 				" Dalam perjalanannya, pesawat X tadi menjatuhkan lembaran-lembaran sejarah disepanjang jalan." +
 				" Jangan lupa kumpulkan juga batu pengetahuan untuk membuka sesi quiz pada menu game.\n\n"+
@@ -156,7 +156,7 @@
 				" Muhammad Yusuf Priambodo (Desainer dan Ilustrator)\n"+
 				" Copyright @2015";
 			aboutText.x = stage.stageWidth/2 - aboutText.textBounds.width/2;
-			aboutText.y = title.y+title.height;
+			aboutText.y = stage.stageHeight/2 - aboutText.textBounds.height/2;
 			aboutText.hAlign = HAlign.CENTER;
 			aboutText.vAlign = VAlign.TOP;
 			//aboutText.border = true;
@@ -252,8 +252,8 @@
 			
 			//statusT = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
 			statusT = new TextField(stage.stageWidth, stage.stageHeight/4, "", "nulshock", 14, 0xffffff);
-			statusT.x = stage.stageWidth/2 - statusT.textBounds.width/2;
-			statusT.y = stage.stageHeight/2 - statusT.textBounds.height/2;
+			statusT.x = stage.stageWidth/2 - statusT.width/2;
+			statusT.y = stage.stageHeight/2 - statusT.height/2;
 			statusT.hAlign = HAlign.CENTER;
 			statusT.vAlign = VAlign.TOP;
 			//statusT.border = true;
@@ -288,7 +288,7 @@
 				showQuiz();
 			else
 			{
-				var alert:Alert = Alert.show("Belum bisa dibuka!! Kumpulkan skor akumulasi sebanyak lebih dari 1.000.000", "Peringatan", new ListCollection(
+				var alert:Alert = Alert.show("Belum bisa dibuka!! Kumpulkan skor akumulasi sebanyak lebih dari 1.000.000. Skor akumulasi sekarang: "+String(SaveManager.getInstance().loadDataScore()), "Peringatan", new ListCollection(
 				[
 					{ label: "OK"}
 				]) );
@@ -338,6 +338,7 @@
 		public function showAbout():void
 		{
 			screenMode = "about";
+			title.visible = false;
 			ketText.visible = false;
 			bgInfo.visible = false;
 			hero.visible = false;
@@ -496,8 +497,8 @@
         private function showMessage(theMessage:String) {
 			statusT.visible = true;
             statusT.text = theMessage;
-            statusT.x = stage.stageWidth/2 - statusT.textBounds.width/2;
-			statusT.y = stage.stageHeight/2 - statusT.textBounds.height/2;
+            statusT.x = stage.stageWidth/2 - statusT.width/2;
+			statusT.y = stage.stageHeight/2 - statusT.height/2;
         }
 		
         private function addAllQuestions() {
@@ -518,7 +519,6 @@
         }
         private function prevHandler(event:Event) {
 			if (!Sounds.muted) Sounds.sndMushroom.play();
-            showMessage("");
             if(currentIndex > 0) {
                 currentQuestion.visible = false;
                 currentIndex--;
@@ -530,10 +530,7 @@
         }
         private function nextHandler(event:Event) {
 			if (!Sounds.muted) Sounds.sndMushroom.play();
-           // showMessage("error");
-			////trace("user: "+currentQuestion.userAnswer)
             if(currentQuestion.userAnswer < 0) {
-                //showMessage("sesudahnya");
                 return;
             }
             if(currentIndex < (quizQuestions.length - 1)) {
@@ -551,7 +548,6 @@
         }
         private function finishHandler(event:Event) {
 			if (!Sounds.muted) Sounds.sndMushroom.play();
-            showMessage("");
             var finished:Boolean = true;
             for(var i:int = 0; i < quizQuestions.length; i++) {
                 if(quizQuestions[i].userAnswer == 0) {
@@ -559,8 +555,7 @@
                     break;
                 }
             }
-			//trace(quizQuestions.length)
-            if(finished || currentIndex == quizQuestions.length -1) {
+			if(finished || currentIndex == quizQuestions.length -1) {
                 prevButton.visible = false;
                 nextButton.visible = false;
                 finishButton.visible = false;

@@ -2,6 +2,10 @@
 {
 	import flash.net.SharedObject;
 	import flash.errors.IllegalOperationError;
+	import flash.filesystem.File;
+	import flash.filesystem.FileStream;
+	import flash.filesystem.FileMode;
+	import flash.errors.IOError;
 	
 	public class SaveManager 
 	{
@@ -22,53 +26,67 @@
 		//initialize all save data
 		public function initialize():void
 		{
-			
-			var saveDataObject:SharedObject = SharedObject.getLocal("5v67575vd77d6sd");
-			var temp:int = int(saveDataObject.data.score);
-			if(saveDataObject.data.score != null)
-			{
-				if ( int(saveDataObject.data.score) >= 0)
+			if(GameSettings.isAndroid){
+				var saveDataObject:SharedObject = SharedObject.getLocal("5v67575vd77d6sd");
+				var temp:int = int(saveDataObject.data.score);
+				if(saveDataObject.data.score != null)
 				{
-					//do nothing
+					if ( int(saveDataObject.data.score) >= 0)
+					{
+						//do nothing
+					}
+					else
+					{
+						saveDataObject.data.score = 0;
+					}
 				}
 				else
 				{
 					saveDataObject.data.score = 0;
 				}
-			}
-			else
-			{
-				saveDataObject.data.score = 0;
-			}
-			if(saveDataObject.data.godlike != null)
-			{
-				if ( int(saveDataObject.data.godlike) >= 0)
+				if(saveDataObject.data.godlike != null)
 				{
-					//do nothing
+					if ( int(saveDataObject.data.godlike) >= 0)
+					{
+						//do nothing
+					}
+					else
+					{
+						saveDataObject.data.godlike = 0;
+					}
 				}
 				else
 				{
 					saveDataObject.data.godlike = 0;
 				}
-			}
-			else
-			{
-				saveDataObject.data.godlike = 0;
-			}
-			if(saveDataObject.data.galInfo1 != null && 
-			   saveDataObject.data.galInfo2 != null &&
-			   saveDataObject.data.galInfo3 != null &&
-			   saveDataObject.data.galInfo4 != null &&
-			   saveDataObject.data.galInfo5 != null &&
-			   saveDataObject.data.galInfo6 != null &&
-			   saveDataObject.data.galInfo7 != null &&
-			   saveDataObject.data.galInfo8 != null &&
-			   saveDataObject.data.galInfo9 != null &&
-			   saveDataObject.data.galInfo10 != null)
-			{
-				if ( int(saveDataObject.data.score) >= 0)
+				if(saveDataObject.data.galInfo1 != null && 
+				   saveDataObject.data.galInfo2 != null &&
+				   saveDataObject.data.galInfo3 != null &&
+				   saveDataObject.data.galInfo4 != null &&
+				   saveDataObject.data.galInfo5 != null &&
+				   saveDataObject.data.galInfo6 != null &&
+				   saveDataObject.data.galInfo7 != null &&
+				   saveDataObject.data.galInfo8 != null &&
+				   saveDataObject.data.galInfo9 != null &&
+				   saveDataObject.data.galInfo10 != null)
 				{
-					//do nothing
+					if ( int(saveDataObject.data.score) >= 0)
+					{
+						//do nothing
+					}
+					else
+					{
+						saveDataObject.data.galInfo1 = 0;
+						saveDataObject.data.galInfo2 = 0;
+						saveDataObject.data.galInfo3 = 0;
+						saveDataObject.data.galInfo4 = 0;
+						saveDataObject.data.galInfo5 = 0;
+						saveDataObject.data.galInfo6 = 0;
+						saveDataObject.data.galInfo7 = 0;
+						saveDataObject.data.galInfo8 = 0;
+						saveDataObject.data.galInfo9 = 0;
+						saveDataObject.data.galInfo10 = 0;
+					}
 				}
 				else
 				{
@@ -84,18 +102,107 @@
 					saveDataObject.data.galInfo10 = 0;
 				}
 			}
-			else
+			
+			if(GameSettings.isIOS)
 			{
-				saveDataObject.data.galInfo1 = 0;
-				saveDataObject.data.galInfo2 = 0;
-				saveDataObject.data.galInfo3 = 0;
-				saveDataObject.data.galInfo4 = 0;
-				saveDataObject.data.galInfo5 = 0;
-				saveDataObject.data.galInfo6 = 0;
-				saveDataObject.data.galInfo7 = 0;
-				saveDataObject.data.galInfo8 = 0;
-				saveDataObject.data.galInfo9 = 0;
-				saveDataObject.data.galInfo10 = 0;
+				var f:File = File.desktopDirectory.resolvePath("score.conf");
+				var fs:FileStream = new FileStream();
+					
+				//score
+				try {
+					fs.open(f, FileMode.READ);
+					var objReader:int = fs.readInt();
+					var temporary:int = objReader;
+					fs.close();
+				} catch(e:IOError) {
+					var temporary:int = -1;
+					fs.open(f, FileMode.WRITE);
+				}
+				
+				if(temporary == 0)
+				{
+					if ( temporary >= 0)
+					{
+						//do nothing
+					}
+					else
+					{
+						fs.writeInt(0);
+						fs.close();
+					}
+				}
+				else
+				{
+						fs.writeInt(0);
+						fs.close();
+				}
+				
+				//godlike
+				var fg:File = File.applicationStorageDirectory.resolvePath("godlike.conf");
+				var fsg:FileStream = new FileStream();
+				
+				fsg.open(fg, FileMode.READ);
+				var objReaderg:int = fsg.readInt();
+				var temporaryg:int = objReaderg;
+				fsg.close();
+				
+				fsg.open(fg, FileMode.WRITE);
+				if(temporaryg == 0)
+				{
+					if ( temporaryg >= 0)
+					{
+						//do nothing
+					}
+					else
+					{
+						fsg.writeInt(0);
+						fsg.close();
+					}
+				}
+				else
+				{
+						fsg.writeInt(0);
+						fsg.close();
+				}
+				
+				//item
+				var fi:File = File.applicationStorageDirectory.resolvePath("items.conf");
+				var fsi:FileStream = new FileStream();
+				
+				fsi.open(f, FileMode.READ);
+				var objReaderi:Object = fsi.readObject();
+				var temporaryi:Object = objReaderi;
+				fsi.close();
+				
+				fsi.open(fi, FileMode.WRITE);
+				var obj:Object = {	galInfo1:0, 
+									galInfo2:0,
+									galInfo3:0,
+									galInfo4:0,
+									galInfo5:0,
+									galInfo6:0,
+									galInfo7:0,
+									galInfo8:0,
+									galInfo9:0,
+									galInfo10:0}; 
+						
+				if(temporaryi != null)
+				{
+					if ( temporaryi >= 0)
+					{
+						//do nothing
+					}
+					else
+					{
+						fsi.writeObject(obj);
+						fsi.close();
+					}
+				}
+				else
+				{
+						fsi.writeObject(obj);
+						fsi.close();
+				}
 			}
 			
 		}

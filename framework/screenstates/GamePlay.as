@@ -191,20 +191,6 @@
 			this.addChild(scoreLife);
 			scoreLife.visible = false;
 			
-			labelTips = new TextField(stage.stageWidth,stage.stageHeight/2+stage.stageHeight/14, "","nulshock", 14, 0xffffff);
-			labelTips.hAlign = HAlign.CENTER;
-			labelTips.vAlign = VAlign.TOP;
-			labelTips.x = stage.stageWidth/2-labelTips.width/2;
-			labelTips.y = stage.stageHeight/2-labelTips.height/2;
-			this.addChild(labelTips);
-			labelTips.visible = false;
-			
-			startButton = new Button(GameAssets.getAtlasFix().getTexture("btn_mulai"));
-			startButton.x = stage.stageWidth/2-startButton.width/2;
-			startButton.y = labelTips.height+10;
-			startButton.addEventListener(Event.TRIGGERED, onStartButtonClick);
-			this.addChild(startButton);
-			startButton.visible = false;
 			
 			bgHud = new Image(GameAssets.getAtlasFix().getTexture("bgHud"));
 			bgHud.height = stage.stageHeight/14;
@@ -212,6 +198,13 @@
 			bgHud.y = stage.stageHeight/14 - bgHud.height/2;
 			this.addChild(bgHud);
 			bgHud.visible = false;
+			
+			/* quiz bg */
+			quizBg = new Quad(stage.stageWidth, stage.stageHeight - (stage.stageHeight/14)*2, 0x1A0000);
+			quizBg.y = stage.stageHeight/2-quizBg.height/2;
+			quizBg.alpha = 0.7;
+			this.addChild(quizBg);
+			quizBg.visible = false;
 			
 			/*item info
 			*/
@@ -261,12 +254,22 @@
 			//end
 			//quiz
 			
-			/* quiz bg */
-			quizBg = new Quad(stage.stageWidth, stage.stageHeight - (stage.stageHeight/14)*2, 0x1A0000);
-			quizBg.y = stage.stageHeight/2-quizBg.height/2;
-			quizBg.alpha = 0.5;
-			this.addChild(quizBg);
-			quizBg.visible = false;
+			
+			
+			labelTips = new TextField(stage.stageWidth,stage.stageHeight/2+stage.stageHeight/14, "","nulshock", 14, 0xfffffa);
+			labelTips.hAlign = HAlign.CENTER;
+			labelTips.vAlign = VAlign.TOP;
+			labelTips.x = stage.stageWidth/2-labelTips.width/2;
+			labelTips.y = stage.stageHeight/2-labelTips.height/2;
+			this.addChild(labelTips);
+			labelTips.visible = false;
+			
+			startButton = new Button(GameAssets.getAtlasFix().getTexture("btn_mulai"));
+			startButton.x = stage.stageWidth/2-startButton.width/2;
+			startButton.y = labelTips.height+startButton.height*2;
+			startButton.addEventListener(Event.TRIGGERED, onStartButtonClick);
+			this.addChild(startButton);
+			startButton.visible = false;
 			
 			var yPosition:Number = stage.stageHeight - stage.stageHeight/10;
 
@@ -394,7 +397,7 @@
 			scoreLife.text = "Energi: "+String(lives);
 			
 			//bg.visible = false;
-			labelTips.text = (SaveManager.getInstance().loadDataGodlike()==1)?"Cara Main\n\nGerakkan tangganmu keatas dan kebawah.\nAmbil batu pengetahuan yang bewarna merah.\nAmbil kertas untuk mendapatkan informasi.\nHindari pesawat yang berlalu-lalang.\n'AURA KEMERDEKAAN' memberikan kekebalan jika bertabrakan dengan pesawat, maka ENERGI berkurang 1 poin saja.\nScore Akumulasi:"+String(SaveManager.getInstance().loadDataScore())+" ":"Cara Main\n\nGerakkan tangganmu keatas dan kebawah.\nAmbil batu pengetahuan yang bewarna merah.\nAmbil kertas untuk mendapatkan informasi.\nHindari pesawat yang berlalu-lalang.\nScore Akumulasi:"+String(SaveManager.getInstance().loadDataScore());
+			labelTips.text = (SaveManager.getInstance().loadDataGodlike()==1)?"Cara Main\n\nGerakkan tangganmu keatas dan kebawah.\nAmbil batu pengetahuan yang bewarna merah.\nAmbil kertas untuk mendapatkan informasi.\nHindari pesawat yang berlalu-lalang.\n'AURA KEMERDEKAAN' memberikan kekebalan jika bertabrakan dengan pesawat, maka ENERGI berkurang 1 poin saja.\nScore Akumulasi :"+String(SaveManager.getInstance().loadDataScore())+" ":"Cara Main\n\nGerakkan tangganmu keatas dan kebawah.\nAmbil batu pengetahuan yang bewarna merah.\nAmbil kertas untuk mendapatkan informasi.\nHindari pesawat yang berlalu-lalang.\n\nScore Akumulasi:"+String(SaveManager.getInstance().loadDataScore());
 			startButton.visible = true;
 			labelTips.visible = true;
 			//force startButton always in top of layers.
@@ -487,7 +490,6 @@
 				switch(gameState)
 				{
 					case "idle":
-						
 						//take off
 						if(enemy.x < stage.stageWidth * 0.5 + stage.stageWidth * 0.25)
 						{
@@ -649,6 +651,15 @@
 							}
 						}
 						
+						for(var k:uint = 0; k < eatParticlesToAnimate.length; k++)
+						{
+							if (eatParticlesToAnimate[k] != null)
+							{
+								// Dispose the obstacle temporarily.
+								disposeParticleTemporarily(k, eatParticlesToAnimate[k]);
+							}
+						}
+						
 						// Spin the hero.
 						hero.rotation -= deg2rad(30);
 						particle.rotation -= deg2rad(30);
@@ -709,7 +720,17 @@
 							}
 						}
 						
-						if (playerSpeed>=40)
+						for(var k:uint = 0; k < eatParticlesToAnimate.length; k++)
+						{
+							if (eatParticlesToAnimate[k] != null)
+							{
+								// Dispose the obstacle temporarily.
+								disposeParticleTemporarily(k, eatParticlesToAnimate[k]);
+							}
+						}
+
+						
+						if (playerSpeed>=50)
 						{
 							//do nothing
 							labelLose.visible = true;
@@ -719,7 +740,7 @@
 							//trace("spee:"+playerSpeed)
 							
 						}
-						else if(playerSpeed>33 && playerSpeed<40)
+						else if(playerSpeed>33 && playerSpeed<50)
 						{
 							enemy.x=enemy.x+enemy.x*elapsed*1.4;
 							labelLose.text = "Aku tidak akan menyerah!!";
@@ -779,6 +800,13 @@
 		{
 			obstacleToAnimate.splice(animateId, 1);
 			this.removeChild(obstacle);
+			//obstacleToAnimate.length--;
+		}
+		
+		private function disposeParticleTemporarily(animateId:uint, particle:Particle):void
+		{
+			eatParticlesToAnimate.splice(animateId, 1);
+			this.removeChild(particle);
 			//obstacleToAnimate.length--;
 		}
 		
@@ -1036,6 +1064,12 @@
 			{
 				obstacleToAnimate[j].visible = false;
 			}
+			
+			for(var k:uint = 0;k<eatParticlesToAnimate.length;k++)
+			{
+				eatParticlesToAnimate[k].visible = false;
+			}
+			
 			//statusT = new TextField(480, 600, "", fontRegular.fontName, fontRegular.fontSize, 0xffffff);
 			statusT.visible = true;
 			
@@ -1081,7 +1115,7 @@
                                                             1,
                                                             "8 Januari 1942",
                                                             "8 Maret 1942"));
-            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Untuk memikat hari rakyat, Jepang membuat propaganda Tiga A, yang berisi?",
+            quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Untuk memikat hati rakyat, Jepang membuat propaganda Tiga A, yang berisi?",
                                                             0,
                                                             "Jepang pemimpin Asia,Jepang pelindung Asia,Jepang cahaya Asia",
                                                             "Jepang pemimpin Asia,Jepang perisai Asia,Jepang cahaya Asia"));
@@ -1095,7 +1129,7 @@
                                                             "Dummy",
                                                             "Dummy"));
             quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Kapan hari lahirnya pancasila?",
-                                                            0,
+                                                            1,
                                                             "5 Agustus 1945",
                                                             "1 Juni 1945"));
             quizQuestions.push(new QuizQuestion(stage.stageWidth/2,"Disebut apakah peristiwa penculikan Soekarno dan Hatta oleh sejumlah pemuda?",
@@ -1138,7 +1172,7 @@
             statusT.x = stage.stageWidth/2 - statusT.width/2;
         }
         private function addQuestions(numQuestion:Number) {
-			quizQuestions[numQuestion].y = stage.stageHeight/2 - quizQuestions[numQuestion].height/2;
+			quizQuestions[numQuestion].y = stage.stageHeight/2 - quizQuestions[numQuestion].height/2 - quizQuestions[numQuestion].height/4;
 
 			this.addChild(quizQuestions[numQuestion]);
         }
@@ -1209,6 +1243,10 @@
 			for(var j:uint = 0;j<obstacleToAnimate.length;j++)
 			{
 				obstacleToAnimate[j].visible = true;
+			}
+			for(var k:uint = 0;k<eatParticlesToAnimate.length;k++)
+			{
+				eatParticlesToAnimate[k].visible = true;
 			}
 		}
 		

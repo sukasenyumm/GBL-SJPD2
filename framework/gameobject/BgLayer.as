@@ -33,7 +33,7 @@
 					image1.blendMode = BlendMode.NONE;
 					image2 = new Image(GameAssets.getTexture("BgLayerExt" + layer));
 					image2.blendMode = BlendMode.NONE;
-					var bottomColor1:uint = 0x000000; // white
+					var bottomColor1:uint = 0x66FFFF; // white
 					var topColor1:uint    = 0x0000CC; // red	
 					image1.setVertexColor(0, topColor1);
 					image1.setVertexColor(1, topColor1);
@@ -59,7 +59,7 @@
 					image1.blendMode = BlendMode.NONE;
 					image2 = new Image(GameAssets.getTexture("BgLayer" + layer));
 					image2.blendMode = BlendMode.NONE;
-					var bottomColor2:uint = 0x000066;
+					var bottomColor2:uint = 0x0066FF;
 					var topColor2:uint    = 0xCCCCFF;
 					image1.setVertexColor(0, topColor2);
 					image1.setVertexColor(1, topColor2);
